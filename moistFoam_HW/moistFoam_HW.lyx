@@ -2666,6 +2666,59 @@ Initialisation uses equivalent potential temperature:
 
 \end_inset
 
+In the initialisation, 
+\begin_inset Formula $r_{t}$
+\end_inset
+
+ is fixed.
+ So we just need to express 
+\begin_inset Formula $r_{v}$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\theta_{e}=T\left(\frac{p_{a}}{p_{0}}\right)^{-\frac{R_{a}}{c_{pa}+c_{pl}r_{t}}}\exp\left[\frac{L_{v}\rho_{v}/\rho_{a}}{\left(c_{pa}+c_{pl}r_{t}\right)T}\right]
+\end{equation}
+
+\end_inset
+
+And we need a Newton solver to find 
+\begin_inset Formula $T$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $\theta_{e}$
+\end_inset
+
+.
+ Define:
+\begin_inset Formula 
+\begin{eqnarray*}
+C_{p} & = & c_{pa}+c_{p\ell}r_{t}\\
+a & = & \left(\frac{p_{a}}{p_{0}}\right)^{-R_{a}/C_{p}}\\
+b & = & \frac{\rho_{v}L_{v}}{\rho_{a}C_{p}}
+\end{eqnarray*}
+
+\end_inset
+
+We wish to minimise the root mean square of the residual, 
+\begin_inset Formula $r$
+\end_inset
+
+, using the Newton iterations:
+\begin_inset Formula 
+\begin{eqnarray*}
+T & -= & \frac{rT}{a\left(b-T\right)\ e^{b/T}}\\
+r & = & \theta_{e}-Ta\ e^{b/T}
+\end{eqnarray*}
+
+\end_inset
+
 
 \end_layout
 
@@ -4061,7 +4114,7 @@ Data:
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="5" columns="4">
+<lyxtabular version="3" rows="6" columns="4">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="0pt">
 <column alignment="center" valignment="top" width="0">
@@ -4298,7 +4351,7 @@ Latent heat of vapourisation at
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4328,7 +4381,7 @@ dimensionedScalar&
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4347,7 +4400,7 @@ pvs0
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4359,7 +4412,7 @@ pvs0
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -4368,6 +4421,64 @@ Saturation vapour pressure at
 \end_inset
 
  of gas
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+volScalarField
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+condensation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Condensation of this species
 \end_layout
 
 \end_inset
@@ -4570,7 +4681,7 @@ pSat
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -4589,11 +4700,11 @@ volScalarField
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-condenseRate
+updateCondensation(T)
 \end_layout
 
 \end_inset
@@ -4607,9 +4718,6 @@ condenseRate
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $S_{cond}$
-\end_inset
-
 
 \end_layout
 
@@ -4619,7 +4727,7 @@ condenseRate
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\frac{S_{f}-S_{\ell}+\sqrt{S_{f}^{2}+S_{\ell}^{2}}}{2\Delta t}$
+\begin_inset Formula $\frac{S_{f}-S_{\ell}+\sqrt{S_{f}^{2}+S_{\ell}^{2}}}{2}$
 \end_inset
 
  where 
@@ -5246,7 +5354,7 @@ status open
 
 \begin_layout Plain Layout
 
-thetaSource(T,divu,condenseRate)
+thetaSource(T,divu)
 \end_layout
 
 \end_inset
@@ -5272,7 +5380,7 @@ thetaSource(T,divu,condenseRate)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $-\nabla\cdot\mathbf{u}\left(\frac{R_{t}}{c_{vt}}-\frac{R_{a}c_{pt}}{c_{pa}c_{vt}}\right)+\frac{S_{\text{cond}}}{\rho c_{vt}}\left[\frac{c_{va}L_{v}}{c_{pa}T}-R_{v}\left(1-\frac{R_{a}}{c_{pa}}\frac{c_{pt}}{R_{t}}\right)\right]$
+\begin_inset Formula $-\nabla\cdot\mathbf{u}\left(\frac{R_{t}}{c_{vt}}-\frac{R_{a}c_{pt}}{c_{pa}c_{vt}}\right)+\sum_{v\in fluids}\frac{S_{\text{cond}}}{\rho c_{vt}}\left[\frac{c_{va}L_{v}}{c_{pa}T}-R_{v}\left(1-\frac{R_{a}}{c_{pa}}\frac{c_{pt}}{R_{t}}\right)\right]$
 \end_inset
 
 
