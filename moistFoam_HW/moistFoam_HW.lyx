@@ -311,6 +311,77 @@ Air density,
  are diagnostic
 \end_layout
 
+\begin_layout Itemize
+Phases do not stand alone.
+ Everything needs global data
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $\rho\mathbf{U}\cdot\mathbf{n}$
+\end_inset
+
+, 
+\begin_inset Formula $\theta$
+\end_inset
+
+, 
+\begin_inset Formula $\pi$
+\end_inset
+
+, 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+, 
+\begin_inset Formula $\rho_{\ell}$
+\end_inset
+
+ with 
+\begin_inset Formula $\pi=(p/p_{0})^{\kappa}$
+\end_inset
+
+ for dry air
+\end_layout
+
+\begin_layout Itemize
+Conservation equations for, 
+\begin_inset Formula $\rho_{a}\theta$
+\end_inset
+
+, 
+\begin_inset Formula $\rho_{v}$
+\end_inset
+
+ and 
+\begin_inset Formula $\rho_{\ell}$
+\end_inset
+
+ use a volume flux rather than a mass flux
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\rho_{a}$
+\end_inset
+
+ is diagnostic
+\end_layout
+
+\begin_layout Itemize
+All conservation equations scaled with 
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Conservation equations use mass flux, 
+\begin_inset Formula $\rho\mathbf{U}\cdot\mathbf{S}$
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Variables and Constants
 \end_layout
@@ -318,7 +389,7 @@ Variables and Constants
 \begin_layout Standard
 There are some global variables and constants that are assumed uniform across
  all phases or relevant to all phases.
- Prognostic variables *:
+ Prognostic variables denoted by *
 \begin_inset Newline newline
 \end_inset
 
@@ -508,10 +579,11 @@ Exner pressure
 \begin_inset Text
 
 \begin_layout Plain Layout
+*
 \begin_inset Formula $\pi$
 \end_inset
 
-*
+
 \end_layout
 
 \end_inset
@@ -604,10 +676,11 @@ Potential temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
+*
 \begin_inset Formula $\theta$
 \end_inset
 
-*
+
 \end_layout
 
 \end_inset
@@ -648,10 +721,11 @@ Velocity
 \begin_inset Text
 
 \begin_layout Plain Layout
+*
 \begin_inset Formula $\mathbf{u}$
 \end_inset
 
-*
+
 \end_layout
 
 \end_inset
@@ -824,7 +898,7 @@ For the gaseous phases; air and water vapour, we store:
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="12" columns="6">
+<lyxtabular version="3" rows="13" columns="6">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
 <column alignment="center" valignment="top" width="0">
@@ -1298,10 +1372,11 @@ Density
 \begin_inset Text
 
 \begin_layout Plain Layout
+*
 \begin_inset Formula $\rho_{v}$
 \end_inset
 
-*
+
 \end_layout
 
 \end_inset
@@ -1333,7 +1408,8 @@ Density
 \begin_inset Text
 
 \begin_layout Plain Layout
-Diagnostic variables
+Diagnostic variables: Not part of data structure for gas because depends
+ on mixture
 \end_layout
 
 \end_inset
@@ -1385,7 +1461,75 @@ Diagnostic variables
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Volume ratio (not needed)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $v_{a}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $q_{a}\frac{R_{a}}{R_{t}}(1-v_{\ell})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $v_{v}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $q_{v}\frac{R_{v}}{R_{t}}(1-v_{\ell})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1710,7 +1854,7 @@ Volume fraction
 \begin_inset Text
 
 \begin_layout Plain Layout
-prognostic
+Prognostic
 \end_layout
 
 \end_inset
@@ -1795,7 +1939,7 @@ Mass mixing ratio (not needed)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $v_{\ell}\rho_{\ell}/\rho$
+\begin_inset Formula $v_{l}\rho_{l}/\rho$
 \end_inset
 
 
@@ -1807,7 +1951,7 @@ Mass mixing ratio (not needed)
 \begin_inset Text
 
 \begin_layout Plain Layout
--
+
 \end_layout
 
 \end_inset
@@ -1871,7 +2015,7 @@ There are also some diagnostic variables concerned with mixtures:
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="10" columns="4">
+<lyxtabular version="3" rows="9" columns="4">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
 <column alignment="center" valignment="top" width="0pt">
@@ -1907,7 +2051,7 @@ Total water mixing ratio (only needed for
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $(q_{v}+q_{\ell})\rho/\rho_{a}$
+\begin_inset Formula $(\rho_{v}+\rho_{\ell})/\rho_{a}$
 \end_inset
 
 
@@ -1995,7 +2139,7 @@ Gas constant of moist air
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $(\rho_{a}R_{a}+\rho_{v}R_{v})/\rho_{a}$
+\begin_inset Formula $R_{a}+r_{v}R_{v}$
 \end_inset
 
 
@@ -2021,7 +2165,7 @@ Gas constant of moist air
 \begin_inset Text
 
 \begin_layout Plain Layout
-(not needed)
+
 \end_layout
 
 \end_inset
@@ -2252,50 +2396,6 @@ Specific heat of moist air at constant volume (not needed)
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Volume fraction of dry air
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $v_{a}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\frac{R_{a}}{R_{m}}(1-v_{\ell})$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
@@ -2321,7 +2421,7 @@ Density potential temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\theta/v_{a}$
+\begin_inset Formula $\theta R_{t}/(R_{a}(1-v_{\ell}))$
 \end_inset
 
 
@@ -2345,6 +2445,14 @@ Density potential temperature
 
 
 \begin_inset Newline newline
+\end_inset
+
+Note that:
+\begin_inset Formula 
+\begin{equation}
+\rho_{a}R_{m}=\rho R_{t}=q_{a}\rho R_{m}
+\end{equation}
+
 \end_inset
 
 and constants and relationships related to phase changes between water vapour
@@ -2710,7 +2818,7 @@ key "JKKV15"
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\rho_{v}(1-p_{vs}/p_{v})$
+\begin_inset Formula $\frac{p_{v}-p_{vs}}{R_{v}T}$
 \end_inset
 
 
@@ -2803,7 +2911,7 @@ r_{v} & =q_{v}/q_{a} & r_{\ell} & =q_{\ell}/q_{a} & q_{a} & =1/(1+r_{t})\\
 
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{p_{v}}{p}=\frac{1}{1+\varepsilon/r_{v}} &  & \frac{p_{a}}{p}=\frac{1}{1+r_{v}/\varepsilon}\label{eq:pp}
+\frac{p_{v}}{p}=\frac{1-v_{\ell}}{1+\varepsilon/r_{v}} &  & \frac{p_{a}}{p}=\frac{1-v_{\ell}}{1+r_{v}/\varepsilon}\label{eq:pp}
 \end{eqnarray}
 
 \end_inset
@@ -2851,26 +2959,22 @@ From the definition of Exner pressure, we can calculate the pressure gradient
 \begin_inset Formula 
 \begin{eqnarray}
 \nabla p & = & p_{0}\nabla\pi^{1/\kappa}=p_{0}\frac{\pi^{\frac{1-\kappa}{\kappa}}}{\kappa}\nabla\pi=\frac{p_{0}}{\kappa}\pi^{\frac{1-\kappa}{\kappa}}\nabla\pi\\
- & = & \frac{R_{t}\rho\theta}{\kappa(1-v_{\ell})}\nabla\pi=\frac{\rho_{a}R_{m}\theta}{\kappa(1-v_{\ell})}\nabla\pi=\rho_{a}c_{pa}\frac{\theta}{v_{a}}\nabla\pi=\rho_{a}c_{pa}\theta_{\rho}\nabla\pi
+ & = & \frac{R_{t}\rho\theta}{\kappa(1-v_{\ell})}\nabla\pi=\rho\frac{c_{pa}}{R_{a}}\frac{R_{t}\theta}{1-v_{\ell}}\nabla\pi=\rho c_{pa}\theta_{\rho}\nabla\pi
 \end{eqnarray}
 
 \end_inset
 
 where 
-\begin_inset Formula $\theta_{\rho}=\theta/v_{a}$
+\begin_inset Formula $\theta_{\rho}=\theta R_{t}/(R_{a}(1-v_{\ell}))$
 \end_inset
 
- where 
-\begin_inset Formula $v_{a}$
-\end_inset
-
- is the volume fraction occupied by dry air.
+.
  Based on the prognostic variables of 
-\begin_inset Formula $\rho_{a}\mathbf{u}$
+\begin_inset Formula $\rho\mathbf{u}$
 \end_inset
 
 , 
-\begin_inset Formula $\rho_{a}\theta$
+\begin_inset Formula $\theta$
 \end_inset
 
 , 
@@ -2891,11 +2995,11 @@ where
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{\partial\rho_{a}\mathbf{u}}{\partial t}+\nabla\cdot\left(\rho_{a}\mathbf{u}\mathbf{u}\right) & = & -2\rho_{a}\boldsymbol{\Omega}\times\mathbf{u}-\rho_{a}c_{pa}\theta_{\rho}\nabla\pi+\rho_{a}\mathbf{g}\\
-\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot(\rho_{a}\mathbf{u}) & = & 0\\
-\frac{\partial\rho_{v}}{\partial t}+\nabla\cdot(\rho_{v}\mathbf{u}) & = & -S_{\text{cond}}\\
-\frac{\partial v_{\ell}}{\partial t}+\nabla\cdot\left(v_{\ell}\mathbf{u}\right) & = & S_{\text{cond}}/v_{\ell}\\
-\frac{\partial\rho_{a}\theta}{\partial t}+\nabla\cdot\left(\rho_{a}\theta\mathbf{u}\right) & = & S_{\theta}
+\frac{\partial\rho\mathbf{u}}{\partial t}+\nabla\cdot\left(\rho\mathbf{u}\mathbf{u}\right) & = & -2\rho\boldsymbol{\Omega}\times\mathbf{u}-\rho c_{pa}\theta_{\rho}\nabla\pi+\rho_{}\mathbf{g}\\
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot(\rho\mathbf{u}) & = & 0\\
+\frac{\partial\rho_{v}}{\partial t}+\nabla\cdot(\rho_{v}(\rho\mathbf{u})/\rho) & = & -S_{\text{cond}}\\
+\frac{\partial v_{\ell}}{\partial t}+\nabla\cdot\left((\rho\mathbf{u})v_{\ell}/\rho\right) & = & S_{\text{cond}}\\
+\frac{\partial\rho\theta}{\partial t}+\nabla\cdot\left(\rho\mathbf{u}\theta\right) & = & \rho\theta S_{\theta}
 \end{eqnarray}
 
 \end_inset
@@ -2907,7 +3011,7 @@ where
  is the compressibility defined as:
 \begin_inset Formula 
 \begin{equation}
-\Psi=\rho_{a}/\pi
+\Psi=\rho/\pi
 \end{equation}
 
 \end_inset
@@ -2927,7 +3031,7 @@ reference "eq:stateForPi"
  The heat source is calculated from: 
 \begin_inset Formula 
 \[
-S_{\theta}=\rho_{a}\theta\left\{ -\nabla\cdot\mathbf{u}\left(\frac{R_{m}}{c_{vml}}-\frac{R_{a}c_{pml}}{c_{pa}c_{vml}}\right)+S_{\text{cond}}\frac{\rho}{\rho_{a}c_{vml}}\left[\frac{c_{va}L_{v}}{c_{pa}T}-R_{v}\left(1-\frac{R_{a}}{c_{pa}}\frac{c_{pml}}{R_{m}}\right)\right]\right\} .
+S_{\theta}=-\nabla\cdot\mathbf{u}\left(\frac{R_{t}}{c_{vt}}-\kappa\frac{c_{pt}}{c_{vt}}\right)+\frac{S_{\text{cond}}}{c_{vt}}\left[\frac{c_{va}L_{v}}{c_{pa}T}-R_{v}\left(1-\kappa\frac{c_{pt}}{R_{t}}\right)\right].
 \]
 
 \end_inset
@@ -2945,7 +3049,7 @@ from which we calculate the condensation:
 \begin_inset Formula 
 \begin{eqnarray*}
 S_{\text{cond}} & = & \frac{S_{f}-S_{\ell}+\sqrt{S_{f}^{2}+S_{\ell}^{2}}}{2\Delta t}\\
-\text{where }S_{f} & = & (p_{v}-p_{vs})/(R_{v}T)\\
+\text{where }S_{f} & = & \frac{p_{v}-p_{vs}}{R_{v}T}\\
 S_{\ell} & = & v_{\ell}\rho_{\ell}
 \end{eqnarray*}
 
@@ -3006,7 +3110,7 @@ And we need a Newton solver to find
 \begin{eqnarray*}
 C_{p} & = & c_{pa}+c_{p\ell}r_{t}\\
 a & = & \left(\frac{p_{a}}{p_{0}}\right)^{-R_{a}/C_{p}}\\
-b & = & \frac{q_{v}L_{v}}{q_{a}C_{p}}
+b & = & \frac{\rho_{v}L_{v}}{\rho_{a}C_{p}}
 \end{eqnarray*}
 
 \end_inset
@@ -3167,11 +3271,11 @@ surfaceScalarField
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
-phi
+U
 \end_layout
 
 \end_inset
@@ -3185,7 +3289,7 @@ phi
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\phi$
+\begin_inset Formula $U$
 \end_inset
 
 
@@ -3296,6 +3400,7 @@ volScalarField
 \begin_inset Text
 
 \begin_layout Plain Layout
+*
 \begin_inset Flex URL
 status open
 
@@ -3306,7 +3411,7 @@ theta
 
 \end_inset
 
-*
+
 \end_layout
 
 \end_inset
@@ -3580,6 +3685,7 @@ volScalarField
 \begin_inset Text
 
 \begin_layout Plain Layout
+*
 \begin_inset Flex URL
 status collapsed
 
@@ -3590,7 +3696,7 @@ Exner
 
 \end_inset
 
-*
+
 \end_layout
 
 \end_inset
@@ -3738,7 +3844,7 @@ Psi
 
 \begin_layout Plain Layout
 Compressibility, 
-\begin_inset Formula $\rho_{a}/\pi$
+\begin_inset Formula $\rho/\pi$
 \end_inset
 
 
@@ -4091,11 +4197,7 @@ rho
 
 \begin_layout Standard
 \noindent
-Additional functions are functions of a temperature field, 
-\begin_inset Formula $T$
-\end_inset
-
-:
+Additional functions:
 \end_layout
 
 \begin_layout Standard
@@ -4115,7 +4217,7 @@ status open
 
 \begin_layout Plain Layout
 
-partialPressure(T)
+partialPressure(T,rho)
 \end_layout
 
 \end_inset
@@ -4144,7 +4246,7 @@ partialPressure(T)
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -4210,7 +4312,7 @@ Data:
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\mbox{\rho}_{\ell}=$
+\begin_inset Formula $\mbox{\rho}_{\ell}$
 \end_inset
 
 
@@ -4269,7 +4371,7 @@ rhol = 1000
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $c_{p\ell}=$
+\begin_inset Formula $c_{p\ell}$
 \end_inset
 
 
@@ -4328,7 +4430,7 @@ cp = 4186
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $v_{\ell}=$
+\begin_inset Formula $v_{\ell}$
 \end_inset
 
 
@@ -4350,7 +4452,7 @@ volScalarField
 
 \end_inset
 
- - volume fraction of liquid
+ - volume of liquid
 \end_layout
 
 \end_inset
@@ -4609,7 +4711,7 @@ dimensionedScalar&
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -4871,7 +4973,7 @@ volScalarField
 
 \begin_layout Plain Layout
 \begin_inset Flex URL
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -5003,7 +5105,7 @@ status open
 
 \begin_layout Plain Layout
 
-updateCondensation(T)
+updateCondensation(T,p)
 \end_layout
 
 \end_inset
@@ -5030,7 +5132,7 @@ updateCondensation(T)
 \end_inset
 
  where 
-\begin_inset Formula $S_{f}=(p_{v}-p_{vs})/(R_{v}T)$
+\begin_inset Formula $S_{f}=\frac{p_{v}-p_{vs}}{R_{v}T}$
 \end_inset
 
  and 
@@ -5124,7 +5226,7 @@ volScalarField
 
 
 \begin_inset Tabular
-<lyxtabular version="3" rows="11" columns="3">
+<lyxtabular version="3" rows="9" columns="3">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="40text%">
 <column alignment="center" valignment="top" width="0">
@@ -5182,7 +5284,7 @@ rhoR()
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\rho_{a}R_{m}$
+\begin_inset Formula $\rho R_{t}$
 \end_inset
 
 
@@ -5272,7 +5374,7 @@ rhoCp()
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\rho_{a}c_{pml}$
+\begin_inset Formula $\rho c_{pt}$
 \end_inset
 
 
@@ -5284,7 +5386,7 @@ rhoCp()
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\sum_{i\in\text{gases}}\rho_{i}c_{pi}+\sum_{\ell\in\text{liquids}}\rho_{\ell}v_{\ell}c_{p\ell}$
+\begin_inset Formula $\sum_{i\in\text{gases}}\rho_{i}c_{pi}+\sum_{\ell\in\text{liquids}}v_{\ell}c_{p\ell}\rho_{\ell}$
 \end_inset
 
 
@@ -5317,7 +5419,7 @@ rhoCv()
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\rho_{a}c_{vml}$
+\begin_inset Formula $\rho c_{vt}$
 \end_inset
 
 
@@ -5329,97 +5431,7 @@ rhoCv()
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\sum_{i\in\text{gases}}\rho_{i}c_{vi}+\sum_{\ell\in\text{liquids}}\rho_{\ell}v_{\ell}c_{p\ell}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-sumDensity()
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\rho$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\sum_{i\in\text{gases}}\rho_{i}+\sum_{\ell\in\text{liquids}}\rho_{\ell}v_{\ell}$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Flex URL
-status open
-
-\begin_layout Plain Layout
-
-sumPressure(T)
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $p$
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Formula $\frac{1}{v_{g}}\sum_{i\in\text{gases}}p_{i}$
+\begin_inset Formula $\sum_{i\in\text{gases}}\rho_{i}c_{vi}+\sum_{\ell\in\text{liquids}}v_{\ell}c_{p\ell}\rho_{\ell}$
 \end_inset
 
 
@@ -5477,7 +5489,7 @@ pFromT(T)
 \noun off
 \color none
 \lang english
-\begin_inset Formula $p=\frac{\rho_{a}R_{m}T}{v_{g}}$
+\begin_inset Formula $p=\frac{\rho R_{t}T}{v_{g}}$
 \end_inset
 
 
@@ -5535,7 +5547,7 @@ ExnerFromTheta(theta)
 \noun off
 \color none
 \lang english
-\begin_inset Formula $\left(\frac{\theta\rho_{a}R_{m}}{p_{0}v_{g}}\right)^{\kappa/(1-\kappa)}$
+\begin_inset Formula $\left(\frac{\theta\rho R_{t}}{p_{0}v_{g}}\right)^{\kappa/(1-\kappa)}$
 \end_inset
 
 
@@ -5568,7 +5580,7 @@ thetaSource(T,divu)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $S_{\theta}/(\theta\rho_{a})$
+\begin_inset Formula $S_{\theta}$
 \end_inset
 
 
@@ -5580,7 +5592,7 @@ thetaSource(T,divu)
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $-\nabla\cdot\mathbf{u}\left(\frac{R_{m}}{c_{vml}}-\frac{R_{a}c_{pml}}{c_{pa}c_{vml}}\right)+\frac{\rho}{\rho_{a}}\sum_{v\in fluids}\frac{S_{\text{cond}}}{\rho_{a}c_{vml}}\left[\frac{c_{va}L_{v}}{c_{pa}T}-R_{v}\left(1-\frac{R_{a}}{c_{pa}}\frac{c_{pml}}{R_{m}}\right)\right]$
+\begin_inset Formula $-\nabla\cdot\mathbf{u}\left(\frac{R_{t}}{c_{vt}}-\kappa\frac{c_{pt}}{c_{vt}}\right)+\sum_{v\in fluids}\frac{S_{\text{cond}}}{\rho c_{vt}}\left[\frac{c_{va}L_{v}}{c_{pa}T}-R_{v}\left(1-\kappa\frac{c_{pt}}{R_{t}}\right)\right]$
 \end_inset
 
 
