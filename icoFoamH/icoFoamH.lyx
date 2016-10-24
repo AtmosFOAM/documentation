@@ -1,0 +1,517 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+
+\RequirePackage{tweaklist}
+\renewcommand{\itemhook}
+{
+    \setlength{\topsep}{3pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    \setlength{\itemsep}{0pt}
+    \setlength{\labelwidth}{10pt}
+    \setlength{\leftmargin}{\labelwidth}
+}
+
+\renewcommand{\enumhook}
+{
+    \setlength{\topsep}{3pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\partopsep}{0pt}
+    \setlength{\itemsep}{3pt}
+    \setlength{\labelwidth}{10pt}
+    \setlength{\leftmargin}{\labelwidth}
+}
+
+\renewcommand{\descriptionlabel}[1]{\parbox{\leftmargin}{\raggedleft #1.~}}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+icoFoamH - incompressible solver on a C-grid with a Hodge operator
+\end_layout
+
+\begin_layout Standard
+The continuous equations solved are the incompressible Euler equations
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\mathbf{u}}{\partial t}+\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)=-2\bm{\Omega}\times\mathbf{u}-\nabla p\label{eq:mom}
+\end{equation}
+
+\end_inset
+
+subject to the constraint
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot\mathbf{u}=0\label{eq:divFree}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+ is the velocity and 
+\begin_inset Formula $p$
+\end_inset
+
+ is the pressure.
+ The numerical solution uses the prognostic variable
+\begin_inset Formula 
+\begin{equation}
+V_{f}=\mathbf{u}_{f}\cdot\mathbf{d}_{f}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{u}_{f}$
+\end_inset
+
+ is the velocity on face 
+\begin_inset Formula $f$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{d}_{f}$
+\end_inset
+
+ is the vector between cell centres either side of face 
+\begin_inset Formula $f$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/hilary/latex/myPapers/ExnerFoam/submit2/geometryVariables.pdf
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We also define a diagnostic variable for the volumetric flux across face
+ 
+\begin_inset Formula $f$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{equation}
+U_{f}=\mathbf{u}\cdot\mathbf{S}_{f}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{S}_{f}$
+\end_inset
+
+ is the normal vector to face 
+\begin_inset Formula $f$
+\end_inset
+
+ with magnitude equal to the area of face 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ The pressure, 
+\begin_inset Formula $p$
+\end_inset
+
+, is an auxiliary variable.
+ 
+\end_layout
+
+\begin_layout Standard
+We use the convection that 
+\begin_inset Formula $U$
+\end_inset
+
+ is a vector of all values of 
+\begin_inset Formula $U_{f}$
+\end_inset
+
+ on all faces and 
+\begin_inset Formula $V$
+\end_inset
+
+ is a vector of all values of 
+\begin_inset Formula $V_{f}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The numerical solution uses projection method: the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+) is solved without the pressure gradient term to find an intermediate value
+ of the velocity, then this velocity is projected into divergence free space
+ by solving a pressure equation and then adding the pressure gradient term
+ to the intermediate velocity.
+ To discretise the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+), we take the dot product with 
+\begin_inset Formula $\mathbf{d}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial V}{\partial t}+\left(\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)\right)\cdot\mathbf{d}=-\left(2\bm{\Omega}\times\mathbf{u}\right)\cdot\mathbf{d}-\nabla_{d}p\label{eq:momDotd}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\nabla_{d}p=\mathbf{d}\cdot\nabla p$
+\end_inset
+
+ so that the simplest discretisation of 
+\begin_inset Formula $\nabla_{d}p$
+\end_inset
+
+ is simply the difference between the two values of the pressure, 
+\begin_inset Formula $p$
+\end_inset
+
+, either side of the face.
+ We can now discretise in time using trapezoidal-implicit time-stepping
+ with deferred correction of explicit terms:
+\begin_inset Formula 
+\begin{equation}
+V^{n+1}=V^{n}+(1-\alpha)\Delta t\left(\frac{\partial V}{\partial t}\right)^{n}-\alpha\Delta t\left\{ \left(\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)^{\ell}\right)\cdot\mathbf{d}+\left(2\bm{\Omega}\times\mathbf{u}^{\ell}\right)\cdot\mathbf{d}+\nabla_{d}p^{n+1}\right\} \label{eq:momD}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\Delta t$
+\end_inset
+
+ is the time-step, 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the off-centering parameter and 
+\begin_inset Formula $\ell$
+\end_inset
+
+ represents values of variables at the most recent iteration within each
+ time-step but not at the latest time since they are not solved for implicitly.
+ Next we define an intermediate value, 
+\begin_inset Formula $V^{i}$
+\end_inset
+
+, (which shares the same storage as 
+\begin_inset Formula $V$
+\end_inset
+
+), using explicitly defined values:
+\begin_inset Formula 
+\begin{equation}
+V^{i}=V^{n}+(1-\alpha)\Delta t\left(\frac{\partial V}{\partial t}\right)^{n}-\alpha\Delta t\left(\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)^{\ell}\right)\cdot\mathbf{d}.\label{eq:Vi}
+\end{equation}
+
+\end_inset
+
+Variables 
+\begin_inset Formula $V$
+\end_inset
+
+, 
+\begin_inset Formula $V^{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial V/\partial t$
+\end_inset
+
+ share the same boundary conditions at zero flux boundaries (ie they are
+ all set to zero at zero flux boundaries).
+ Next we apply the Hodge operator, 
+\begin_inset Formula $H$
+\end_inset
+
+, to find the intermediate value of the flux, before pressure gradients
+ are applied:
+\begin_inset Formula 
+\begin{eqnarray}
+U^{i} & = & HV^{i}-\alpha\Delta t\ 2\left(\bm{\Omega}\times\mathbf{u}^{\ell}\right)\cdot\mathbf{S}.\\
+ & = & HV^{i}-\alpha\Delta t\ 2\left(\mathbf{S}\times\bm{\Omega}\right)\cdot\mathbf{u}^{\ell}.
+\end{eqnarray}
+
+\end_inset
+
+Alternatively, if we had applied the Hodge operator to 
+\begin_inset Formula $V^{n+1}$
+\end_inset
+
+ from eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:momD"
+
+\end_inset
+
+) we would get an equation for the flux:
+\begin_inset Formula 
+\begin{equation}
+U^{n+1}=U^{i}-\alpha\Delta t\ H\nabla_{d}p^{n+1}.\label{eq:flux}
+\end{equation}
+
+\end_inset
+
+We require the velocity field to be divergence free at every time-step,
+ ie 
+\begin_inset Formula $\nabla\cdot U^{n+1}=0$
+\end_inset
+
+ where 
+\begin_inset Formula $\nabla\cdot U^{n+1}$
+\end_inset
+
+ represents the discrete calculation of 
+\begin_inset Formula $\nabla\cdot\mathbf{u}$
+\end_inset
+
+ and is calculated as:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot U=\frac{1}{v_{c}}\sum_{f\in c}U_{f}\label{eq:divU}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $v_{c}$
+\end_inset
+
+ is the volume of cell 
+\begin_inset Formula $c$
+\end_inset
+
+ and 
+\begin_inset Formula $f\in c$
+\end_inset
+
+ means all the faces, 
+\begin_inset Formula $f$
+\end_inset
+
+, of cell 
+\begin_inset Formula $c$
+\end_inset
+
+.
+ Therefore, substituting eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:flux"
+
+\end_inset
+
+) into 
+\begin_inset Formula $\nabla\cdot U=0$
+\end_inset
+
+ gives:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot U^{i}-\alpha\Delta t\nabla\cdot H\nabla_{d}p^{n+1}=0.\label{eq:p}
+\end{equation}
+
+\end_inset
+
+This is the pressure equation, a Helmholtz equation that can be solved implicitl
+y for 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ In order to simplify the construction of the matrix for the implicit solution
+ of (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:p"
+
+\end_inset
+
+), we can separate 
+\begin_inset Formula $H\nabla_{d}p$
+\end_inset
+
+ into diagonal and off-diagonal parts:
+\begin_inset Formula 
+\begin{eqnarray}
+H\nabla_{d}p & = & H_{d}\nabla_{d}p+H_{off}\nabla_{d}p\\
+ & = & \frac{|\mathbf{S}|}{|\mathbf{d}|}\nabla_{d}p+H_{off}\nabla_{d}p
+\end{eqnarray}
+
+\end_inset
+
+and only solve the diagonal part implicitly.
+ Then 
+\begin_inset Formula $U^{i}$
+\end_inset
+
+ can be re-defined to include the off diagonal part of the Hodge operator:
+\begin_inset Formula 
+\begin{equation}
+U^{i}=HV^{i}-\alpha\Delta t\ 2\left(\mathbf{S}\times\bm{\Omega}\right)\cdot\mathbf{u}^{\ell}-\alpha\Delta t\ H_{off}\nabla_{d}p^{\ell}
+\end{equation}
+
+\end_inset
+
+leaving the pressure equation simpler:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot U^{i}-\alpha\Delta t\nabla\cdot\frac{|\mathbf{S}|}{|\mathbf{d}|}\nabla_{d}p^{n+1}=0.\label{eq:pDiag}
+\end{equation}
+
+\end_inset
+
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pDiag"
+
+\end_inset
+
+) is solved implicitly for 
+\begin_inset Formula $p$
+\end_inset
+
+ and then we can calculate divergence free velocity components, 
+\begin_inset Formula $U$
+\end_inset
+
+ and 
+\begin_inset Formula $V$
+\end_inset
+
+ (the back-substitution step):
+\begin_inset Formula 
+\begin{eqnarray}
+V^{n+1} & = & V^{i}-\alpha\Delta t\left\{ \left(2\bm{\Omega}\times\mathbf{u}^{\ell}\right)\cdot\mathbf{d}+\nabla_{d}p^{n+1}\right\} \\
+U^{n+1} & = & U^{i}-\alpha\Delta t\ H\nabla_{d}p^{n+1}.
+\end{eqnarray}
+
+\end_inset
+
+In order to ensure no flow at boundaries, geostrophic balance can be imposed,
+ ie:
+\begin_inset Formula 
+\begin{equation}
+\nabla_{d}p=\left(2\bm{\Omega}\times\mathbf{u}^{\ell}\right)\cdot\mathbf{d}
+\end{equation}
+
+\end_inset
+
+at boundaries.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
