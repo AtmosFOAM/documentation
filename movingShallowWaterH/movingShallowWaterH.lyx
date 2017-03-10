@@ -103,23 +103,17 @@
 \begin_body
 
 \begin_layout Title
-movingIcoFoamH - incompressible solver on a moving C-grid with a Hodge operator
+movingShallowWaterFoamH - shallow water solver on a moving C-grid on a plane
+ with a Hodge operator
 \end_layout
 
 \begin_layout Standard
-The continuous equations solved are the incompressible Euler equations
+The shallow water equations in rotating frame in flux form are:
 \begin_inset Formula 
-\begin{equation}
-\frac{\partial\mathbf{u}}{\partial t}+\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)=-2\bm{\Omega}\times\mathbf{u}-\nabla p\label{eq:mom}
-\end{equation}
-
-\end_inset
-
-subject to the constraint
-\begin_inset Formula 
-\begin{equation}
-\nabla\cdot\mathbf{u}=0\label{eq:divFree}
-\end{equation}
+\begin{eqnarray}
+\frac{\partial h\mathbf{u}}{\partial t}+\nabla\cdot\left(h\mathbf{u}\mathbf{u}\right) & = & -2h\bm{\Omega}\times\mathbf{u}-gh\nabla h\label{eq:mom}\\
+\frac{\partial h}{\partial t}+\nabla\cdot\left(h\mathbf{u}\right) & = & 0\label{eq:cont}
+\end{eqnarray}
 
 \end_inset
 
@@ -132,10 +126,14 @@ where
 \end_inset
 
  is the rotation of the domain and 
-\begin_inset Formula $p$
+\begin_inset Formula $h$
 \end_inset
 
- is the pressure.
+ is the shallow water height and 
+\begin_inset Formula $g$
+\end_inset
+
+ is the acceleration due to gravity.
  In order to be able to consider the equatorial 
 \begin_inset Formula $\beta$
 \end_inset
@@ -144,11 +142,7 @@ where
 \begin_inset Formula $(x,y)$
 \end_inset
 
- domain) and a vertical 
-\begin_inset Formula $(x,z)$
-\end_inset
-
- slice, the rotation is expressed as:
+ domain) the rotation is expressed as:
 \begin_inset Formula 
 \begin{equation}
 2\bm{\Omega}=(f_{0}+\beta y)\hat{\bm{\Omega}}
@@ -156,42 +150,32 @@ where
 
 \end_inset
 
-and a restoring velocity, 
-\begin_inset Formula $\mathbf{u}_{g}$
+where 
+\begin_inset Formula $f_{0}$
 \end_inset
 
-, is used to balance the Coriolis force in an 
-\begin_inset Formula $(x,z)$
+ is the Coriolis force at 
+\begin_inset Formula $y=0$
 \end_inset
 
- plane following 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "SK94"
-
+ and 
+\begin_inset Formula $\hat{\bm{\Omega}}$
 \end_inset
 
- so that the momentum equation becomes
-\begin_inset Formula 
-\begin{equation}
-\frac{\partial\mathbf{u}}{\partial t}+\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)=-2\bm{\Omega}\times(\mathbf{u}-\mathbf{u}_{g})-\nabla p.\label{eq:momCori}
-\end{equation}
-
-\end_inset
-
-
+ is the direction of the rotation vector.
+ 
 \end_layout
 
 \begin_layout Standard
-The numerical solution uses the prognostic variable
+The Hodge-dual C-grid numerical solution uses the prognostic variable
 \begin_inset Formula 
 \begin{equation}
-V=\mathbf{u}\cdot\mathbf{d}
+V=h\mathbf{u}\cdot\mathbf{d}
 \end{equation}
 
 \end_inset
 
-where 
+located at the cell interfaces (face centres) where 
 \begin_inset Formula $\mathbf{d}$
 \end_inset
 
@@ -300,15 +284,15 @@ Face area vector,
 \end_inset
 
  and placement of variables 
-\begin_inset Formula $U$
+\begin_inset Formula $U=h\mathbf{u}\cdot\mathbf{S}$
 \end_inset
 
 , 
-\begin_inset Formula $V$
+\begin_inset Formula $V=h\mathbf{u}\cdot\mathbf{d}$
 \end_inset
 
  and 
-\begin_inset Formula $p$
+\begin_inset Formula $h$
 \end_inset
 
 .
@@ -332,13 +316,12 @@ name "fig:geometryVariables"
 \end_layout
 
 \begin_layout Standard
-We also define a diagnostic variable for the volumetric flux across each
- face.
+We also define a diagnostic variable for the mass flux across each face.
  This is the total flux over the interface at the fixed location of the
  face rather than the relative flux: 
 \begin_inset Formula 
 \begin{equation}
-U=\mathbf{u}\cdot\mathbf{S}
+U=h\mathbf{u}\cdot\mathbf{S}
 \end{equation}
 
 \end_inset
@@ -359,12 +342,11 @@ where
 \end_layout
 
 \begin_layout Standard
-The pressure, 
-\begin_inset Formula $p$
+The shallow water height, 
+\begin_inset Formula $h$
 \end_inset
 
-, is an auxiliary variable.
- 
+, is a prognostic variable located in cells (at cell centres)
 \end_layout
 
 \begin_layout Standard
@@ -377,11 +359,11 @@ The moving mesh formulation starts with Reynolds transport theorem for a
 \begin_inset Formula $\mathscr{V}(t)$
 \end_inset
 
- with boundary 
+ (a cell) with boundary 
 \begin_inset Formula $S(t)$
 \end_inset
 
-:
+ (the cell faces):
 \begin_inset Formula 
 \begin{equation}
 \frac{d}{dt}\int_{\mathscr{V}(t)}F\ dV=\int_{\mathscr{V}(t)}\frac{\partial F}{\partial t}\ dV+\int_{S}F\ \mathbf{v}\cdot\mathbf{dS}\label{eq:ReynoldsTransport}
@@ -413,11 +395,11 @@ where
 \end_inset
 
 ), assume that 
-\begin_inset Formula $F=\mathbf{u}$
+\begin_inset Formula $F=h\mathbf{u}$
 \end_inset
 
  and substitute the equation for 
-\begin_inset Formula $\partial\mathbf{u}/\partial t$
+\begin_inset Formula $\partial h\mathbf{u}/\partial t$
 \end_inset
 
  from equation (
@@ -437,7 +419,7 @@ reference "eq:ReynoldsTransport"
 ) and discretise in time: 
 \begin_inset Formula 
 \begin{equation}
-\frac{\mathscr{V}^{n+1}\mathbf{u}^{n+1}-\mathscr{V}^{n}\mathbf{u}^{n}}{\Delta t}=-\int_{\mathscr{V}(t)}\nabla\cdot\left(\mathbf{u}\mathbf{u}\right)+2\bm{\Omega}\times(\mathbf{u}-\mathbf{u}_{g})+\nabla p\ dV+\int_{S}\mathbf{u}\left(\mathbf{v}\cdot\mathbf{dS}\right)
+\frac{\mathscr{V}^{n+1}h\mathbf{u}^{n+1}-\mathscr{V}^{n}h\mathbf{u}^{n}}{\Delta t}=-\int_{\mathscr{V}(t)}\nabla\cdot\left(h\mathbf{u}\mathbf{u}\right)+2h\bm{\Omega}\times\mathbf{u}+gh\nabla h\ dV+\int_{S}h\mathbf{u}\left(\mathbf{v}\cdot\mathbf{dS}\right)
 \end{equation}
 
 \end_inset
@@ -451,7 +433,7 @@ where
  can then be combined with the final term to give:
 \begin_inset Formula 
 \begin{equation}
-\frac{\mathscr{V}^{n+1}\mathbf{u}^{n+1}-\mathscr{V}^{n}\mathbf{u}^{n}}{\Delta t}=-\int_{S}\mathbf{u}\left(\mathbf{u}-\mathbf{v}\right)\cdot\mathbf{dS}-\int_{\mathscr{V}(t)}2\bm{\Omega}\times(\mathbf{u}-\mathbf{u}_{g})\ dV-\int_{\mathscr{V}(t)}\nabla p\ dV.\label{eq:momMoving}
+\frac{\mathscr{V}^{n+1}h\mathbf{u}^{n+1}-\mathscr{V}^{n}h\mathbf{u}^{n}}{\Delta t}=-\int_{S}h\mathbf{u}\left(\mathbf{u}-\mathbf{v}\right)\cdot\mathbf{dS}-\int_{\mathscr{V}(t)}2h\bm{\Omega}\times\mathbf{u}\ dV-\int_{\mathscr{V}(t)}gh\nabla h\ dV.\label{eq:momMoving}
 \end{equation}
 
 \end_inset
@@ -467,7 +449,7 @@ We define the velocity relative to the mesh face as
 and the relative flux through the face as:
 \begin_inset Formula 
 \begin{equation}
-U_{r}=\mathbf{u}_{r}\cdot\mathbf{S}.
+U_{r}=h\mathbf{u}_{r}\cdot\mathbf{S}.
 \end{equation}
 
 \end_inset
@@ -481,45 +463,59 @@ In order to solve the momentum equation on a moving C-grid (with a Hodge
  term so that the cross product can be pre-computed:
 \begin_inset Formula 
 \begin{equation}
-\frac{\mathscr{V}_{f}^{n+1}V^{n+1}-\mathscr{V}_{f}^{n}\mathbf{u}^{n}\cdot\mathbf{d}^{n+1}}{\Delta t}=-\mathbf{d}^{n+1}\cdot\sum_{\text{faces}}\left(U_{r}\mathbf{u}\right)^{n+\half}-2\mathscr{V}_{f}(\mathbf{d}^{n+1}\times\bm{\Omega})\cdot(\mathbf{u}-\mathbf{u}_{g})^{n+\half}-\left(\mathscr{V}_{f}\ \nabla_{d}p\right)^{n+1}\label{eq:momDotdMoving}
+\frac{\mathscr{V}_{f}^{n+1}V^{n+1}-\mathscr{V}_{f}^{n}h\mathbf{u}^{n}\cdot\mathbf{d}^{n+1}}{\Delta t}=-\mathbf{d}^{n+1}\cdot\left(\sum_{\text{faces}}U_{r}\mathbf{u}\right)_{f}^{n+\half}-2\mathscr{V}_{f}(\mathbf{d}^{n+1}\times\bm{\Omega})\cdot(h\mathbf{u})^{n+\half}-\left(\mathscr{V}_{f}gh_{f}\nabla_{d}h\right)^{n+\half}\label{eq:momDotdMoving}
 \end{equation}
 
 \end_inset
 
-where 
-\begin_inset Formula $\mathscr{V}_{f}$
+where subscript 
+\begin_inset Formula $f$
 \end_inset
 
- is the cell volume interpolated onto the face 
+ means a field interpolated onto the face 
 \begin_inset Formula $f$
 \end_inset
 
 .
- The pressure gradient is defined at time 
-\begin_inset Formula $n+1$
-\end_inset
-
- rather than at time 
-\begin_inset Formula $n+\half$
-\end_inset
-
- because the pressure is being used as a Lagrange multiplier to enforce
- continuity using the projection method rather than as a prognostic variable.
  The pressure gradient term is defined by 
-\begin_inset Formula $\nabla_{d}p^{n}=\mathbf{d}^{n}\cdot\nabla p^{n}$
+\begin_inset Formula $\nabla_{d}h=\mathbf{d}\cdot\nabla h$
 \end_inset
 
  so that the simplest discretisation of 
-\begin_inset Formula $\nabla_{d}p$
+\begin_inset Formula $\nabla_{d}h$
 \end_inset
 
- is simply the difference between the two values of the pressure, 
-\begin_inset Formula $p$
+ is simply the difference between the two values of the height, 
+\begin_inset Formula $h$
 \end_inset
 
 , either side of the face.
- The advection and Coriolis terms are treated explicitly with deferred correctio
-n of explicit terms, with parameter 
+ 
+\end_layout
+
+\begin_layout Standard
+The diagnostic variable 
+\begin_inset Formula $h\mathbf{u}$
+\end_inset
+
+ is reconstructed at faces from surrounding values of 
+\begin_inset Formula $V$
+\end_inset
+
+ following 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Wel14"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The advection and Coriolis terms are treated explicitly with deferred correction
+ of explicit terms, with parameter 
 \begin_inset Formula $\ell$
 \end_inset
 
@@ -533,12 +529,41 @@ n of explicit terms, with parameter
 : 
 \begin_inset Formula 
 \begin{eqnarray}
-\mathscr{V}_{f}^{n+1}V^{n+1} & = & \mathscr{V}_{f}^{n}\mathbf{u}^{n}\cdot\mathbf{d}^{n+1}-(1-\alpha)\Delta t\left(\mathbf{d}^{n+1}\cdot\sum_{\text{faces}}\left(U_{r}\mathbf{u}\right)+2\mathscr{V}_{f}(\mathbf{d}^{n+1}\times\bm{\Omega})\cdot(\mathbf{u}-\mathbf{u}_{g})\right)^{n}\label{eq:momD}\\
- & - & \alpha\Delta t\left\{ \left(\nabla\cdot\left(U_{r}\mathbf{u}\right)^{\ell}\right)\cdot\mathbf{d}^{n+1}+2\mathscr{V}_{f}\left(\mathbf{d}^{n+1}\times\bm{\Omega}\right)_{f}\cdot(\mathbf{u}^{\ell}-\mathbf{u}_{g})\right\} -\Delta t\ \mathscr{V}_{f}^{n+1}\nabla_{d}p^{n+1}
+\mathscr{V}_{f}^{n+1}V^{n+1} & = & \mathscr{V}_{f}^{n}h\mathbf{u}^{n}\cdot\mathbf{d}^{n+1}-(1-\alpha)\Delta t\left(\mathbf{d}^{n+1}\cdot\sum_{\text{faces}}\left(U_{r}\mathbf{u}\right)+2\mathscr{V}_{f}(\mathbf{d}^{n+1}\times\bm{\Omega})\cdot(h\mathbf{u})+\mathscr{V}_{f}gh_{f}\nabla_{d}h\right)^{n}\label{eq:momD}\\
+ & - & \alpha\Delta t\left\{ \left(\nabla\cdot\left(U_{r}\mathbf{u}\right)^{\ell}\right)\cdot\mathbf{d}^{n+1}+2\mathscr{V}_{f}\left(\mathbf{d}^{n+1}\times\bm{\Omega}\right)_{f}\cdot(h\mathbf{u}^{\ell})+\mathscr{V}_{f}^{n+1}gh_{f}\nabla_{d}p^{n+1}\right\} .
 \end{eqnarray}
 
 \end_inset
 
+Note that for the variables defined at time-level 
+\begin_inset Formula $n$
+\end_inset
+
+, the volume is defined at time-level 
+\begin_inset Formula $n$
+\end_inset
+
+ but the direction, 
+\begin_inset Formula $d$
+\end_inset
+
+, is defined at time-level 
+\begin_inset Formula $n+1$
+\end_inset
+
+ so that 
+\begin_inset Formula $ $
+\end_inset
+
+
+\begin_inset Formula $\left(\mathscr{V}_{f}\nabla_{d}h\right)^{n}=\mathscr{V}_{f}^{n}\mathbf{d}^{n+1}\cdot\nabla h^{n}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
 Next we define an intermediate values, 
 \begin_inset Formula $V^{o}$
 \end_inset
@@ -558,8 +583,8 @@ Next we define an intermediate values,
 ) using all explicitly defined values:
 \begin_inset Formula 
 \begin{eqnarray}
-V^{o} & = & \left\{ \mathscr{V}_{f}^{n}\mathbf{u}^{n}\cdot\mathbf{d}^{n+1}-(1-\alpha)\Delta t\left(\mathbf{d}^{n+1}\cdot\sum_{f\in\text{faces}}\left(U_{r}\mathbf{u}\right)+2\mathscr{V}_{f}(\mathbf{d}^{n+1}\times\bm{\Omega})\cdot\left(\mathbf{u}-\mathbf{u}_{g}\right)\right)^{n}\right\} \bigg/\mathscr{V}_{f}^{n+1}\label{eq:Vi}\\
-V^{\prime} & = & V^{o}-\alpha\Delta t\left(\nabla\cdot\left(U_{r}\mathbf{u}\right)^{\ell}\right)\cdot\mathbf{d}^{n+1}/\mathscr{V}_{f}^{n+1}
+V^{o} & = & \left\{ \mathscr{V}_{f}^{n}h\mathbf{u}^{n}\cdot\mathbf{d}^{n+1}-(1-\alpha)\Delta t\left(\mathbf{d}^{n+1}\cdot\left(\sum_{f\in\text{faces}}U_{r}\mathbf{u}\right)_{f}+2\mathscr{V}_{f}(\mathbf{d}^{n+1}\times\bm{\Omega})\cdot\left(h\mathbf{u}\right)+\mathscr{V}_{f}gh_{f}\nabla_{d}h\right)^{n}\right\} \bigg/\mathscr{V}_{f}^{n+1}\label{eq:Vi}\\
+V^{\prime} & = & V^{o}-\alpha\Delta t\mathbf{d}^{n+1}\cdot\left(\sum_{f\in\text{faces}}U_{r}\mathbf{u}\right)_{f}^{\ell}/\mathscr{V}_{f}^{n+1}
 \end{eqnarray}
 
 \end_inset
@@ -588,17 +613,16 @@ Variables
  orthogonal part of the pressure gradient is applied:
 \begin_inset Formula 
 \begin{eqnarray}
-U^{\prime} & = & HV^{\prime}-2\alpha\Delta t\ H\left(\left(\mathbf{d}^{n+1}\times\bm{\Omega}\right)\cdot(\mathbf{u}^{\ell}-\mathbf{u}_{g})\right)-\Delta t\ H_{\text{off}}\nabla_{d}p
+U^{\prime} & = & HV^{\prime}-2\alpha\Delta t\ H\left(\left(\mathbf{d}^{n+1}\times\bm{\Omega}\right)\cdot(h\mathbf{u}^{\ell})\right)-\alpha\Delta t\ gH_{\text{off}}h_{f}^{\ell}\nabla_{d}h^{\ell}
 \end{eqnarray}
 
 \end_inset
 
-After the projection step (numerical solution of the pressure equation to
- find 
-\begin_inset Formula $p^{n+1}$
+After the numerical solution of the Helmholtz equation to find 
+\begin_inset Formula $h^{n+1}$
 \end_inset
 
-), we will be able to back-substitute to calculate 
+, we will be able to back-substitute to calculate 
 \begin_inset Formula $V^{n+1}$
 \end_inset
 
@@ -613,63 +637,73 @@ After the projection step (numerical solution of the pressure equation to
 :
 \begin_inset Formula 
 \begin{eqnarray}
-V^{n+1} & = & V^{\prime}-2\alpha\Delta t\ \left(\mathbf{d}^{n+1}\times\bm{\Omega}\right)\cdot(\mathbf{u}^{\ell}-\mathbf{u}_{g})-\Delta t\ \nabla_{d}p^{n+1}\label{eq:backSubsV}\\
-U^{n+1} & = & U^{\prime}-\Delta t\ H_{d}\nabla_{d}p^{n+1}.\label{eq:backSubsFlux}\\
-U_{r}^{n+1} & = & U^{n+1}-\mathbf{v}^{n+\half}\cdot\mathbf{S}
+V^{n+1} & = & V^{\prime}-2\alpha\Delta t\ \left(\mathbf{d}^{n+1}\times\bm{\Omega}\right)\cdot(h\mathbf{u}^{\ell})-\alpha\Delta t\ gh_{f}^{\ell}\nabla_{d}h^{n+1}\label{eq:backSubsV}\\
+U^{n+1} & = & U^{\prime}-\Delta t\alpha gH_{d}h_{f}\nabla_{d}h^{n+1}.\label{eq:backSubsFlux}\\
+U_{r}^{n+1} & = & U^{n+1}-h_{f}^{n+\half}\mathbf{v}^{n+\half}\cdot\mathbf{S}.\label{eq:backSubsRelFlux}
 \end{eqnarray}
 
 \end_inset
 
-We require the velocity field to be divergence free at every time-step,
- ie 
-\begin_inset Formula $\nabla\cdot U^{n+1}=0$
+We require the momentum, 
+\begin_inset Formula $h\mathbf{u}$
 \end_inset
 
- where 
-\begin_inset Formula $\nabla\cdot U^{n+1}$
+, to satisfy the continuity equation at every time-step.
+ Applying the Reynolds transport theorem (eqn 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ReynoldsTransport"
+
 \end_inset
 
- represents the discrete calculation of 
-\begin_inset Formula $\nabla\cdot\mathbf{u}$
+) to the continuity equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:cont"
+
 \end_inset
 
- and is calculated as:
+) using 
+\begin_inset Formula $F=h$
+\end_inset
+
+ and discretising in space and time gives:
 \begin_inset Formula 
 \begin{equation}
-\mathscr{V}\nabla\cdot U=\sum_{\text{faces}}U.\label{eq:divU}
+\frac{\mathscr{V}_{f}^{n+1}h^{n+1}-\mathscr{V}_{f}^{n}h^{n}}{\Delta t}=-(1-\alpha)\sum_{\text{faces}}U_{r}^{n}-\alpha\sum_{\text{faces}}U_{r}^{n+1}.\label{eq:divU}
 \end{equation}
 
 \end_inset
 
-Therefore, substituting eqn (
+The Helmholtz equation for 
+\begin_inset Formula $h^{n+1}$
+\end_inset
+
+ can be formulated using eqns (
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:backSubsFlux"
+reference "eq:backSubsV"
 
 \end_inset
 
-) into 
-\begin_inset Formula $\nabla\cdot U=0$
-\end_inset
-
- using eqn (
+-
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:divU"
+reference "eq:backSubsRelFlux"
 
 \end_inset
 
-) gives:
+):
 \begin_inset Formula 
 \begin{equation}
-\mathscr{V}^{n+1}\nabla\cdot U^{\prime}-\Delta t\nabla\cdot H_{d}\nabla_{d}p^{n+1}=0.\label{eq:p}
+\frac{\mathscr{V}_{f}^{n+1}h^{n+1}-\mathscr{V}_{f}^{n}h^{n}}{\Delta t}=\sum_{\text{faces}}h_{f}^{n+\half}\mathbf{v}\cdot S-\alpha\sum_{\text{faces}}U^{n}-(1-\alpha)\sum_{\text{faces}}U^{\prime}-\alpha^{2}\sum_{\text{faces}}\Delta tgH_{d}h_{f}\nabla_{d}h^{n+1}.\label{eq:p}
 \end{equation}
 
 \end_inset
 
-This is the pressure equation, a Poisson equation that can be solved implicitly
- for 
-\begin_inset Formula $p^{n+1}$
+This is a Helpholtz equation because the final term is a discretisation
+ of the Laplacian, 
+\begin_inset Formula $\nabla\cdot\left(gh\nabla h\right)$
 \end_inset
 
 .
@@ -688,8 +722,8 @@ reference "eq:p"
  has been separated into diagonal and off-diagonal parts:
 \begin_inset Formula 
 \begin{eqnarray}
-H\nabla_{d}p & = & H_{d}\nabla_{d}p+H_{\text{off}}\nabla_{d}p\\
- & = & \frac{|\mathbf{S}|}{|\mathbf{d}|}\nabla_{d}p+H_{\text{off}}\nabla_{d}p
+H\nabla_{d}h & = & H_{d}\nabla_{d}h+H_{\text{off}}\nabla_{d}h\\
+ & = & \frac{|\mathbf{S}|}{|\mathbf{d}|}\nabla_{d}h+H_{\text{off}}\nabla_{d}h
 \end{eqnarray}
 
 \end_inset
@@ -706,10 +740,10 @@ reference "eq:p"
 \end_inset
 
 ) is solved implicitly for 
-\begin_inset Formula $p^{n+1}$
+\begin_inset Formula $h^{n+1}$
 \end_inset
 
- and then we can calculate divergence free velocity components, 
+ and then we can calculate momentum components, 
 \begin_inset Formula $U$
 \end_inset
 
@@ -731,7 +765,11 @@ reference "eq:backSubsFlux"
 
 \end_inset
 
-).
+) and then reconstruct 
+\begin_inset Formula $h\mathbf{u}$
+\end_inset
+
+ at the faces.
 \end_layout
 
 \begin_layout Standard
@@ -739,7 +777,7 @@ In order to ensure no flow at boundaries, geostrophic balance can be imposed,
  ie:
 \begin_inset Formula 
 \begin{equation}
-\nabla_{n}p=-2\left(\bm{\Omega}\times(\mathbf{u}^{\ell}-\mathbf{u}_{g})\right)\cdot\mathbf{n}=-2\left(\mathbf{n}\times\bm{\Omega}\right)\cdot(\mathbf{u}^{\ell}-\mathbf{u}_{g})
+g\nabla_{n}h=-2\left(\bm{\Omega}\times\mathbf{u}\right)\cdot\mathbf{n}=-2\left(\mathbf{n}\times\bm{\Omega}\right)\cdot\mathbf{u}
 \end{equation}
 
 \end_inset
