@@ -1294,7 +1294,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="25" columns="4">
+<lyxtabular version="3" rows="26" columns="4">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
 <column alignment="center" valignment="top" width="0">
@@ -2205,7 +2205,7 @@ Specific heat of moist air at constant volume in
 \begin_inset Text
 
 \begin_layout Plain Layout
-Density potential temperature
+Partition averaged potential temperature
 \end_layout
 
 \end_inset
@@ -2214,7 +2214,7 @@ Density potential temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\theta_{\rho}$
+\begin_inset Formula $\theta$
 \end_inset
 
 
@@ -2226,7 +2226,59 @@ Density potential temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\theta R_{t}/(R_{a}(1-v_{\ell}))$
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:theta"
+
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Density potential temperature in 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta_{\rho i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{R_{ti}\theta_{i}}{R_{a}(1-v_{\ell i})}$
 \end_inset
 
 
@@ -2238,7 +2290,7 @@ Density potential temperature
 \begin_inset Text
 
 \begin_layout Plain Layout
-
+K
 \end_layout
 
 \end_inset
@@ -2622,23 +2674,7 @@ reference "eq:condTheta"
 \end_inset
 
  appear together and so they are stored as a single variable.
- However in the pressure gradient term of the conditionally averaged momentum
- equation (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:condMom"
-
-\end_inset
-
-), 
-\begin_inset Formula $\sigma_{i}$
-\end_inset
-
- appears without 
-\begin_inset Formula $\rho_{i}$
-\end_inset
-
- and in the equation of state, 
+ However in the equation of state, 
 \begin_inset Formula $\rho_{i}$
 \end_inset
 
@@ -2689,6 +2725,84 @@ reference "eq:Helmholtz"
 \begin{equation}
 \sigma_{i}^{\text{new}}=\frac{\sigma_{i}\sum_{s}\rho_{gis}R_{s}T_{i}}{p(1-v_{\ell i})}.\label{eq:sigma}
 \end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Potential Temperature Averaged over Partitions
+\end_layout
+
+\begin_layout Standard
+We would like the equation of state in terms of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ and 
+\begin_inset Formula $\pi$
+\end_inset
+
+ to hold globally (eqn 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condState"
+
+\end_inset
+
+) but also to hold in every partition (eqn 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condStatei"
+
+\end_inset
+
+) with the same Exner pressure, 
+\begin_inset Formula $\pi$
+\end_inset
+
+.
+ This requirement informs the method of averaging 
+\begin_inset Formula $\theta$
+\end_inset
+
+ over partitions, 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\theta=\left(1-v_{\ell}\right)\frac{\sum_{i}\frac{\sigma_{i}\rho_{i}R_{ti}\theta_{i}}{1-v_{\ell i}}}{\sum_{i}\sigma_{i}\rho_{i}R_{ti}}.\label{eq:theta}
+\end{equation}
+
+\end_inset
+
+This enables calculation of the pressure gradient term of eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) as a function of 
+\begin_inset Formula $\pi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{i}\nabla p=\sigma_{i}p_{0}\nabla\pi^{1/\kappa}=\frac{\sigma_{i}p_{0}}{\kappa}\pi^{\frac{1-\kappa}{\kappa}}\nabla\pi & = & \frac{\sigma_{i}\rho_{i}R_{ti}\theta_{i}c_{pa}}{R_{a}(1-v_{\ell i})}\nabla\pi=\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\nabla\pi
+\end{eqnarray}
+
+\end_inset
+
+where the density potential temperature for each partition is defined as:
+\begin_inset Formula 
+\begin{eqnarray}
+\theta_{\rho i} & = & \frac{R_{ti}\theta_{i}}{R_{a}(1-v_{\ell i})}.
+\end{eqnarray}
 
 \end_inset
 
@@ -2752,6 +2866,204 @@ Q_{i}=-\nabla\cdot\mathbf{u}_{i}\left(\frac{R_{ti}}{c_{vti}}-\kappa\frac{c_{pti}
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Constructing the Helmholtz Equation
+\end_layout
+
+\begin_layout Standard
+The Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is constructed from the continuity equation by substituting
+\begin_inset Formula 
+\begin{equation}
+\rho=\Psi\pi\label{eq:rhoComp}
+\end{equation}
+
+\end_inset
+
+into the rate of change of density (where 
+\begin_inset Formula $\Psi$
+\end_inset
+
+ is the compressibility) and by substituting the flux from the momentum
+ for each partition into the divergence term of the continuity equation:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\left(\sum_{i}F_{i}\right)=0.\label{eq:contForPi}
+\end{equation}
+
+\end_inset
+
+The compressibility, 
+\begin_inset Formula $\Psi$
+\end_inset
+
+, is calculated from equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:rhoComp"
+
+\end_inset
+
+) after summing the densities in all partitions to find 
+\begin_inset Formula $\rho$
+\end_inset
+
+ using the equation in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:diags"
+
+\end_inset
+
+ and using the equation of state (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condState"
+
+\end_inset
+
+) to calculate 
+\begin_inset Formula $\pi$
+\end_inset
+
+.
+ In order to make eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:contForPi"
+
+\end_inset
+
+) into a Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+, the fluxes, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ are expressed as a pressure gradient and other terms using the discretised
+ momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{equation}
+F_{i}^{n+1}=F_{i}^{\prime}-\alpha\Delta t\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\nabla_{S}\pi^{n+1}\label{eq:newFluxi}
+\end{equation}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{equation}
+\nabla_{S}\pi=\mathbf{S}\cdot\nabla\pi
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+ is the face area vector, 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the off-centering parameter for the time-stepping and the explicit component
+ of 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is 
+\begin_inset Formula $F_{i}^{\prime}$
+\end_inset
+
+ calculated from the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) without the new value of the pressure gradient term
+\begin_inset Formula 
+\begin{eqnarray*}
+F_{i}^{\prime}=F_{i}^{n}- & (1-\alpha\Delta t) & \left\{ \nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}+\sigma_{i}\nabla p-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{n}\cdot\mathbf{S}\\
+- & \alpha\Delta t & \left\{ \nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{\ell}\cdot\mathbf{S}
+\end{eqnarray*}
+
+\end_inset
+
+where superscripts 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $n+1$
+\end_inset
+
+ specify the time-level and superscript 
+\begin_inset Formula $\ell$
+\end_inset
+
+ means the most up to date value of time level 
+\begin_inset Formula $n+1$
+\end_inset
+
+ calculated explicitly.
+ This assumes predictor-corrector time-stepping such as multi-stage RK2.
+ Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi"
+
+\end_inset
+
+) is then substituted into equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:contForPi"
+
+\end_inset
+
+) to create the Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\nabla\cdot\left(\sum_{i}\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\right)\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
+\end{equation}
+
+\end_inset
+
+The solution for 
+\begin_inset Formula $\pi^{n+1}$
+\end_inset
+
+ is then substituted back into eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi"
+
+\end_inset
+
+) to calculate each 
+\begin_inset Formula $F_{i}^{n+1}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
