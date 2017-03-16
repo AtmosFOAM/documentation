@@ -2864,10 +2864,10 @@ reference "eq:condTheta"
 \end_inset
 
 ) contains a source term due to adiabatic expansion and a source term due
- to latent heating, from 
+ to latent heating, modified from 
 \begin_inset CommandInset citation
 LatexCommand citet
-key "JKKV15"
+key "BF02"
 
 \end_inset
 
@@ -3084,7 +3084,7 @@ reference "eq:contForPi"
 :
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\nabla\cdot\left(\sum_{i}\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\right)\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-(\alpha\Delta t)^{2}\nabla\cdot\left(\sum_{i}\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\right)\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
 \end{equation}
 
 \end_inset
@@ -3246,7 +3246,7 @@ where
 :
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{\partial F_{i}}{\partial t}+\nabla\cdot\left(F_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}(\boldsymbol{\Omega}\times\mathbf{u}_{i})\cdot\mathbf{S}-\sigma_{i}\nabla_{S}p+\sigma_{i}\rho_{i}\mathbf{g}\cdot\mathbf{S}\label{eq:condMom-1}\\
+\frac{\partial F_{i}}{\partial t}+\nabla\cdot\left(F_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}(\boldsymbol{\Omega}\times\mathbf{u}_{i})\cdot\mathbf{S}-\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\nabla_{S}\pi+\sigma_{i}\rho_{i}\mathbf{g}\cdot\mathbf{S}\label{eq:condMom-1}\\
  & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\cdot\mathbf{S}\nonumber \\
 \frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(F_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont-1}\\
 \frac{\partial\sigma_{i}\rho_{gis}}{\partial t}+\nabla\cdot(F_{i}\frac{\sigma_{i}\rho_{gis}}{\sigma_{i}\rho_{i}}) & = & -\sigma_{i}C_{is}\label{eq:condGas-1}\\
@@ -3256,6 +3256,61 @@ where
 \frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(F_{i}\theta_{i}\right) & = & \sigma_{i}\rho_{i}\theta_{i}Q_{i}\label{eq:condTheta-1}\\
  & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\nonumber 
 \end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Defining Boundary Conditions
+\end_layout
+
+\begin_layout Standard
+Boundary conditions are read in for the mesh and for variables
+\begin_inset Formula 
+\begin{equation}
+\rho_{gis},\ v_{\ell is},\ \sigma_{i},\ \theta_{i},\ \mathbf{u}_{fi}
+\end{equation}
+
+\end_inset
+
+but in the numerical solution, boundary conditions must also be set for
+ the variables
+\begin_inset Formula 
+\begin{equation}
+\pi,\ \frac{\partial F_{i}}{\partial t}.
+\end{equation}
+
+\end_inset
+
+In order to compute the correct flux at the boundary in balance with the
+ pressure gradient, no boundary condition is defined for the flux, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is calculated incrementally (with operator splitting) so that large fluxes
+ and added into and out of the domain which should balance to the correct
+ boundary condition at the end of the time-step.
+ Zero flux boundary conditions are applied by ensuring that 
+\begin_inset Formula $\partial F_{i}/\partial t$
+\end_inset
+
+ is zero at these boundaries.
+ 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is set at fixed flux boundaries by assuming hydrostatic pressure
+\begin_inset Formula 
+\begin{equation}
+c_{pa}\theta_{\rho i}\nabla_{S}\pi+\mathbf{g}\cdot\mathbf{S}.
+\end{equation}
 
 \end_inset
 
