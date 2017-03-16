@@ -536,7 +536,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="16" columns="4">
+<lyxtabular version="3" rows="17" columns="4">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="59text%">
 <column alignment="center" valignment="top" width="0">
@@ -1211,7 +1211,7 @@ Latent heat of vapourisation at
 </cell>
 </row>
 <row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1224,7 +1224,7 @@ Saturation vapour pressure at
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1236,7 +1236,7 @@ Saturation vapour pressure at
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -1245,11 +1245,55 @@ Saturation vapour pressure at
 
 \end_inset
 </cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 Pa
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Face area vector (normal to each face)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m}^{2}$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2627,12 +2671,9 @@ name "tab:diags"
 
 \end_layout
 
-\begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\rho_{a}R_{m}=\rho R_{t}=q_{a}\rho R_{m}
-\end{equation}
-
+\begin_layout Section
+Updating the partition fraction, 
+\begin_inset Formula $\sigma_{i}$
 \end_inset
 
 
@@ -2774,35 +2815,8 @@ reference "eq:condStatei"
 :
 \begin_inset Formula 
 \begin{equation}
-\theta=\left(1-v_{\ell}\right)\frac{\sum_{i}\frac{\sigma_{i}\rho_{i}R_{ti}\theta_{i}}{1-v_{\ell i}}}{\sum_{i}\sigma_{i}\rho_{i}R_{ti}}.\label{eq:theta}
+\theta=\frac{p_{0}\left(1-v_{\ell}\right)}{\rho R_{t}}\left(\sum_{i}\sigma_{i}\left(\frac{\rho_{i}R_{ti}\theta_{i}}{p_{0}(1-v_{\ell i})}\right)^{\frac{\kappa}{1-\kappa}}\right)^{\frac{1-\kappa}{\kappa}}.\label{eq:theta}
 \end{equation}
-
-\end_inset
-
-This enables calculation of the pressure gradient term of eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:condMom"
-
-\end_inset
-
-) as a function of 
-\begin_inset Formula $\pi$
-\end_inset
-
-:
-\begin_inset Formula 
-\begin{eqnarray}
-\sigma_{i}\nabla p=\sigma_{i}p_{0}\nabla\pi^{1/\kappa}=\frac{\sigma_{i}p_{0}}{\kappa}\pi^{\frac{1-\kappa}{\kappa}}\nabla\pi & = & \frac{\sigma_{i}\rho_{i}R_{ti}\theta_{i}c_{pa}}{R_{a}(1-v_{\ell i})}\nabla\pi=\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\nabla\pi
-\end{eqnarray}
-
-\end_inset
-
-where the density potential temperature for each partition is defined as:
-\begin_inset Formula 
-\begin{eqnarray}
-\theta_{\rho i} & = & \frac{R_{ti}\theta_{i}}{R_{a}(1-v_{\ell i})}.
-\end{eqnarray}
 
 \end_inset
 
@@ -2932,30 +2946,57 @@ reference "eq:condState"
 \end_inset
 
 .
- In order to make eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:contForPi"
-
-\end_inset
-
-) into a Helmholtz equation for 
-\begin_inset Formula $\pi$
-\end_inset
-
-, the fluxes, 
+ The fluxes, 
 \begin_inset Formula $F_{i}$
 \end_inset
 
- are expressed as a pressure gradient and other terms using the discretised
- momentum equation (
+, are updated using the momentum equation (
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:condMom"
 
 \end_inset
 
-):
+) in direction 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+ and by expressing the pressure gradient in terms of 
+\begin_inset Formula $\pi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{i}\nabla p=\sigma_{i}p_{0}\nabla\pi^{1/\kappa}=\frac{\sigma_{i}p_{0}}{\kappa}\pi^{\frac{1-\kappa}{\kappa}}\nabla\pi & = & \frac{\sigma_{i}\rho_{i}R_{ti}\theta_{i}c_{pa}}{R_{a}(1-v_{\ell i})}\nabla\pi=\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\nabla\pi
+\end{eqnarray}
+
+\end_inset
+
+where the density potential temperature for each partition is defined as:
+\begin_inset Formula 
+\begin{eqnarray}
+\theta_{\rho i} & = & \frac{R_{ti}\theta_{i}}{R_{a}(1-v_{\ell i})}.
+\end{eqnarray}
+
+\end_inset
+
+The by taking the dot product of the discretised momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) with 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+ we can find the flux at the new time-step, 
+\begin_inset Formula $F_{i}^{n+1}$
+\end_inset
+
+ as a function of the pressure gradient and other terms:
 \begin_inset Formula 
 \begin{equation}
 F_{i}^{n+1}=F_{i}^{\prime}-\alpha\Delta t\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\nabla_{S}\pi^{n+1}\label{eq:newFluxi}
@@ -3155,6 +3196,70 @@ The transfers between partitions are the terms
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Section
+Transport Equations in Terms of Fluxes
+\end_layout
+
+\begin_layout Standard
+The Helmholtz equation predicts fluxes in each partition, 
+\begin_inset Formula $F_{i}=\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$
+\end_inset
+
+, and so for conservation and consistency, it is important to use these
+ fluxes when updating the species.
+ We write the divergence operator in semi-discretised form or in discretised
+ form using Gauss's divergence theorem:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}\Upsilon)=\nabla\cdot(F_{i}\Upsilon)=\frac{1}{V}\sum_{f}F_{i}\Upsilon_{f}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $V$
+\end_inset
+
+ is the volume of a cell, 
+\begin_inset Formula $f$
+\end_inset
+
+ is over each face of a cell and 
+\begin_inset Formula $\Upsilon$
+\end_inset
+
+ is a variable with 
+\begin_inset Formula $\Upsilon_{f}$
+\end_inset
+
+ being the value of the variable at the face 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ Thus we can re-write the transport equations in terms of 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial F_{i}}{\partial t}+\nabla\cdot\left(F_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}(\boldsymbol{\Omega}\times\mathbf{u}_{i})\cdot\mathbf{S}-\sigma_{i}\nabla_{S}p+\sigma_{i}\rho_{i}\mathbf{g}\cdot\mathbf{S}\label{eq:condMom-1}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\cdot\mathbf{S}\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(F_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont-1}\\
+\frac{\partial\sigma_{i}\rho_{gis}}{\partial t}+\nabla\cdot(F_{i}\frac{\sigma_{i}\rho_{gis}}{\sigma_{i}\rho_{i}}) & = & -\sigma_{i}C_{is}\label{eq:condGas-1}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{gjs}S_{ji}-\sigma_{i}\rho_{gis}S_{ij}\right)\nonumber \\
+\frac{\partial\sigma_{i}v_{\ell is}}{\partial t}+\nabla\cdot\left(F_{i}\frac{\sigma_{i}v_{\ell is}}{\sigma_{i}\rho_{i}}\right) & = & \sigma_{i}C_{is}\label{eq:condLiq-1}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}v_{\ell js}S_{ji}-\sigma_{i}v_{\ell is}S_{ij}\right)\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(F_{i}\theta_{i}\right) & = & \sigma_{i}\rho_{i}\theta_{i}Q_{i}\label{eq:condTheta-1}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
