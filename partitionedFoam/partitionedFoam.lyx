@@ -106,13 +106,17 @@ partionedFoam -- numerical solution of the conditionally averaged moist,
  compressible equations
 \end_layout
 
+\begin_layout Author
+Hilary Weller
+\end_layout
+
 \begin_layout Section
 Continuous Equations
 \end_layout
 
 \begin_layout Standard
 Conditionally averaging, based on presence of updraughts, downdraughts or
- neutrally stabl air, partitions the atmosphere into three regions indexed
+ neutrally stable air, partitions the atmosphere into three regions indexed
  by label 
 \begin_inset Formula $i$
 \end_inset

@@ -346,7 +346,7 @@ The shallow water height,
 \begin_inset Formula $h$
 \end_inset
 
-, is a prognostic variable located in cells (at cell centres)
+, is a prognostic variable located in cells (at cell centres).
 \end_layout
 
 \begin_layout Standard
@@ -386,7 +386,7 @@ where
 
  can be a scalar, vector or tensor field.
  We first consider the discretisation of the full vector valued momentum
- equation over a control volume with volume 
+ equation over a cell with volume 
 \begin_inset Formula $\mathscr{V}^{n}$
 \end_inset
 
@@ -701,7 +701,7 @@ reference "eq:backSubsRelFlux"
 
 \end_inset
 
-This is a Helpholtz equation because the final term is a discretisation
+This is a Helmholtz equation because the final term is a discretisation
  of the Laplacian, 
 \begin_inset Formula $\nabla\cdot\left(gh\nabla h\right)$
 \end_inset
