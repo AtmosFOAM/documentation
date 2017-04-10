@@ -103,6 +103,10 @@
 \begin_body
 
 \begin_layout Title
+Shallow Water Equations on Moving Meshes
+\end_layout
+
+\begin_layout Part
 movingShallowWaterFoamH - shallow water solver on a moving C-grid on a plane
  with a Hodge operator
 \end_layout
@@ -788,6 +792,34 @@ at boundaries where
 
  is the outward pointing unit normal at the boundary.
  
+\end_layout
+
+\begin_layout Part
+movingShallowWaterFoamH - shallow water solver on a moving C-grid on a plane
+ with a Hodge operator
+\end_layout
+
+\begin_layout Standard
+If the momentum is represented at cell centres instead of components at
+ faces, Gauss's divergence theorem is applied to equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:momMoving"
+
+\end_inset
+
+) to give:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{\mathscr{V}^{n+1}h\mathbf{u}^{n+1}-\mathscr{V}^{n}h\mathbf{u}^{n}}{\Delta t}=-\left(\sum_{\text{faces}}U_{r}\mathbf{u}\right)^{n+\half}-2\mathscr{V}(\bm{\Omega}\times(h\mathbf{u}))^{n+\half}-\left(\mathscr{V}gh_{f}\nabla_{d}h\right)^{n+\half}-\left(\mathscr{V}gh\nabla h\right)^{n+\half}.\label{eq:momMovingA}
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
