@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass article
@@ -12,31 +12,6 @@
 \renewcommand{\textfraction}{0}
 \renewcommand{\topfraction}{1}
 \renewcommand{\bottomfraction}{1}
-
-\RequirePackage{tweaklist}
-\renewcommand{\itemhook}
-{
-    \setlength{\topsep}{3pt}
-    \setlength{\parskip}{0pt}
-    \setlength{\parsep}{0pt}
-    \setlength{\partopsep}{0pt}
-    \setlength{\itemsep}{0pt}
-    \setlength{\labelwidth}{10pt}
-    \setlength{\leftmargin}{\labelwidth}
-}
-
-\renewcommand{\enumhook}
-{
-    \setlength{\topsep}{3pt}
-    \setlength{\parskip}{0pt}
-    \setlength{\parsep}{0pt}
-    \setlength{\partopsep}{0pt}
-    \setlength{\itemsep}{3pt}
-    \setlength{\labelwidth}{10pt}
-    \setlength{\leftmargin}{\labelwidth}
-}
-
-\renewcommand{\descriptionlabel}[1]{\parbox{\leftmargin}{\raggedleft #1.~}}
 \end_preamble
 \use_default_options false
 \maintain_unincluded_children false
@@ -47,13 +22,13 @@
 \font_roman times
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -64,15 +39,24 @@
 \use_hyperref false
 \papersize a4paper
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
-\cite_engine natbib_authoryear
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 0
 \index Index
 \shortcut idx
@@ -110,20 +94,25 @@ partionedFoam -- numerical solution of the conditionally averaged moist,
 Hilary Weller
 \end_layout
 
+\begin_layout Part
+Continuous Equations and Numerical Methods
+\end_layout
+
 \begin_layout Section
 Continuous Equations
 \end_layout
 
 \begin_layout Standard
-Conditionally averaging, based on presence of updraughts, downdraughts or
- neutrally stable air, partitions the atmosphere into three regions indexed
- by label 
+The compressible Euler equations can be conditionally averaged in order
+ to divide the atmsophere into partitions based on, for example, the presence
+ of buoyant updrafts, stable air and downdraughts.
+ These three partitions are labelled using 
 \begin_inset Formula $i$
 \end_inset
 
 .
- Each region has separate prognostic variables but all regions share the
- same pressure.
+ Each partition has separate prognostic variables but all regions share
+ the same pressure.
  This partitioned atmosphere is composed of a number of species indexed
  by label 
 \begin_inset Formula $s$
@@ -145,11 +134,7 @@ Conditionally averaging, based on presence of updraughts, downdraughts or
 \begin_inset Formula $\ell$
 \end_inset
 
-) or solid (
-\begin_inset Formula $ $
-\end_inset
-
-ice) phases:
+) or solid (ice) phases:
 \begin_inset Formula 
 \begin{eqnarray*}
 i=\begin{cases}
@@ -198,7 +183,7 @@ p_{0}\Pi^{\frac{1-\kappa}{\kappa}} & = & \frac{\rho_{i}R_{ti}\theta_{i}}{1-v_{\e
 
 \end_inset
 
-where the prognostic variables give given in table 
+where the prognostic variables are given in table 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:progs"
@@ -231,11 +216,11 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="6" columns="4">
-<features tabularvalignment="middle">
+<features rotate="0" tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <row>
 <cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -313,10 +298,6 @@ Exner pressure
 
 \begin_layout Plain Layout
 -
-\begin_inset Formula $ $
-\end_inset
-
-
 \end_layout
 
 \end_inset
@@ -509,7 +490,7 @@ Liquid volume fraction
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Prognostic variables of the conditionally averaged moist Euler equations.
@@ -541,11 +522,11 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="17" columns="4">
-<features tabularvalignment="middle">
+<features rotate="0" tabularvalignment="middle">
 <column alignment="left" valignment="top" width="59text%">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <row>
 <cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -1311,7 +1292,7 @@ Face area vector (normal to each face)
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Constants of the conditionally averaged moist Euler equations.
@@ -1343,11 +1324,11 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="26" columns="4">
-<features tabularvalignment="middle">
+<features rotate="0" tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
 <row>
 <cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2652,7 +2633,7 @@ Partial pressure of gas of species
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
+\begin_inset Caption Standard
 
 \begin_layout Plain Layout
 Diagnostic variables of the conditionally averaged moist Euler equations.
@@ -2693,6 +2674,10 @@ reference "eq:condCont"
 
 ), predicts 
 \begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ and the continuity equation for the gases phases predicts 
+\begin_inset Formula $\sigma_{i}\rho_{gis}$
 \end_inset
 
 .
@@ -2768,12 +2753,16 @@ reference "eq:Helmholtz"
  
 \begin_inset Formula 
 \begin{equation}
-\sigma_{i}^{\text{new}}=\frac{\sigma_{i}\sum_{s}\rho_{gis}R_{s}T_{i}}{p(1-v_{\ell i})}.\label{eq:sigma}
+\sigma_{i}^{\text{new}}=\frac{\sum_{s}(\sigma_{i}\rho_{gis})R_{s}T_{i}}{p(1-v_{\ell i})}.\label{eq:sigma}
 \end{equation}
 
 \end_inset
 
-
+This allows each partition to have different densities and temperatures
+ but to share the same pressure.
+ The volume occupied by each partition is adjusted so that the density and
+ temperature do not change but the pressures are equalised.
+ 
 \end_layout
 
 \begin_layout Section
@@ -3116,7 +3105,8 @@ Spatial Discretisation
 \end_layout
 
 \begin_layout Standard
-The velocity at cell faces for each partition is reconstructed from the
+A staggered finite volume discretisation is used.
+ The velocity at cell faces for each partition is reconstructed from the
  face mass flux and the partition density:
 \begin_inset Formula 
 \begin{equation}
@@ -3149,6 +3139,107 @@ reference "tab:progs"
 
 .
  The summations are over all of the faces of a cell.
+\end_layout
+
+\begin_layout Standard
+A multi-dimensional, method of lines, linear upwind advection scheme is
+ used for advecting species concentrations, velocity and potential temperature.
+\end_layout
+
+\begin_layout Section
+The Pressure Gradient Term
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:gradP"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The conditionally averaged momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) ignores the terms due to sub-filter scale pressure varations described
+ in eqns (30-35) of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "TWW+1x"
+
+\end_inset
+
+.
+ Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) gives the pressure gradient term as 
+\begin_inset Formula $\sigma_{i}\nabla p$
+\end_inset
+
+.
+ This term should actually be:
+\begin_inset Formula 
+\begin{equation}
+\overline{I_{i}\nabla p}=\sigma_{i}\nabla\overline{p}+\mathbf{b}_{i}+\sum_{j}\mathbf{d}_{ij}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+ is the force exerted by fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ on fluid 
+\begin_inset Formula $j$
+\end_inset
+
+ (like a form drag).
+ 
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+ satisfies:
+\begin_inset Formula 
+\begin{equation}
+\overline{p\nabla I_{i}}=-\sum_{j}\mathbf{d}_{ij}
+\end{equation}
+
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{b}_{i}$
+\end_inset
+
+ is a further correction defined as:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{b}_{i}=\left(\overline{\nabla(I_{i}p)}-\sigma_{i}\nabla\overline{p}\right).
+\end{equation}
+
+\end_inset
+
+I don't know how to calculate 
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{b}_{i}$
+\end_inset
+
+ but they appear to be important ...
 \end_layout
 
 \begin_layout Section
@@ -3288,20 +3379,7 @@ but in the numerical solution, boundary conditions must also be set for
 
 \end_inset
 
-In order to compute the correct flux at the boundary in balance with the
- pressure gradient, no boundary condition is defined for the flux, 
-\begin_inset Formula $F_{i}$
-\end_inset
-
-.
- 
-\begin_inset Formula $F_{i}$
-\end_inset
-
- is calculated incrementally (with operator splitting) so that large fluxes
- and added into and out of the domain which should balance to the correct
- boundary condition at the end of the time-step.
- Zero flux boundary conditions are applied by ensuring that 
+Zero flux boundary conditions are applied by ensuring that 
 \begin_inset Formula $\partial F_{i}/\partial t$
 \end_inset
 
@@ -3319,6 +3397,1295 @@ c_{pa}\theta_{\rho i}\nabla_{S}\pi+\mathbf{g}\cdot\mathbf{S}.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Part
+Numerical Results
+\end_layout
+
+\begin_layout Standard
+A case is set up with two partitions and all tranfer terms between partition
+ terms zero.
+ Partition zero (the stable partition) initially has 
+\begin_inset Formula $\sigma_{0}$
+\end_inset
+
+ globally set to 0.9.
+ Other variables are set to be the initial conditions for the 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BF02"
+
+\end_inset
+
+ moist rising bubble but without the bouyancy perturbation that makes the
+ bubble rise.
+ Partition one (the buoyant partition) initially has 
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+ globally set to 0.1.
+ Other variables are set the initial conditions for the 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BF02"
+
+\end_inset
+
+ moist rising bubble but with the perturbation for the rising bubble.
+ The initial conditions of 
+\begin_inset Formula $\theta$
+\end_inset
+
+, 
+\begin_inset Formula $\rho_{giw}$
+\end_inset
+
+ and 
+\begin_inset Formula $v_{i\ell w}$
+\end_inset
+
+ are shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:bubbleInitial"
+
+\end_inset
+
+.
+ The pressure is in discrete hydrostatic balance with the temperature in
+ partition zero.
+ The velocity is initially zero in both partitions.
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BF02"
+
+\end_inset
+
+ use mixing ratios, 
+\begin_inset Formula $r_{v}=\rho_{giw}/\rho_{gia}$
+\end_inset
+
+ and 
+\begin_inset Formula $r_{\ell}=v_{i\ell w}\rho_{\ell}/\rho_{gia}$
+\end_inset
+
+ as prognostic variables instead of the variables defined in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:progs"
+
+\end_inset
+
+.
+ The results that will be shown use semi-implicit time-stepping with off-centeri
+ng of 
+\begin_inset Formula $\alpha=0.5$
+\end_inset
+
+, a grid of 200
+\begin_inset Formula $\times$
+\end_inset
+
+100 cells giving 
+\begin_inset Formula $\Delta x=\Delta z=100$
+\end_inset
+
+m.
+ The simulation runs for 184 seconds before going unstable (with negative
+ pressure).
+ The differences between 
+\begin_inset Formula $\theta_{i}(t)$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{0}(t=0)$
+\end_inset
+
+ for both partitions at various times are shown in figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:stableThetaDiff"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:buoyantThetaDiff"
+
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+ is shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:buoyantSigma"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="3">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Partition 
+\begin_inset Formula $i=0$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma_{0}=0.9$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Partition 
+\begin_inset Formula $i=1$
+\end_inset
+
+, 
+\begin_inset Formula $\sigma_{1}=0.1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/stableTheta.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/buoyantTheta.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{giw}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/stableWaterVapourRho.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/buoyantWaterVapourRho.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $v_{i\ell w}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/stableWaterLiquidFrac.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/buoyantWaterLiquidFrac.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Initial conditions of the partitioned version of the 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BF02"
+
+\end_inset
+
+ moist rising bubble test case with the buoyant perturbation placed only
+ in partition 1.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:bubbleInitial"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=30$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=60$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/30/stableThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/60/stableThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=90$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=120$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/90/stableThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/120/stableThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=160$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=180$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/160/stableThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/180/stableThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Differences between 
+\begin_inset Formula $\theta_{0}(t)$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{0}(t=0)$
+\end_inset
+
+ in partition zero.
+ The vector scales are uniform between times but ten times those shown in
+ figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:buoyantThetaDiff"
+
+\end_inset
+
+.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:stableThetaDiff"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=30$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=60$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/30/buoyantThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/60/buoyantThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=90$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=120$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/90/buoyantThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/120/buoyantThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=160$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=180$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/160/buoyantThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/180/buoyantThetaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Differences between 
+\begin_inset Formula $\theta_{1}(t)$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{0}(t=0)$
+\end_inset
+
+ in partition one.
+ The vector scales are uniform between times but ten times smaller those
+ shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:stableThetaDiff"
+
+\end_inset
+
+.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:buoyantThetaDiff"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=30$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=60$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/30/sigmaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/60/sigmaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=90$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=120$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/90/sigmaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/120/sigmaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=160$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $t=180$
+\end_inset
+
+s
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/160/sigmaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/180/sigmaDiff.pdf
+	lyxscale 50
+	width 40text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Differences between partition volume fraction, 
+\begin_inset Formula $\sigma_{1}$
+\end_inset
+
+ at various times and 
+\begin_inset Formula $\sigma_{1}(t=0)=0.1$
+\end_inset
+
+.
+ Vectors show the velocity averaged over both partitions.
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:buoyantSigma"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This simulation has been run with various time-steps between 0.1
+\begin_inset space \space{}
+\end_inset
+
+seconds and 2
+\begin_inset space \space{}
+\end_inset
+
+seconds, with semi-implicit and fully explicit time-stepping, with time
+ off-centering between 
+\begin_inset Formula $\alpha=0.5$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+.
+ It has been run with 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ calculated using eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigma"
+
+\end_inset
+
+) (as in figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:stableThetaDiff"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:buoyantSigma"
+
+\end_inset
+
+) and with 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ held fixed.
+ For each of these variations, the simulation runs for 184
+\begin_inset space \space{}
+\end_inset
+
+seconds before the pressure goes negative and the simulation crashes.
+ The solutions near the end time do not contain grid-scale oscillations
+ and they do not oscillate from one time-step to another.
+ The instability therefore appears not to be a numerical instability but
+ rather an instability of the underlying continuous equations.
+ The simulations with smaller time-steps have smaller amplitude oscillations
+ in 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ but the same instability in the other fields and divergence between the
+ partitions.
+\end_layout
+
+\begin_layout Standard
+As a test of the code, a version was set up with no interaction between
+ the partitions, a separate pressure for each partition and the same initial
+ conditions as described above.
+ The stable partition (without the buoyancy perturbation) remained motionless
+ for the 1000 seconds of the simulation whereas the buoyant partion evolved
+ very similarly to the simulations presented by 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BF02"
+
+\end_inset
+
+.
+ However this is not a realistic situation - with independent pressures
+ for each partition, one partition could become pressurised in comparison
+ to the other.
+ However identical pressures cannot work either, as will be described in
+ the following section.
+ 
+\end_layout
+
+\begin_layout Section
+Thought Experiment with a Partitioned Shallow Water Model
+\end_layout
+
+\begin_layout Standard
+Imagine the conditionally averaged non-rotating shallow water equations
+ with two partitions which share the same geopotential, 
+\begin_inset Formula $\Psi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -\nabla\Psi\\
+\frac{\partial\sigma_{i}\Psi}{\partial t}+\nabla\cdot\sigma_{i}\Psi\mathbf{u}_{i} & = & 0
+\end{eqnarray*}
+
+\end_inset
+
+with 
+\begin_inset Formula $i=0,1$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{0}+\sigma_{1}=1$
+\end_inset
+
+.
+ Consider a square domain with doubly periodic boundary conditions.
+ The initial conditions in partition zero consist of a steady vortex with
+ a low pressure centre to balance the non-linear advection term.
+ Partition one is initially at rest.
+ The low pressure will lead to convergence in partition 1 which will fill
+ the low pressure which will in turn lead to divergence in partition 0,
+ leading to gravity waves in both partitions.
+ Since the only coupling between the partitions is through a pressure gradient,
+ no rotation can be transferred between the partitions and so the vortex
+ in partion one will remain soley in partition one.
+ If instead we wished to maintain independent balance in each partition,
+ we would need independent geopotentials for each partion and we would need
+ another equation in order to make the system well posed.
+ 
+\end_layout
+
+\begin_layout Section
+Conclusions
+\end_layout
+
+\begin_layout Standard
+My impression is that the numerical method used to solve equations (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condState"
+
+\end_inset
+
+) subject to 
+\begin_inset Formula $\sum_{i}\sigma_{i}=1$
+\end_inset
+
+ is stable but the solutions diverge because the continuous equations are
+ not well posed.
+ I think that the problem is in the pressure gradient term which is lacking
+ the 
+\begin_inset Formula $\mathbf{b}_{i}$
+\end_inset
+
+ term and the drag term, 
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+ described by 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "TWW+1x"
+
+\end_inset
+
+ and outlined in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:gradP"
+
+\end_inset
+
+.
+ However I do not know how to define these terms.
+ Equations (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condState"
+
+\end_inset
+
+) currently do not have energy conservation for each partition.
+ Perhaps energy conservation can be used to find values of 
+\begin_inset Formula $\mathbf{b}_{i}+\sum_{j}\mathbf{d}_{ij}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
