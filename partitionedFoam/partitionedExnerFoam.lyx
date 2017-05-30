@@ -1,0 +1,2165 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+partionedExnerFoam -- numerical solution of the conditionally averaged compressi
+ble Euler equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Section
+Continuous Equations
+\end_layout
+
+\begin_layout Standard
+The compressible Euler equations can be conditionally averaged in order
+ to divide the atmosphere into partitions based on, for example, the presence
+ of buoyant updrafts, stable air and downdraughts.
+ These three partitions are labelled using 
+\begin_inset Formula $i$
+\end_inset
+
+: 
+\begin_inset Formula 
+\[
+i=\begin{cases}
+0 & \text{ stable}\\
+1 & \text{ updraught}\\
+2 & \text{ downdraught. }
+\end{cases}
+\]
+
+\end_inset
+
+Each partition has separate prognostic variables of density, 
+\begin_inset Formula $\rho_{i}$
+\end_inset
+
+, potential temperature, 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+, and velocity, 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+, but all regions share the same pressure, 
+\begin_inset Formula $p$
+\end_inset
+
+ and Exner pressure, 
+\begin_inset Formula $\pi=(p/p_{0})^{\kappa}$
+\end_inset
+
+.
+ Assuming that the atmosphere is a perfect dry gas in a frame rotating with
+ rate 
+\begin_inset Formula $\bm{\Omega}$
+\end_inset
+
+, the conditionally averaged Euler equations are:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}\rho_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\theta_{i}\nabla\pi+\sigma_{i}\rho_{i}\mathbf{g}\label{eq:condMom}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont}\\
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condTheta}
+\end{eqnarray}
+
+\end_inset
+
+with the global equation of state and the equation of state for each partition:
+\begin_inset Formula 
+\begin{eqnarray}
+p_{0}\pi^{\frac{1-\kappa}{\kappa}} & = & R\rho\theta=R\sum_{i}\sigma_{i}\rho_{i}\theta_{i}\label{eq:condState}\\
+p_{0}\pi^{\frac{1-\kappa}{\kappa}} & =R & \rho_{i}\theta_{i}\label{eq:condStatei}
+\end{eqnarray}
+
+\end_inset
+
+and subject to
+\begin_inset Formula 
+\begin{equation}
+\sum_{i}\sigma_{i}=1.
+\end{equation}
+
+\end_inset
+
+The prognostic variables are given in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:progs"
+
+\end_inset
+
+, the constants in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:constants"
+
+\end_inset
+
+ and the diagnostic variables in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:diags"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="4">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="left" valignment="top" width="39text%">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Units
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exner pressure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\pi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $(p/p_{0})^{\kappa}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Potential temperature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $T_{i}/\pi$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mass flux
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mass in partition 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $(\sigma_{i}\rho_{i})$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg m}^{-3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Prognostic variables of the conditionally averaged dry Euler equations.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:progs"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="4">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="left" valignment="top" width="59text%">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Units
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rotation of geometry (or planet)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\bm{\Omega}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Reference pressure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $p_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $10^{5}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pa
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Dry air 
+\begin_inset Formula $\kappa$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R_{a}/c_{pa}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Acceleration due to gravity
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $g$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.81
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m s}^{-2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Reference temperature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $T_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+273.16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gas constant of dry air
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+287
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{J kg}^{-1}\text{ K }^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Heat capacity at constant pressure of dry air
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $c_{p}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1004
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{J kg}^{-1}\text{ K }^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Face area vector (normal to each face)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m}^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Constants of the conditionally averaged dry Euler equations.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:constants"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="13" columns="4">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="left" valignment="top" width="39text%">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Diagnostic variable
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Calculated as
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Units
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Velocity of partition 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:reconU"
+
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Density of partition 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{p_{0}}{R\theta_{i}}\pi^{\frac{1-\kappa}{\kappa}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg m}^{-3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Volume fraction of partition 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{(\sigma_{i}\rho_{i})}{\rho_{i}}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Transfer rate from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+See section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:transfers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Drag on 
+\begin_inset Formula $i$
+\end_inset
+
+ from 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+See section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:transfers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg m}^{-2}\text{s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Heat transfer from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $H_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+See section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:transfers"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{K s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Compressibility
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\Psi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho/\pi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Temperature in 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $T_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta_{i}\pi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pressure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+p
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $p_{0}\pi^{1/\kappa}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pa
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total density
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sum_{i}\sigma_{i}\rho_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg m}^{-3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total potential temperature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\frac{\sum_{i}\sigma_{i}\rho_{i}\theta_{i}}{\rho}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total mass fluxes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sum_{i}F_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Diagnostic variables of the conditionally averaged dry Euler equations.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:diags"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Transfers between Partitions
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:transfers"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The transfers between partitions are the terms 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+, the mass transfer rate from partition 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+, the drag exerted on partition 
+\begin_inset Formula $i$
+\end_inset
+
+ from partition 
+\begin_inset Formula $j$
+\end_inset
+
+ and 
+\begin_inset Formula $H_{ij}$
+\end_inset
+
+, the heat transfer from partition 
+\begin_inset Formula $j$
+\end_inset
+
+ to partition 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Transport Equations in Terms of Fluxes
+\end_layout
+
+\begin_layout Standard
+For conservation and consistency, the same fluxes, 
+\begin_inset Formula $F_{i}=\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$
+\end_inset
+
+, are used to update the density, potential temperature and velocity in
+ each partition.
+ For brevity, we write the divergence operator in semi-discretised form
+ or in discretised form using Gauss's divergence theorem:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}\Upsilon)=\nabla\cdot(F_{i}\Upsilon)=\frac{1}{V}\sum_{f}F_{i}\Upsilon_{f}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $V$
+\end_inset
+
+ is the volume of a cell, 
+\begin_inset Formula $f$
+\end_inset
+
+ is over each face of a cell and 
+\begin_inset Formula $\Upsilon$
+\end_inset
+
+ is a variable with 
+\begin_inset Formula $\Upsilon_{f}$
+\end_inset
+
+ being the value of the variable at the face 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ Thus we can re-write the transport equations in terms of 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial F_{i}}{\partial t}+\nabla\cdot\left(F_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}(\boldsymbol{\Omega}\times\mathbf{u}_{i})\cdot\mathbf{S}-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla_{S}\pi+\sigma_{i}\rho_{i}\mathbf{g}\cdot\mathbf{S}\label{eq:condMomFlux}\\
+ & + & \sum_{j\ne i}\left(F_{j}S_{ji}-F_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\cdot\mathbf{S}\right)\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot F_{i} & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condContFlux}\\
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(F_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condThetaFlux}
+\end{eqnarray}
+
+\end_inset
+
+Before the construction and numerical solution of the Helmholtz equation
+ to update 
+\begin_inset Formula $\pi$
+\end_inset
+
+ (section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:helm"
+
+\end_inset
+
+), new values of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ are predicted using eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+) and values of 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ are predicted using eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaFlux"
+
+\end_inset
+
+) and using the new values of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+.
+ These initial predictions are corrected in an iterative outer predictor-correct
+or loop.
+\end_layout
+
+\begin_layout Section
+Constructing the Helmholtz Equation
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:helm"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is constructed from the continuity equation by substituting
+\begin_inset Formula 
+\begin{equation}
+\rho=\Psi\pi\label{eq:rhoComp}
+\end{equation}
+
+\end_inset
+
+into the rate of change of density in eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot F=0.\label{eq:contForPi}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula $\Psi$
+\end_inset
+
+ is the compressibility which is calculated as 
+\begin_inset Formula $\Psi=\rho/\pi$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is calculated from the sum of the partitions, 
+\begin_inset Formula $\rho=\sum_{i}\sigma_{i}\rho_{i}$
+\end_inset
+
+ where each 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ is updated from eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+) and 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is calculated from the equation of state (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condState"
+
+\end_inset
+
+) using updated values of 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+.
+ The fluxes, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+, are updated using the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMomFlux"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{equation}
+F_{i}^{n+1}=F_{i}^{\prime}-\alpha\Delta tc_{p}\sigma_{i}\rho_{i}\theta_{i}\nabla_{S}\pi^{n+1}\label{eq:newFluxi}
+\end{equation}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{equation}
+\nabla_{S}\pi=\mathbf{S}\cdot\nabla\pi,
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the off-centering parameter for the time-stepping and the explicit component
+ of 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is 
+\begin_inset Formula $F_{i}^{\prime}$
+\end_inset
+
+ calculated from the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMomFlux"
+
+\end_inset
+
+) without the new value of the pressure gradient term
+\begin_inset Formula 
+\begin{eqnarray*}
+F_{i}^{\prime}=F_{i}^{n}- & (1-\alpha)\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}+c_{p}\sigma_{i}\rho_{i}\theta_{i}\nabla\pi-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{n}\cdot\mathbf{S}\\
+- & \alpha\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{\ell}\cdot\mathbf{S}
+\end{eqnarray*}
+
+\end_inset
+
+where superscripts 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $n+1$
+\end_inset
+
+ specify the time-level and superscript 
+\begin_inset Formula $\ell$
+\end_inset
+
+ means the most up to date value of time level 
+\begin_inset Formula $n+1$
+\end_inset
+
+ calculated explicitly.
+ This assumes predictor-corrector time-stepping such as multi-stage RK2.
+ Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi"
+
+\end_inset
+
+) is then substituted into equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:contForPi"
+
+\end_inset
+
+) to create the Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta tc_{p}\rho\theta\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
+\end{equation}
+
+\end_inset
+
+The solution for 
+\begin_inset Formula $\pi^{n+1}$
+\end_inset
+
+ is then substituted back into eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi"
+
+\end_inset
+
+) to calculate each 
+\begin_inset Formula $F_{i}^{n+1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Updating the partition fraction, 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above solution of the Helmholtz equation updates 
+\begin_inset Formula $\pi$
+\end_inset
+
+ and the back substitution gives fluxes 
+\begin_inset Formula $F$
+\end_inset
+
+ which satisfy eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:contForPi"
+
+\end_inset
+
+) and partition fluxes 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ which satisfy 
+\begin_inset Formula $\sum_{i}F_{i}=F$
+\end_inset
+
+ given 
+\begin_inset Formula $\rho\theta=\sum_{i}\sigma_{i}\rho_{i}\theta_{i}$
+\end_inset
+
+.
+ We now need to update 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ so that eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+) is satisfied in each partition, the equation of state (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condStatei"
+
+\end_inset
+
+) is satisfied in each partition using the same pressure and satisfying
+ 
+\begin_inset Formula $\sum_{i}\sigma_{i}=1$
+\end_inset
+
+.
+ In order to achieve this, the joint variables 
+\begin_inset Formula $(\sigma_{i}\rho_{i})$
+\end_inset
+
+ are first updated using eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+).
+ The density in each partition is calculated so that the equation of state
+ holds in each partition:
+\begin_inset Formula 
+\begin{equation}
+\rho_{i}=\frac{p_{0}\pi^{\frac{1-\kappa}{\kappa}}}{R\theta_{i}}\label{eq:stateForRhoi}
+\end{equation}
+
+\end_inset
+
+and finally 
+\begin_inset Formula $\sigma_{i}=\frac{(\sigma_{i}\rho_{i})}{\rho_{i}}$
+\end_inset
+
+.
+ This will automatically guarantee 
+\begin_inset Formula $\sum_{i}\sigma_{i}=1$
+\end_inset
+
+ since if we substitute eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:stateForRhoi"
+
+\end_inset
+
+) into the definition of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ we get:
+\begin_inset Formula 
+\begin{equation}
+\sum_{i}\sigma_{i}=\sum_{i}\frac{(\sigma_{i}\rho_{i})}{\rho_{i}}=\sum_{i}\frac{R\theta_{i}(\sigma_{i}\rho_{i})}{p_{0}\pi^{\frac{1-\kappa}{\kappa}}}=\frac{R\rho\theta}{p_{0}\pi^{\frac{1-\kappa}{\kappa}}}=1.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Spatial Discretisation
+\end_layout
+
+\begin_layout Standard
+A staggered finite volume discretisation is used.
+ The velocity at cell faces for each partition is reconstructed from the
+ face mass flux and the partition density:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{u}_{i}=\left(\left(\sum_{\text{faces}}\mathbf{S}\mathbf{S}^{T}\right)^{-1}\sum_{\text{faces}}F_{i}\mathbf{S}\right)_{f}\bigg/\left(\sigma_{i}\rho_{i}\right)_{f}\label{eq:reconU}
+\end{equation}
+
+\end_inset
+
+where operator 
+\begin_inset Formula $\left(\right)_{f}$
+\end_inset
+
+ means interpolation from cell centre values onto face values and 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+ is the face area vector (outward pointing normal to each face with magnitude
+ of the face area.
+ For a uniform velocity field, this reconstruction formula reproduces exactly
+ the definition of the face flux, 
+\begin_inset Formula $F_{i}=\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$
+\end_inset
+
+ given in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:progs"
+
+\end_inset
+
+.
+ The summations are over all of the faces of a cell.
+\end_layout
+
+\begin_layout Standard
+The velocity field in each partition is updated after updating 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\rho_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A multi-dimensional, method of lines, linear upwind advection scheme is
+ used for advecting species concentrations, velocity and potential temperature.
+\end_layout
+
+\begin_layout Section
+Defining Boundary Conditions
+\end_layout
+
+\begin_layout Standard
+Boundary conditions must be set for the variables 
+\begin_inset Formula $\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial F_{i}/\partial t$
+\end_inset
+
+.
+ Fixed flux boundary conditions are applied by ensuring that 
+\begin_inset Formula $\partial F_{i}/\partial t$
+\end_inset
+
+ is zero at these boundaries.
+ 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is set at fixed flux boundaries by assuming hydrostatic pressure in the
+ direction normal to each boundary:
+\begin_inset Formula 
+\begin{equation}
+c_{p}\theta_{\rho}\nabla_{S}\pi=\mathbf{g}\cdot\mathbf{S}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

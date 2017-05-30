@@ -177,7 +177,7 @@ Assuming that the atmosphere consists of a mixture of perfect gases and
 with the global equation of state and the equation of state for each partition:
 \begin_inset Formula 
 \begin{eqnarray}
-p_{0}\Pi^{\frac{1-\kappa}{\kappa}} & = & \frac{\rho R_{t}\theta}{1-v_{\ell}}\label{eq:condState}\\
+p_{0}\Pi^{\frac{1-\kappa}{\kappa}} & = & \frac{\rho R_{t}\theta}{1-v_{\ell}}=\sum_{i}\sigma_{i}\rho_{i}R_{ti}\theta_{i}\label{eq:condState}\\
 p_{0}\Pi^{\frac{1-\kappa}{\kappa}} & = & \frac{\rho_{i}R_{ti}\theta_{i}}{1-v_{\ell i}}\label{eq:condStatei}
 \end{eqnarray}
 
@@ -2808,7 +2808,7 @@ reference "eq:condStatei"
 :
 \begin_inset Formula 
 \begin{equation}
-\theta=\frac{p_{0}\left(1-v_{\ell}\right)}{\rho R_{t}}\left(\sum_{i}\sigma_{i}\left(\frac{\rho_{i}R_{ti}\theta_{i}}{p_{0}(1-v_{\ell i})}\right)^{\frac{\kappa}{1-\kappa}}\right)^{\frac{1-\kappa}{\kappa}}.\label{eq:theta}
+\theta=\frac{\sum_{i}\sigma_{i}\rho_{i}R_{ti}\theta_{i}}{\sum_{i}\sigma_{i}\rho_{i}R_{ti}}.\label{eq:theta}
 \end{equation}
 
 \end_inset
@@ -3077,7 +3077,7 @@ reference "eq:contForPi"
 :
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-(\alpha\Delta t)^{2}\nabla\cdot\left(\sum_{i}\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\right)\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\nabla\cdot\left(\sum_{i}\sigma_{i}\rho_{i}c_{pa}\theta_{\rho i}\right)\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
 \end{equation}
 
 \end_inset
@@ -3404,7 +3404,7 @@ Numerical Results
 \end_layout
 
 \begin_layout Standard
-A case is set up with two partitions and all tranfer terms between partition
+A case is set up with two partitions and all transfer terms between partition
  terms zero.
  Partition zero (the stable partition) initially has 
 \begin_inset Formula $\sigma_{0}$
@@ -3418,7 +3418,7 @@ key "BF02"
 
 \end_inset
 
- moist rising bubble but without the bouyancy perturbation that makes the
+ moist rising bubble but without the buoyancy perturbation that makes the
  bubble rise.
  Partition one (the buoyant partition) initially has 
 \begin_inset Formula $\sigma_{1}$
@@ -3536,7 +3536,7 @@ reference "fig:buoyantSigma"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -3772,7 +3772,7 @@ name "fig:bubbleInitial"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -4013,7 +4013,7 @@ name "fig:stableThetaDiff"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -4254,7 +4254,7 @@ name "fig:buoyantThetaDiff"
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
