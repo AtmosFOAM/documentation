@@ -1800,12 +1800,53 @@ The heat transfer between partitions should be limited by the amount of
  heat needed to equalised the temperatures in one time-step:
 \begin_inset Formula 
 \begin{equation}
-\left(\sigma_{i}\rho_{i}H_{ij}\right)_{\max}=\frac{1}{2\Delta t}\left(\sigma_{j}\rho_{j}\theta_{j}-\sigma_{i}\rho_{i}\theta_{i}\right)
+H_{ij\ \max}=\frac{\theta_{j}-\theta_{i}}{\Delta t}\frac{\sigma_{j}\rho_{j}\sigma_{i}\rho_{i}}{\sigma_{j}\rho_{j}+\sigma_{i}\rho_{i}}.
 \end{equation}
 
 \end_inset
 
+However even using the maximum heat transfer between partitions, the model
+ is still unstable.
+\end_layout
 
+\begin_layout Subsection
+Diffusion of partition volume fraction, 
+\begin_inset Formula $\sigma$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Drag and heat transfer between partitions does nothing to prevent model
+ instability.
+ We therefore introduce diffusion of 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ in such a way that total mass is not diffused.
+ The mass transfer terms can be used for this:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\frac{1}{2}K_{\sigma}\left(\rho_{j}\nabla^{2}\sigma_{j}-\rho_{i}\nabla^{2}\sigma_{i}\right)
+\end{equation}
+
+\end_inset
+
+ The equation for 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ becomes:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & K_{\sigma}\sum_{j\ne i}\left(\rho_{i}\nabla^{2}\sigma_{i}-\rho_{j}\nabla^{2}\sigma_{j}\right).
+\end{eqnarray}
+
+\end_inset
+
+These mass transfer terms need to appear in all of the equations of motion.
+ 
 \end_layout
 
 \begin_layout Section
@@ -2041,7 +2082,8 @@ reference "eq:condMomFlux"
 \begin_inset Formula 
 \begin{eqnarray*}
 F_{i}^{\prime}=F_{i}^{n}- & (1-\alpha)\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}+c_{p}\sigma_{i}\rho_{i}\theta_{i}\nabla\pi-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{n}\cdot\mathbf{S}\\
-- & \alpha\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{\ell}\cdot\mathbf{S}
+- & \alpha\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{\ell}\cdot\mathbf{S}\\
+ & + & \Delta t\sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right\} ^{n+1/2}
 \end{eqnarray*}
 
 \end_inset
