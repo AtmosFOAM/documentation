@@ -1948,6 +1948,40 @@ reference "eq:condThetaFlux"
 or loop.
 \end_layout
 
+\begin_layout Standard
+The fluxes, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+, in equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+) can lead to unbounded solutions for 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+.
+ In order to avoid this, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is rewritten as:
+\begin_inset Formula 
+\begin{eqnarray*}
+F_{i} & = & \sigma_{i}F-\sigma_{i}\sum_{j}F_{j}+\sigma_{i}\frac{F_{i}}{\sigma_{i}}\\
+ & = & \sigma_{i}F+\sigma_{i}\frac{F_{i}}{\sigma_{i}}-\sigma_{i}(1-\sigma_{i})\sum_{j}\frac{F_{j}}{(1-\sigma_{i})}\\
+ & = & \sigma_{i}F+\sigma_{i}(1-\sigma_{i})\left(\frac{F_{i}}{\sigma_{i}}-\frac{\sum_{j\ne i}F_{j}}{\sum_{j\ne i}\sigma_{j}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Constructing the Helmholtz Equation
 \begin_inset CommandInset label
