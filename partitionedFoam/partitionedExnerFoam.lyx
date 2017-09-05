@@ -150,7 +150,7 @@ Each partition has separate prognostic variables of density,
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{\partial\sigma_{i}\rho_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\theta_{i}\nabla\pi+\sigma_{i}\rho_{i}\mathbf{g}\label{eq:condMom}\\
+\frac{\partial\sigma_{i}\rho_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla\pi+\sigma_{i}\rho_{i}\mathbf{g}\label{eq:condMom}\\
  & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\nonumber \\
 \frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont}\\
 \frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condTheta}
@@ -1979,7 +1979,8 @@ F_{i} & = & \sigma_{i}F-\sigma_{i}\sum_{j}F_{j}+\sigma_{i}\frac{F_{i}}{\sigma_{i
 
 \end_inset
 
-
+This doesn't work.
+ It only makes things worse.
 \end_layout
 
 \begin_layout Section
@@ -2161,7 +2162,7 @@ reference "eq:contForPi"
 :
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta tc_{p}\rho\theta\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\sum_{i}\sigma_{i}c_{p}\rho\theta\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
 \end{equation}
 
 \end_inset
@@ -2182,6 +2183,88 @@ reference "eq:newFluxi"
 \end_inset
 
 .
+ The coefficient 
+\begin_inset Formula $\sum_{i}\sigma_{i}$
+\end_inset
+
+ is retained in the Helmholtz equation because it may not exactly sum to
+ one.
+ 
+\end_layout
+
+\begin_layout Section
+Upwinding of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi"
+
+\end_inset
+
+) gives the flux of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ and so the continuity equation for partition 
+\begin_inset Formula $i$
+\end_inset
+
+ (eqn 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+) can update 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ without further numerical approximation.
+ However this leads to unbounded solutions.
+ Instead we need to advect 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ using the flux, 
+\begin_inset Formula $F_{i}/\sigma_{i}$
+\end_inset
+
+ so that upwinding can be used in the advection to avoid spurious undershoots
+ and overshoots.
+ This will be attempted by calculating 
+\begin_inset Formula $F_{i}/\sigma_{i}$
+\end_inset
+
+ using linear interpolation to interpolate 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ from cell centres onto faces (with 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+).
+ Then upwinding of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ can be used in the continuity equation:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot\left(\frac{F_{i}}{\sigma_{i\text{lin}}}\sigma_{i\text{up}}\right)=\sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section

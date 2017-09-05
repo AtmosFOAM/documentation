@@ -94,7 +94,7 @@ Hilary Weller
 \end_layout
 
 \begin_layout Standard
-The conditionally averaged equations as propsed by 
+The conditionally averaged equations as proposed by 
 \begin_inset CommandInset citation
 LatexCommand citet
 key "TWW+1x"
@@ -266,25 +266,8 @@ key "TWW+1x"
 
 \end_inset
 
-.) 
-\begin_inset CommandInset citation
-LatexCommand citet
-key "TWW+1x"
-
-\end_inset
-
- give no guidance on how to evaluate 
-\begin_inset Formula $\mathbf{b}_{i}$
-\end_inset
-
- but assuming 
+.) In the absence of other information, we assume 
 \begin_inset Formula $\mathbf{b}_{i}=0$
-\end_inset
-
- appears to give unbounded solutions.
- We will therefore assume energy conservation in each partition in order
- to derive an approximation for 
-\begin_inset Formula $\mathbf{b}_{i}$
 \end_inset
 
 .
@@ -313,7 +296,7 @@ reference "eq:condMom"
  to give:
 \begin_inset Formula 
 \begin{eqnarray}
-\sigma_{i}\psi\frac{\partial K_{i}}{\partial t}+\sigma_{i}\psi\mathbf{u}_{i}\cdot\nabla K_{i} & = & -\sigma_{i}\psi\mathbf{u}_{i}\cdot\nabla\psi-\sigma_{i}\psi\mathbf{u}_{i}\cdot\mathbf{b}_{i}.\label{eq:K1}
+\sigma_{i}\psi\frac{\partial K_{i}}{\partial t}+\sigma_{i}\psi\mathbf{u}_{i}\cdot\nabla K_{i} & = & -\sigma_{i}\psi\mathbf{u}_{i}\cdot\nabla\psi.\label{eq:K1}
 \end{eqnarray}
 
 \end_inset
@@ -336,7 +319,7 @@ reference "eq:condCont"
 ) to give:
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\sigma_{i}\psi K_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\psi\mathbf{u}_{i}K_{i})=-\sigma_{i}\psi\mathbf{u}_{i}\cdot\nabla\psi-\sigma_{i}\psi\mathbf{u}_{i}\cdot\mathbf{b}_{i}.\label{eq:Kflux}
+\frac{\partial\sigma_{i}\psi K_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\psi\mathbf{u}_{i}K_{i})=-\sigma_{i}\psi\mathbf{u}_{i}\cdot\nabla\psi.\label{eq:Kflux}
 \end{equation}
 
 \end_inset
@@ -431,42 +414,17 @@ reference "eq:Pflux"
 ):
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\sigma_{i}E_{i}}{\partial t}+P\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(\psi K_{i}+2P\right)\right)=-\sigma_{i}\psi\mathbf{u}_{i}\cdot\mathbf{b}_{i}.\label{eq:Ei}
+\frac{\partial\sigma_{i}E_{i}}{\partial t}+P\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(\psi K_{i}+2P\right)\right)=0.\label{eq:Ei}
 \end{equation}
 
 \end_inset
 
-Terms inside a divergence do not influence global conservation so for conservati
-on in partition 
-\begin_inset Formula $i$
+Terms inside a divergence do not influence global conservation.
+ Therefore there is a transfer of energy between partitions equal to 
+\begin_inset Formula $-P\partial\sigma_{i}/\partial t$
 \end_inset
 
- we need:
-\begin_inset Formula 
-\begin{equation}
-\sigma_{i}\psi\mathbf{u}_{i}\cdot\mathbf{b}_{i}=-P\frac{\partial\sigma_{i}}{\partial t}.\label{eq:b}
-\end{equation}
-
-\end_inset
-
-This equation appears problematic since it will not have a solution if 
-\begin_inset Formula $P$
-\end_inset
-
- and 
-\begin_inset Formula $\partial\sigma_{i}/\partial t$
-\end_inset
-
- are non-zero but 
-\begin_inset Formula $\sigma_{i}$
-\end_inset
-
- or 
-\begin_inset Formula $\mathbf{u}_{i}$
-\end_inset
-
- are zero.
- 
+.
 \end_layout
 
 \begin_layout Standard
