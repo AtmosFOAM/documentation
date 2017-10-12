@@ -2477,6 +2477,218 @@ c_{p}\theta_{\rho}\nabla_{S}\pi=\mathbf{g}\cdot\mathbf{S}.
 
 \end_layout
 
+\begin_layout Section
+Advective Form of the equations
+\end_layout
+
+\begin_layout Standard
+The conditionally averaged equations without transfer terms in advective
+ form are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}\label{eq:condMomAdv}\\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & 0\label{eq:condCont-1}\\
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & 0\label{eq:condThetaAdv}
+\end{eqnarray}
+
+\end_inset
+
+The Helmholtz equation The Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is constructed in a similar way, substituting
+\begin_inset Formula 
+\begin{equation}
+\rho=\Psi\pi\label{eq:rhoComp-1}
+\end{equation}
+
+\end_inset
+
+into the rate of change of density in eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot F=0.\label{eq:contForPi-1}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula $\Psi$
+\end_inset
+
+ is the compressibility which is calculated as 
+\begin_inset Formula $\Psi=\rho/\pi$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\rho$
+\end_inset
+
+ is calculated from the sum of the partitions, 
+\begin_inset Formula $\rho=\sum_{i}\sigma_{i}\rho_{i}$
+\end_inset
+
+ where each 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ is updated from eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condContFlux"
+
+\end_inset
+
+) and 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is calculated from the equation of state (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condState"
+
+\end_inset
+
+) using updated values of 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+.
+ The fluxes, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+, are updated using the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMomAdv"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{equation}
+F_{i}^{n+1}=F_{i}^{\prime}-\alpha\Delta tc_{p}\left(\sigma_{i}\rho_{i}\theta_{i}\right)^{\ell}\nabla_{S}\pi^{n+1}\label{eq:newFluxi-1}
+\end{equation}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{equation}
+\nabla_{S}\pi=\mathbf{S}\cdot\nabla\pi,
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the off-centering parameter for the time-stepping and the explicit component
+ of 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is 
+\begin_inset Formula $F_{i}^{\prime}$
+\end_inset
+
+ calculated from the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) without the new value of the pressure gradient term
+\begin_inset Formula 
+\begin{eqnarray*}
+F_{i}^{\prime}= & \left(\sigma_{i}\rho_{i}\right)^{n+1}S\cdot\biggl\{\mathbf{u}_{i}^{n}+\Delta t\mathbf{g} & -(1-\alpha)\Delta t\left(\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+2\boldsymbol{\Omega}\times\mathbf{u}_{i}+c_{p}\theta_{i}\nabla\pi\right)^{n}\\
+ &  & -\alpha\Delta t\left(\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+2\boldsymbol{\Omega}\times\mathbf{u}_{i}\right)^{\ell}\biggr\}
+\end{eqnarray*}
+
+\end_inset
+
+where superscripts 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $n+1$
+\end_inset
+
+ specify the time-level and superscript 
+\begin_inset Formula $\ell$
+\end_inset
+
+ means the most up to date value of time level 
+\begin_inset Formula $n+1$
+\end_inset
+
+ calculated explicitly.
+ This assumes predictor-corrector time-stepping such as multi-stage RK2.
+ Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi-1"
+
+\end_inset
+
+) is then substituted into equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:contForPi-1"
+
+\end_inset
+
+) to create the Helmholtz equation for 
+\begin_inset Formula $\pi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\sum_{i}\sigma_{i}c_{p}\rho\theta\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz-1}
+\end{equation}
+
+\end_inset
+
+The solution for 
+\begin_inset Formula $\pi^{n+1}$
+\end_inset
+
+ is then substituted back into eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:newFluxi-1"
+
+\end_inset
+
+) to calculate each 
+\begin_inset Formula $F_{i}^{n+1}$
+\end_inset
+
+.
+ The coefficient 
+\begin_inset Formula $\sum_{i}\sigma_{i}$
+\end_inset
+
+ is retained in the Helmholtz equation because it may not exactly sum to
+ one.
+ 
+\end_layout
+
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
