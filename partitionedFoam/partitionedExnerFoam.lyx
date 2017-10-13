@@ -2486,14 +2486,20 @@ The conditionally averaged equations without transfer terms in advective
  form are:
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}\label{eq:condMomAdv}\\
-\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & 0\label{eq:condCont-1}\\
-\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & 0\label{eq:condThetaAdv}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}-\mathbf{D}_{ij}\label{eq:condMomAdv}\\
+ & + & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\mathbf{u}_{j}S_{ji}-\mathbf{u}_{i}S_{ij}-\mathbf{D}_{ij}\right)\\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont-1}\\
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\theta_{j}S_{ji}-\theta_{i}S_{ij}-H_{ij}\right)\label{eq:condThetaAdv}
 \end{eqnarray}
 
 \end_inset
 
-The Helmholtz equation The Helmholtz equation for 
+where 
+\begin_inset Formula $\mathbf{D}_{ij}$
+\end_inset
+
+ is a different form of the drag.
+ The Helmholtz equation for 
 \begin_inset Formula $\pi$
 \end_inset
 
@@ -2687,6 +2693,18 @@ reference "eq:newFluxi-1"
  is retained in the Helmholtz equation because it may not exactly sum to
  one.
  
+\end_layout
+
+\begin_layout Standard
+For the drag, we will try the form:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{D}_{ij}=\sigma_{j}\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
