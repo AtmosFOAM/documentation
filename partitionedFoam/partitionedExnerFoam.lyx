@@ -1828,7 +1828,7 @@ Drag and heat transfer between partitions does nothing to prevent model
  The mass transfer terms can be used for this:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{i}\rho_{i}S_{ij}=-K_{\sigma}\rho_{i}\nabla^{2}\sigma_{i}
+\sigma_{i}\rho_{i}S_{ij}=\frac{K_{\sigma}}{2}\left(\rho_{j}\nabla^{2}\sigma_{j}-\rho_{i}\nabla^{2}\sigma_{i}\right)
 \end{equation}
 
 \end_inset
@@ -2707,7 +2707,7 @@ For the drag, we will try the form:
 The mass transfer between partitions can still take the form
 \begin_inset Formula 
 \begin{equation}
-S_{ij}=-\frac{K_{\sigma}}{\sigma_{i}}\nabla^{2}\sigma_{i}
+S_{ij}=\frac{K_{\sigma}}{2\sigma_{i}\rho_{i}}\left(\rho_{j}\nabla^{2}\sigma_{j}-\rho_{i}\nabla^{2}\sigma_{i}\right)
 \end{equation}
 
 \end_inset
