@@ -1665,7 +1665,7 @@ reference "eq:condMom"
 ) could be: 
 \begin_inset Formula 
 \begin{equation}
-\mathbf{d}_{ij}=\frac{\rho C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right)
+\mathbf{d}_{ij}=\frac{\rho_{e}C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right)
 \end{equation}
 
 \end_inset
@@ -1697,6 +1697,12 @@ where
 \end_inset
 
 .
+ 
+\begin_inset Formula $\rho_{e}$
+\end_inset
+
+ is the density of the fluid surrounding the bubble.
+ We can therefore use the density of the environmental air.
 \end_layout
 
 \begin_layout Subsection
@@ -1818,9 +1824,12 @@ Diffusion of partition volume fraction,
 \end_layout
 
 \begin_layout Standard
-Drag and heat transfer between partitions does nothing to prevent model
- instability.
- We therefore introduce diffusion of 
+Oscillations in 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ can be controlled by diffusion between partitions.
+ We introduce diffusion of 
 \begin_inset Formula $\sigma$
 \end_inset
 
@@ -2498,7 +2507,7 @@ where
 \begin_inset Formula $\mathbf{D}_{ij}$
 \end_inset
 
- is a different form of the drag.
+ is now the drag per unit mass.
  The Helmholtz equation for 
 \begin_inset Formula $\pi$
 \end_inset
@@ -2699,7 +2708,32 @@ reference "eq:newFluxi-1"
 For the drag, we will try the form:
 \begin_inset Formula 
 \begin{equation}
-\mathbf{D}_{ij}=\sigma_{j}\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\mathbf{D}_{ij}=\sigma_{j}\frac{C_{D}}{r_{c}}\frac{\rho_{e}}{\rho_{i}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\end{equation}
+
+\end_inset
+
+As 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ becomes small in any partition, we need 
+\begin_inset Formula $r_{c}$
+\end_inset
+
+ to become small which increases the drag between partitions.
+ If we assume a maximum and minimum could radius, 
+\begin_inset Formula $r_{\max}$
+\end_inset
+
+ and 
+\begin_inset Formula $r_{\min}$
+\end_inset
+
+, then the cloud radius can take the form
+\begin_inset Formula 
+\begin{equation}
+r_{c}=\min\left(r_{\min},\ r_{\max}\prod_{i}\sigma_{i}\right).
 \end{equation}
 
 \end_inset
