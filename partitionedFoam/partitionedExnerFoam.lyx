@@ -2733,7 +2733,7 @@ As
 , then the cloud radius can take the form
 \begin_inset Formula 
 \begin{equation}
-r_{c}=\min\left(r_{\min},\ r_{\max}\prod_{i}\sigma_{i}\right).
+r_{c}=\max\left(r_{\min},\ r_{\max}\prod_{i}\sigma_{i}\right).
 \end{equation}
 
 \end_inset
