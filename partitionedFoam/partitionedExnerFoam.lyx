@@ -1821,6 +1821,13 @@ Diffusion of partition volume fraction,
 \end_inset
 
 
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:diffusionTransfer"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1846,7 +1853,7 @@ Changes in gradient of
  is always positive:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{i}\rho_{i}S_{ij}=\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{j}\rho_{j}-\sigma_{i}\rho_{i}\right),\ 0\right)
+\sigma_{i}\rho_{i}S_{ij}=\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{j}\rho_{j}-\sigma_{i}\rho_{i}\right),\ 0\right)\label{eq:diffusionTransfer}
 \end{equation}
 
 \end_inset
@@ -1896,7 +1903,7 @@ reference "eq:sigmaRhoWithTransfer"
  For example:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)
+\sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)\label{eq:limitDiffusionTransfer}
 \end{equation}
 
 \end_inset
@@ -2809,7 +2816,7 @@ reference "eq:condThetaAdv"
  Therefore this term needs to be limited:
 \begin_inset Formula 
 \begin{equation}
-T_{ji}=\frac{\sigma_{j}\rho_{j}}{\max(\sigma_{i}\rho_{i},\ \varepsilon)}S_{ji}
+T_{ji}=\frac{\sigma_{j}\rho_{j}}{\rho_{i}\max(\sigma_{i},\ \varepsilon)}S_{ji}
 \end{equation}
 
 \end_inset
@@ -2820,7 +2827,7 @@ for some small
 
 .
  However these source terms can still become very large for small 
-\begin_inset Formula $\sigma_{i}\rho_{i}$
+\begin_inset Formula $\sigma_{i}$
 \end_inset
 
  and so should be treated implicitly with operator splitting so that equations
@@ -2940,6 +2947,108 @@ Alternatively, to limit storage,
 \theta_{1}^{n+1} & = & \frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\left(1+\Delta t\ T_{12}\right)\theta_{1}^{\prime}+\Delta t\ T_{21}\theta_{2}^{\prime}\right)\\
 \theta_{2}^{n+1} & = & \frac{\theta_{2}^{\prime}+\Delta t\ T_{12}\theta_{1}^{n+1}}{1+\Delta T_{12}}.
 \end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Mass Transfers Between Partitions
+\end_layout
+
+\begin_layout Standard
+Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:diffusionTransfer"
+
+\end_inset
+
+ defined mass transfer terms between partitions based on diffusion which
+ will smooth out the 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ fields.
+ However mass transfers are also needed in order to direct buoyant or convecting
+ air into the unstable partition.
+ In the absence of information on sub-grid scale variability, we assume
+ that there is not sub-grid scale variability and so we want rising motion
+ or buoyant air to be in the buoyant partition.
+ Assuming that the stable partition is number 1 and the buoyant partition
+ is number 2, to send buoyant air into the buoyant partition we could set:
+\begin_inset Formula 
+\begin{eqnarray}
+S_{12} & = & \begin{cases}
+1/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{1}<0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+S_{21} & = & \begin{cases}
+1/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{2}>0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+
+\end_inset
+
+Alternatively if 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ is dependent on 
+\begin_inset Formula $w$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+S_{12} & = & \begin{cases}
+1/\Delta t & \ \text{when}\ w_{1}>0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+S_{21} & = & \begin{cases}
+1/\Delta t & \ \text{when}\ w_{2}<0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+
+\end_inset
+
+These need to be combined with equations (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diffusionTransfer"
+
+\end_inset
+
+) and (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:limitDiffusionTransfer"
+
+\end_inset
+
+) so that diffusion can be used in combination:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{1}\rho_{1}S_{12} & = & \begin{cases}
+\sigma_{1}\rho_{1}/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{1}<0\\
+\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{2}\rho_{2}-\sigma_{1}\rho_{1}\right),\ 0\right) & \ \text{otherwise}
+\end{cases}\\
+\sigma_{2}\rho_{2}S_{21} & = & \begin{cases}
+\sigma_{2}\rho_{2}/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{2}>0\\
+\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{1}\rho_{1}-\sigma_{2}\rho_{2}\right),\ 0\right) & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+
+\end_inset
+
+and then limited as before:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)\label{eq:limitDiffusionTransfer-1}
+\end{equation}
 
 \end_inset
 
