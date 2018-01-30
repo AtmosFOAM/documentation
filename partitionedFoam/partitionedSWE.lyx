@@ -210,6 +210,10 @@ so that
 
  over the filter width (eg the grid box).
  Applying this filter to the shallow water equations gives:
+\begin_inset space \space{}
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard

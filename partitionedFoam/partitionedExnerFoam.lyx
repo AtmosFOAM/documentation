@@ -1824,20 +1824,29 @@ Diffusion of partition volume fraction,
 \end_layout
 
 \begin_layout Standard
-Oscillations in 
+Changes in gradient of 
 \begin_inset Formula $\sigma$
 \end_inset
 
- can be controlled by diffusion between partitions.
+ (and in particular oscillations) can be reduced by diffusion between partitions
+ through the mass transfer terms.
  We introduce diffusion of 
 \begin_inset Formula $\sigma$
 \end_inset
 
- in such a way that total mass is not diffused.
- The mass transfer terms can be used for this:
+ in such a way that total mass is not diffused and so that the transfer
+ from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ is always positive:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{i}\rho_{i}S_{ij}=\frac{K_{\sigma}}{2}\left(\rho_{j}\nabla^{2}\sigma_{j}-\rho_{i}\nabla^{2}\sigma_{i}\right)
+\sigma_{i}\rho_{i}S_{ij}=\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{j}\rho_{j}-\sigma_{i}\rho_{i}\right),\ 0\right)
 \end{equation}
 
 \end_inset
@@ -1849,13 +1858,50 @@ Oscillations in
  becomes:
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & K_{\sigma}\sum_{j\ne i}\left(\rho_{i}\nabla^{2}\sigma_{i}-\rho_{j}\nabla^{2}\sigma_{j}\right).
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & K_{\sigma}\sum_{j\ne i}\left(\nabla^{2}\left(\sigma_{i}\rho_{i}-\sigma_{j}\rho_{j}\right)\right).\label{eq:sigmaRhoWithTransfer}
 \end{eqnarray}
 
 \end_inset
 
-These mass transfer terms need to appear in all of the equations of motion.
- 
+If eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigmaRhoWithTransfer"
+
+\end_inset
+
+) is solved with operator splitting and the right hand side treated explicitly,
+ positivity of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ is not violated by the 
+\begin_inset Formula $K_{\sigma}\nabla^{2}\sigma_{i}\rho_{i}$
+\end_inset
+
+ term as long as the ratio 
+\begin_inset Formula $K_{\sigma}\Delta t/\Delta x^{2}$
+\end_inset
+
+ is small enough.
+ In order to prevent the 
+\begin_inset Formula $K_{\sigma}\nabla^{2}\sigma_{j}\rho_{j}$
+\end_inset
+
+ term from removing too much 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ in one time-step it can be limited, depending on the time-stepping scheme.
+ For example:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -2491,14 +2537,13 @@ Advective Form of the equations
 \end_layout
 
 \begin_layout Standard
-The conditionally averaged equations without transfer terms in advective
- form are:
+The conditionally averaged equations in advective form are:
 \begin_inset Formula 
 \begin{eqnarray}
-\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}-\mathbf{D}_{ij}\label{eq:condMomAdv}\\
- & + & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\mathbf{u}_{j}S_{ji}-\mathbf{u}_{i}S_{ij}-\mathbf{D}_{ij}\right)\\
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}\label{eq:condMomAdv}\\
+ & + & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)\\
 \frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont-1}\\
-\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\theta_{j}S_{ji}-\theta_{i}S_{ij}-H_{ij}\right)\label{eq:condThetaAdv}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-H_{ij}\right)\label{eq:condThetaAdv}
 \end{eqnarray}
 
 \end_inset
@@ -2738,11 +2783,163 @@ r_{c}=\max\left(r_{\min},\ r_{\max}\prod_{i}\sigma_{i}\right).
 
 \end_inset
 
-The mass transfer between partitions can still take the form
+The term 
+\begin_inset Formula $\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}$
+\end_inset
+
+ appears on the right hand side of equations (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMomAdv"
+
+\end_inset
+
+) and (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) and so these source terms will diverge when 
+\begin_inset Formula $\sigma_{i}\rho_{i}\rightarrow0$
+\end_inset
+
+.
+ Therefore this term needs to be limited:
 \begin_inset Formula 
 \begin{equation}
-S_{ij}=\frac{K_{\sigma}}{2\sigma_{i}\rho_{i}}\left(\rho_{j}\nabla^{2}\sigma_{j}-\rho_{i}\nabla^{2}\sigma_{i}\right)
+T_{ji}=\frac{\sigma_{j}\rho_{j}}{\max(\sigma_{i}\rho_{i},\ \varepsilon)}S_{ji}
 \end{equation}
+
+\end_inset
+
+for some small 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+.
+ However these source terms can still become very large for small 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ and so should be treated implicitly with operator splitting so that equations
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMomAdv"
+
+\end_inset
+
+) and (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) are solved with a zero right hand side and the solutions are 
+\begin_inset Formula $\mathbf{u}_{i}^{\prime}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{i}^{\prime}$
+\end_inset
+
+.
+ Then equations (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMomAdv"
+
+\end_inset
+
+) and (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) can be re-written (without drag or heat transfer) as:
+\begin_inset Formula 
+\begin{eqnarray}
+\mathbf{u}_{i}^{n+1} & = & \mathbf{u}_{i}^{\prime}+\Delta t\sum_{j\ne i}\left(T_{ji}(\mathbf{u}_{j}^{n+1}-\mathbf{u}_{i}^{n+1})\right)\label{eq:condMomAdv-1}\\
+\theta_{i}^{n+1} & = & \theta_{i}^{\prime}+\Delta t\sum_{j\ne i}\left(T_{ji}(\theta_{j}^{n+1}-\theta_{i}^{n+1})\right).\label{eq:condThetaAdv-1}
+\end{eqnarray}
+
+\end_inset
+
+If 
+\begin_inset Formula $i,j=1,2$
+\end_inset
+
+ then these can be re-arranged as:
+\begin_inset Formula 
+\begin{eqnarray}
+\left(\begin{array}{cc}
+1+\Delta t\ T_{21} & -\Delta t\ T_{21}\\
+-\Delta t\ T_{12} & 1+\Delta t\ T_{12}
+\end{array}\right)\left(\begin{array}{c}
+\mathbf{u}_{1}^{n+1}\\
+\mathbf{u}_{2}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\mathbf{u}_{1}^{\prime}\\
+\mathbf{u}_{2}^{\prime}
+\end{array}\right)\\
+\left(\begin{array}{cc}
+1+\Delta t\ T_{21} & -\Delta t\ T_{21}\\
+-\Delta t\ T_{12} & 1+\Delta t\ T_{12}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\theta_{1}^{\prime}\\
+\theta_{2}^{\prime}
+\end{array}\right)
+\end{eqnarray}
+
+\end_inset
+
+which can be solved implicitly for 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ with construction of only local two by two matrices, for example:
+\begin_inset Formula 
+\begin{equation}
+\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right)=\frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\begin{array}{cc}
+1+\Delta t\ T_{12} & \Delta t\ T_{21}\\
+\Delta t\ T_{12} & 1+\Delta t\ T_{21}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{\prime}\\
+\theta_{2}^{\prime}
+\end{array}\right).
+\end{equation}
+
+\end_inset
+
+Alternatively, to limit storage, 
+\begin_inset Formula $\theta_{1}^{n+1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{2}^{n+1}$
+\end_inset
+
+ can be calculated as:
+\begin_inset Formula 
+\begin{eqnarray*}
+\theta_{1}^{n+1} & = & \frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\left(1+\Delta t\ T_{12}\right)\theta_{1}^{\prime}+\Delta t\ T_{21}\theta_{2}^{\prime}\right)\\
+\theta_{2}^{n+1} & = & \frac{\theta_{2}^{\prime}+\Delta t\ T_{12}\theta_{1}^{n+1}}{1+\Delta T_{12}}.
+\end{eqnarray*}
 
 \end_inset
 

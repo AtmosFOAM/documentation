@@ -3536,7 +3536,7 @@ reference "fig:buoyantSigma"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -3608,7 +3608,7 @@ Partition
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/stableTheta.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/0/stableTheta.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3624,7 +3624,7 @@ Partition
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/buoyantTheta.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/0/buoyantTheta.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3654,7 +3654,7 @@ Partition
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/stableWaterVapourRho.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/0/stableWaterVapourRho.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3670,7 +3670,7 @@ Partition
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/buoyantWaterVapourRho.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/0/buoyantWaterVapourRho.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3700,7 +3700,7 @@ Partition
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/stableWaterLiquidFrac.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/0/stableWaterLiquidFrac.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3716,7 +3716,7 @@ Partition
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/0/buoyantWaterLiquidFrac.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/0/buoyantWaterLiquidFrac.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3772,7 +3772,7 @@ name "fig:bubbleInitial"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -3812,7 +3812,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/30/stableThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/30/stableThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3828,7 +3828,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/60/stableThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/60/stableThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3872,7 +3872,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/90/stableThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/90/stableThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3888,7 +3888,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/120/stableThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/120/stableThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3932,7 +3932,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/160/stableThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/160/stableThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -3948,7 +3948,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/180/stableThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/180/stableThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4013,7 +4013,7 @@ name "fig:stableThetaDiff"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -4053,7 +4053,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/30/buoyantThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/30/buoyantThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4069,7 +4069,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/60/buoyantThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/60/buoyantThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4113,7 +4113,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/90/buoyantThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/90/buoyantThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4129,7 +4129,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/120/buoyantThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/120/buoyantThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4173,7 +4173,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/160/buoyantThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/160/buoyantThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4189,7 +4189,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/180/buoyantThetaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/180/buoyantThetaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4254,7 +4254,7 @@ name "fig:buoyantThetaDiff"
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -4294,7 +4294,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/30/sigmaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/30/sigmaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4310,7 +4310,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/60/sigmaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/60/sigmaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4354,7 +4354,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/90/sigmaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/90/sigmaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4370,7 +4370,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/120/sigmaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/120/sigmaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4414,7 +4414,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/160/sigmaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/160/sigmaDiff.pdf
 	lyxscale 50
 	width 40text%
 
@@ -4430,7 +4430,7 @@ s
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/AtmosFOAM/run/moistBubble/partitionedFoam/varyingSigma/180/sigmaDiff.pdf
+	filename /mnt/homer2/hilary/OpenFOAM/hilary-dev/run/hilary/moistBubble/partitionedFoam/varyingSigma/180/sigmaDiff.pdf
 	lyxscale 50
 	width 40text%
 
