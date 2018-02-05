@@ -2974,47 +2974,64 @@ reference "sub:diffusionTransfer"
  However mass transfers are also needed in order to direct buoyant or convecting
  air into the unstable partition.
  In the absence of information on sub-grid scale variability, we assume
- that there is not sub-grid scale variability and so we want rising motion
+ that there is no sub-grid scale variability and so we want rising motion
  or buoyant air to be in the buoyant partition.
  Assuming that the stable partition is number 1 and the buoyant partition
- is number 2, to send buoyant air into the buoyant partition we could set:
+ is number 2, to send buoyant air into the buoyant partition if it is warmer
+ than it's surrounding, ie if 
+\begin_inset Formula $\nabla^{2}\theta<0$
+\end_inset
+
+.
+ The rate of sending air into the buoyant partition should be dependent
+ on the size of 
+\begin_inset Formula $\nabla^{2}\theta<0$
+\end_inset
+
+.
+ We could chose a frequency 
+\begin_inset Formula $K_{\theta}\frac{\nabla^{2}\theta}{\theta}$
+\end_inset
+
+ where 
+\begin_inset Formula $K_{\theta}$
+\end_inset
+
+ is a diffusivity in 
+\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+\end_inset
+
+.
+ 
 \begin_inset Formula 
 \begin{eqnarray}
 S_{12} & = & \begin{cases}
-1/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{1}<0\\
+\max\left(-K_{\theta}\frac{\nabla^{2}\theta}{\theta},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
 0 & \ \text{otherwise}
 \end{cases}\\
 S_{21} & = & \begin{cases}
-1/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{2}>0\\
+\max\left(K_{\theta}\frac{\nabla^{2}\theta}{\theta},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
 0 & \ \text{otherwise}
 \end{cases}.
 \end{eqnarray}
 
 \end_inset
 
-Alternatively if 
-\begin_inset Formula $S_{ij}$
+This frequency seems to work ok but however you start it, both partitions
+ end up with the same properties.
+ We need somehow to transfer the excess 
+\begin_inset Formula $\theta$
 \end_inset
 
- is dependent on 
-\begin_inset Formula $w$
+ into the other partition so as to remove variations in 
+\begin_inset Formula $\theta$
 \end_inset
 
-:
-\begin_inset Formula 
-\begin{eqnarray}
-S_{12} & = & \begin{cases}
-1/\Delta t & \ \text{when}\ w_{1}>0\\
-0 & \ \text{otherwise}
-\end{cases}\\
-S_{21} & = & \begin{cases}
-1/\Delta t & \ \text{when}\ w_{2}<0\\
-0 & \ \text{otherwise}
-\end{cases}.
-\end{eqnarray}
+.
+ Ie the mass transferred sucks heat out of where it came from.
+\end_layout
 
-\end_inset
-
+\begin_layout Standard
 These need to be combined with equations (
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -3032,13 +3049,13 @@ reference "eq:limitDiffusionTransfer"
 ) so that diffusion can be used in combination:
 \begin_inset Formula 
 \begin{eqnarray}
-\sigma_{1}\rho_{1}S_{12} & = & \begin{cases}
-\sigma_{1}\rho_{1}/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{1}<0\\
-\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{2}\rho_{2}-\sigma_{1}\rho_{1}\right),\ 0\right) & \ \text{otherwise}
+\sigma_{1}\rho_{1}S_{12} & = & \frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{2}\rho_{2}-\sigma_{1}\rho_{1}\right),\ 0\right)+\begin{cases}
+-K_{\theta}\frac{\nabla^{2}\theta}{\theta} & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+0 & \ \text{otherwise}
 \end{cases}\\
-\sigma_{2}\rho_{2}S_{21} & = & \begin{cases}
-\sigma_{2}\rho_{2}/\Delta t & \ \text{when}\ \nabla\cdot\nabla_{h}\theta_{2}>0\\
-\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{1}\rho_{1}-\sigma_{2}\rho_{2}\right),\ 0\right) & \ \text{otherwise}
+\sigma_{2}\rho_{2}S_{21} & = & \frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{1}\rho_{1}-\sigma_{2}\rho_{2}\right),\ 0\right)+\begin{cases}
+K_{\theta}\frac{\nabla^{2}\theta}{\theta} & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+0 & \ \text{otherwise}
 \end{cases}.
 \end{eqnarray}
 
@@ -3048,6 +3065,127 @@ and then limited as before:
 \begin_inset Formula 
 \begin{equation}
 \sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)\label{eq:limitDiffusionTransfer-1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Temperature of the Mass Transferred
+\end_layout
+
+\begin_layout Standard
+If mass is transferred based on its anomalous temperature, then it makes
+ sense that the mass transferred has a different mean temperature to the
+ mass left behind.
+ If, before mass transfer, 
+\begin_inset Formula $\nabla^{2}\theta_{i}^{\prime}<0$
+\end_inset
+
+ and as a result, mass is transferred out, then we want 
+\begin_inset Formula $\nabla^{2}\theta_{i}^{n+1}=0$
+\end_inset
+
+ after mass transfer.
+ This occurs if 
+\begin_inset Formula $\nabla\theta_{i}^{n+1}$
+\end_inset
+
+ is uniform across all the faces of a cell in question.
+ We can consider a cell 
+\begin_inset Formula $C$
+\end_inset
+
+ with faces 
+\begin_inset Formula $f$
+\end_inset
+
+ and neighbours 
+\begin_inset Formula $N$
+\end_inset
+
+ so that the temperature in the cell before and after mass transfer is 
+\begin_inset Formula $\theta_{c}^{\prime}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{C}^{n+1}$
+\end_inset
+
+ and the temperatures of the neighbour faces are 
+\begin_inset Formula $\theta_{N}$
+\end_inset
+
+ (which is assumed not to change).
+ We can calculate a mean temperature gradient for cell 
+\begin_inset Formula $C$
+\end_inset
+
+, 
+\begin_inset Formula $\nabla_{C}\theta$
+\end_inset
+
+ using Gauss's divergence theorem and the 
+\begin_inset Formula $\theta_{N}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{C}^{\prime}$
+\end_inset
+
+ values.
+ We can then calculate 
+\begin_inset Formula $\theta_{C}^{n+1}$
+\end_inset
+
+ as a volume mean of the neighbour values plus the increment due to the
+ gradient:
+\begin_inset Formula 
+\begin{equation}
+\theta_{C}^{n+1}=\frac{\sum_{f\in\text{faces}}\left(S_{f}\cdot(C_{N}-C_{C})\right)\left(\theta_{N}+(C_{f}-C_{N})\cdot\nabla_{C}\theta\right)}{\sum_{f\in\text{faces}}\left(S_{f}\cdot(C_{N}-C_{C})\right)}.
+\end{equation}
+
+\end_inset
+
+This gives us the value left behind, not the value transferred out.
+ If we assume conservation, we get:
+\begin_inset Formula 
+\begin{equation}
+\theta_{i}^{\prime}=\Delta tS_{ij}\theta_{i}^{t}+\left(1-\Delta tS_{ij}\right)\theta_{C}^{n+1}.
+\end{equation}
+
+\end_inset
+
+Where 
+\begin_inset Formula $\theta_{i}^{\prime}$
+\end_inset
+
+ is the solution of eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) without source terms on the RHS.
+ This implies that we need 
+\begin_inset Formula $\Delta tS_{ij}\ll1$
+\end_inset
+
+.
+ Eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) then becomes (without heat transfer):
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}^{t}-\theta_{i})-S_{ij}(\theta_{i}^{t}-\theta_{i})-H_{ij}\right).
 \end{equation}
 
 \end_inset
