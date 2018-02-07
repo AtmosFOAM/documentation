@@ -2954,7 +2954,45 @@ Alternatively, to limit storage,
 \end_layout
 
 \begin_layout Section
-Mass Transfers Between Partitions
+Mass Transfers Between Partitions based on horizontal divergence
+\end_layout
+
+\begin_layout Standard
+We can calculate the horizontal divergence as
+\begin_inset Formula 
+\begin{equation}
+\nabla_{h}\cdot\mathbf{u}_{i}=\nabla\cdot\left(\mathbf{u}-(\mathbf{u}\cdot\hat{\mathbf{g}})\hat{\mathbf{g}}\right).
+\end{equation}
+
+\end_inset
+
+Then the mass transfer can be calculated as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+S_{12} & = & \begin{cases}
+\nabla_{h}\cdot\mathbf{u}_{1} & \ \text{if}\ \nabla_{h}\cdot\mathbf{u}_{1}>0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+S_{21} & = & \begin{cases}
+\nabla_{h}\cdot\mathbf{u}_{2} & \ \text{if}\ \nabla_{h}\cdot\mathbf{u}_{2}<0\\
+0 & \ \text{otherwise}
+\end{cases}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Mass Transfers Between Partitions based on 
+\begin_inset Formula $\nabla^{2}\theta$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3080,117 +3118,97 @@ Temperature of the Mass Transferred
 If mass is transferred based on its anomalous temperature, then it makes
  sense that the mass transferred has a different mean temperature to the
  mass left behind.
- If, before mass transfer, 
-\begin_inset Formula $\nabla^{2}\theta_{i}^{\prime}<0$
+ However we know nothing about the sub-grid scale variability and we are
+ not solving equations involving the sub-grid scale variability.
+ Therefore the 
+\begin_inset Formula $H_{ij}$
 \end_inset
 
- and as a result, mass is transferred out, then we want 
-\begin_inset Formula $\nabla^{2}\theta_{i}^{n+1}=0$
-\end_inset
-
- after mass transfer.
- This occurs if 
-\begin_inset Formula $\nabla\theta_{i}^{n+1}$
-\end_inset
-
- is uniform across all the faces of a cell in question.
- We can consider a cell 
-\begin_inset Formula $C$
-\end_inset
-
- with faces 
-\begin_inset Formula $f$
-\end_inset
-
- and neighbours 
-\begin_inset Formula $N$
-\end_inset
-
- so that the temperature in the cell before and after mass transfer is 
-\begin_inset Formula $\theta_{c}^{\prime}$
-\end_inset
-
- and 
-\begin_inset Formula $\theta_{C}^{n+1}$
-\end_inset
-
- and the temperatures of the neighbour faces are 
-\begin_inset Formula $\theta_{N}$
-\end_inset
-
- (which is assumed not to change).
- We can calculate a mean temperature gradient for cell 
-\begin_inset Formula $C$
-\end_inset
-
-, 
-\begin_inset Formula $\nabla_{C}\theta$
-\end_inset
-
- using Gauss's divergence theorem and the 
-\begin_inset Formula $\theta_{N}$
-\end_inset
-
- and 
-\begin_inset Formula $\theta_{C}^{\prime}$
-\end_inset
-
- values.
- We can then calculate 
-\begin_inset Formula $\theta_{C}^{n+1}$
-\end_inset
-
- as a volume mean of the neighbour values plus the increment due to the
- gradient:
-\begin_inset Formula 
-\begin{equation}
-\theta_{C}^{n+1}=\frac{\sum_{f\in\text{faces}}\left(S_{f}\cdot(C_{N}-C_{C})\right)\left(\theta_{N}+(C_{f}-C_{N})\cdot\nabla_{C}\theta\right)}{\sum_{f\in\text{faces}}\left(S_{f}\cdot(C_{N}-C_{C})\right)}.
-\end{equation}
-
-\end_inset
-
-This gives us the value left behind, not the value transferred out.
- If we assume conservation, we get:
-\begin_inset Formula 
-\begin{equation}
-\theta_{i}^{\prime}=\Delta tS_{ij}\theta_{i}^{t}+\left(1-\Delta tS_{ij}\right)\theta_{C}^{n+1}.
-\end{equation}
-
-\end_inset
-
-Where 
-\begin_inset Formula $\theta_{i}^{\prime}$
-\end_inset
-
- is the solution of eqn (
+ term in equation 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "eq:condThetaAdv"
 
 \end_inset
 
-) without source terms on the RHS.
- This implies that we need 
-\begin_inset Formula $\Delta tS_{ij}\ll1$
+ will be used to transfer additional heat between partitions as this term
+ acts independently of the mass transfer.
+ Considering again the 
+\begin_inset Formula $\theta$
+\end_inset
+
+ equation:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-H_{ij}\right)
+\end{equation}
+
+\end_inset
+
+and assuming that 
+\begin_inset Formula $H_{ij}$
+\end_inset
+
+ can be positive and negative and that 
+\begin_inset Formula $H_{ji}=-H_{ij}$
 \end_inset
 
 .
- Eqn (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:condThetaAdv"
-
+ We want positive 
+\begin_inset Formula $\theta_{i}$
 \end_inset
 
-) then becomes (without heat transfer):
+ anomalies transferred to 
+\begin_inset Formula $j$
+\end_inset
+
+ and negative 
+\begin_inset Formula $\theta_{j}$
+\end_inset
+
+ anomalies transferred to 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ 
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}^{t}-\theta_{i})-S_{ij}(\theta_{i}^{t}-\theta_{i})-H_{ij}\right).
+H_{ij}=-\begin{cases}
+K_{\theta}\nabla^{2}\theta_{i} & \ \text{where}\ \nabla^{2}\theta_{i}<0\\
+0 & \ \text{otherwise}
+\end{cases}-\begin{cases}
+K_{\theta}\nabla^{2}\theta_{j} & \ \text{where}\ \nabla^{2}\theta_{j}>0\\
+0 & \ \text{otherwise}
+\end{cases}
 \end{equation}
 
 \end_inset
 
+This means that 
+\begin_inset Formula $\theta_{i}$
+\end_inset
 
+ will always decrease and 
+\begin_inset Formula $\theta_{j}$
+\end_inset
+
+ will always increase.
+ This is what is wanted.
+ This term should not need to be treated implicitly.
+ 
+\end_layout
+
+\begin_layout Standard
+This is unstable - there is nothing to stop partition 
+\begin_inset Formula $i$
+\end_inset
+
+ from getting colder and colder and 
+\begin_inset Formula $j$
+\end_inset
+
+ from getting hotter and hotter - in spikes.
 \end_layout
 
 \begin_layout Standard
