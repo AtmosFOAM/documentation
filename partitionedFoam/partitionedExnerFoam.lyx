@@ -2954,6 +2954,55 @@ Alternatively, to limit storage,
 \end_layout
 
 \begin_layout Section
+Mass Transfer Between Partitions based on vertical velocity
+\end_layout
+
+\begin_layout Standard
+In order to estimate the mass transfer between partitions we need to know
+ the area of the interface between the partitions, 
+\begin_inset Formula $A=A_{ij}=A_{ji}$
+\end_inset
+
+.
+ The the mass transfer can be defined as
+\begin_inset Formula 
+\begin{eqnarray}
+M_{12} & = & \sigma_{1}\rho_{1}S_{12}=\begin{cases}
+\rho_{1}w_{1}A & \ \text{when}\ w_{1}>0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+M_{21} & = & \sigma_{2}\rho_{2}S_{21}=\begin{cases}
+-\rho_{2}w_{2}A & \ \text{when}\ w_{2}<0\\
+0 & \ \text{otherwise}.
+\end{cases}
+\end{eqnarray}
+
+\end_inset
+
+For an arbitrary shaped cell, the area 
+\begin_inset Formula $A$
+\end_inset
+
+ can be estimated as
+\begin_inset Formula 
+\begin{equation}
+A=\frac{1}{2}\sum_{f\in\text{faces}}\biggl|S_{f}\cdot\widehat{\nabla\sigma}\biggr|
+\end{equation}
+
+\end_inset
+
+for either 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ where 
+\begin_inset Formula $\widehat{\nabla\sigma}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
 Mass Transfers Between Partitions based on horizontal divergence
 \end_layout
 
@@ -2977,14 +3026,53 @@ S_{12} & = & \begin{cases}
 0 & \ \text{otherwise}
 \end{cases}\\
 S_{21} & = & \begin{cases}
-\nabla_{h}\cdot\mathbf{u}_{2} & \ \text{if}\ \nabla_{h}\cdot\mathbf{u}_{2}<0\\
+-\nabla_{h}\cdot\mathbf{u}_{2} & \ \text{if}\ \nabla_{h}\cdot\mathbf{u}_{2}<0\\
 0 & \ \text{otherwise}
 \end{cases}
 \end{eqnarray}
 
 \end_inset
 
+However 
+\begin_inset Formula $S_{ij}$
+\end_inset
 
+ is always multiplied by 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ so maybe we should consider the mass divergence instead:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{1}\rho_{1}S_{12} & = & \begin{cases}
+\nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1})>0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+\sigma_{2}\rho_{2}S_{21} & = & \begin{cases}
+-\nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2})<0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+
+\end_inset
+
+Problems:
+\end_layout
+
+\begin_layout Enumerate
+Mass is transferred very slowly.
+ Not sure why
+\end_layout
+
+\begin_layout Enumerate
+Mass is transferred out of the buoyant partition above the strongest point
+ of convection.
+ It should stay in the buoyant partition until it stops rising.
+ So 
+\begin_inset Formula $S_{21}$
+\end_inset
+
+ needs to be different.
 \end_layout
 
 \begin_layout Section
