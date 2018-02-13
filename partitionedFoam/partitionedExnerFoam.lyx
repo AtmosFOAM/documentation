@@ -2986,7 +2986,7 @@ For an arbitrary shaped cell, the area
  can be estimated as
 \begin_inset Formula 
 \begin{equation}
-A=\frac{1}{2}\sum_{f\in\text{faces}}\biggl|S_{f}\cdot\widehat{\nabla\sigma}\biggr|
+A=\frac{1}{2}\sum_{f\in\text{faces}}\biggl|\mathbf{S}_{f}\cdot\widehat{\nabla\sigma}\biggr|\approx\frac{1}{2}\frac{\sum_{f\in\text{faces}}\biggl|\nabla_{S}\sigma\biggr|}{|\nabla\sigma|}
 \end{equation}
 
 \end_inset
@@ -2996,10 +2996,14 @@ for either
 \end_inset
 
  where 
-\begin_inset Formula $\widehat{\nabla\sigma}$
+\begin_inset Formula $\widehat{\nabla\sigma}=\frac{\nabla\sigma}{|\nabla\sigma|}$
 \end_inset
 
+ and 
+\begin_inset Formula $\nabla_{S}\sigma=\mathbf{S}_{f}\cdot\nabla\sigma$
+\end_inset
 
+.
 \end_layout
 
 \begin_layout Section
