@@ -3131,7 +3131,7 @@ reference "sub:diffusionTransfer"
 \end_inset
 
 .
- We could chose a frequency 
+ We could choose a frequency 
 \begin_inset Formula $K_{\theta}\frac{\nabla^{2}\theta}{\theta}$
 \end_inset
 
