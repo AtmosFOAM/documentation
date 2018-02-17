@@ -1815,6 +1815,18 @@ However even using the maximum heat transfer between partitions, the model
  is still unstable.
 \end_layout
 
+\begin_layout Standard
+It is essential to ensure that:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}\rho_{i}H_{ij}=-\sigma_{j}\rho_{j}H_{ji}
+\end{equation}
+
+\end_inset
+
+for energy conservation.
+\end_layout
+
 \begin_layout Subsection
 Diffusion of partition volume fraction, 
 \begin_inset Formula $\sigma$
@@ -3203,7 +3215,118 @@ and then limited as before:
 \end_layout
 
 \begin_layout Section
-Temperature of the Mass Transferred
+Temperature of the Mass Transferred based on swapping
+\end_layout
+
+\begin_layout Standard
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condThetaAdv"
+
+\end_inset
+
+) assumes that the mass transferred has the temperature of the partition
+ that it is leaving.
+ Thus there is nothing in these equations that forces the temperatures in
+ each partition away from each other.
+ If instead we assume that the temperature of the mass transferred from
+ partition 1 to 2 has the higher of the two temperatures and vice-verca
+ then partition 2 will always tend to be warmer, consistent with it rising.
+ Then the flux form of the 
+\begin_inset Formula $\theta$
+\end_inset
+
+ equations become: 
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{1}\rho_{1}\theta_{1}}{\partial t}+\nabla\cdot\sigma_{1}\rho_{1}\theta_{1}\mathbf{u}_{1} & = & \sigma_{2}\rho_{2}S_{21}\max(\theta_{1},\theta_{2})-\sigma_{1}\rho_{1}S_{12}\min(\theta_{1},\theta_{2})\\
+\frac{\partial\sigma_{2}\rho_{2}\theta_{2}}{\partial t}+\nabla\cdot\sigma_{2}\rho_{2}\theta_{2}\mathbf{u}_{2} & = & \sigma_{1}\rho_{1}S_{12}\min(\theta_{1},\theta_{2})-\sigma_{2}\rho_{2}S_{21}\max(\theta_{1},\theta_{2}).
+\end{eqnarray}
+
+\end_inset
+
+With the continuity equation, this leads to the advective form:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\theta_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla\theta_{1} & = & \frac{\sigma_{2}\rho_{2}}{\sigma_{1}\rho_{1}}S_{21}\left(\max(\theta_{1},\theta_{2})-\theta_{1}\right)-S_{12}\left(\min(\theta_{1},\theta_{2})-\theta_{1}\right)\\
+\frac{\partial\theta_{2}}{\partial t}+\mathbf{u}_{2}\cdot\nabla\theta_{2} & = & \frac{\sigma_{1}\rho_{1}}{\sigma_{2}\rho_{2}}S_{12}\left(\min(\theta_{1},\theta_{2})-\theta_{2}\right)-S_{21}\left(\max(\theta_{1},\theta_{2})-\theta_{2}\right)
+\end{eqnarray*}
+
+\end_inset
+
+It is going to be much more difficult to make this implicit due to the severe
+ non-linearity of the min and max functions.
+ 
+\end_layout
+
+\begin_layout Section
+Swapping Temperature through the Heat Transfer Term
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\theta_{1}>\theta_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{12}>0$
+\end_inset
+
+ then we want the temperatures to swap (or tend towards swapping).
+ This can be achieved by:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{1}\rho_{1}H_{12} & = & M_{12}\max(\theta_{1}-\theta_{2},0)-M_{21}\min(\theta_{2}-\theta_{1},0)
+\end{eqnarray*}
+
+\end_inset
+
+and 
+\begin_inset Formula $\sigma_{2}\rho_{2}H_{21}=-\sigma_{1}\rho_{1}H_{12}$
+\end_inset
+
+ for energy conservation.
+ This will require some limiting for stability:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{1}\rho_{1}H_{12}=\min\left(\sigma_{1}\rho_{1}H_{12},\ \frac{\sigma_{1}\rho_{1}|\theta_{1}-\theta_{2}|}{\Delta t},\ \frac{\sigma_{2}\rho_{2}|\theta_{1}-\theta_{2}|}{\Delta t}\right).
+\end{equation}
+
+\end_inset
+
+This doesn't work -- it just makes the temperatures equilibrate because
+ there is only heat transfer when there is a difference.
+ It doesn't make them swap.
+\end_layout
+
+\begin_layout Section
+Temperature of the Mass Transferred based on 
+\begin_inset Formula $\nabla^{2}\theta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Comment
+status open
+
+\begin_layout Plain Layout
+This section needs to be fixed so that 
+\begin_inset Formula 
+\begin{equation}
+\sigma_{1}\rho_{1}H_{12}=-\sigma_{2}\rho_{2}H_{21}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
