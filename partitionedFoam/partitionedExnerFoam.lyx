@@ -3148,11 +3148,11 @@ reference "sub:diffusionTransfer"
 \begin_inset Formula 
 \begin{eqnarray}
 S_{12} & = & \begin{cases}
-\max\left(-K_{\theta}\frac{\nabla^{2}\theta}{\theta},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+\max\left(-K_{\theta}\frac{\nabla^{2}\theta_{1}}{\theta_{1}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
 0 & \ \text{otherwise}
 \end{cases}\\
 S_{21} & = & \begin{cases}
-\max\left(K_{\theta}\frac{\nabla^{2}\theta}{\theta},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+\max\left(K_{\theta}\frac{\nabla^{2}\theta_{2}}{\theta_{2}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
 0 & \ \text{otherwise}
 \end{cases}.
 \end{eqnarray}
@@ -3192,11 +3192,11 @@ reference "eq:limitDiffusionTransfer"
 \begin_inset Formula 
 \begin{eqnarray}
 \sigma_{1}\rho_{1}S_{12} & = & \frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{2}\rho_{2}-\sigma_{1}\rho_{1}\right),\ 0\right)+\begin{cases}
--K_{\theta}\frac{\nabla^{2}\theta}{\theta} & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+-K_{\theta}\frac{\nabla^{2}\theta_{1}}{\theta_{1}} & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
 0 & \ \text{otherwise}
 \end{cases}\\
 \sigma_{2}\rho_{2}S_{21} & = & \frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{1}\rho_{1}-\sigma_{2}\rho_{2}\right),\ 0\right)+\begin{cases}
-K_{\theta}\frac{\nabla^{2}\theta}{\theta} & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+K_{\theta}\frac{\nabla^{2}\theta_{2}}{\theta_{2}} & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
 0 & \ \text{otherwise}
 \end{cases}.
 \end{eqnarray}
@@ -3300,35 +3300,6 @@ This doesn't work -- it just makes the temperatures equilibrate because
  It doesn't make them swap.
 \end_layout
 
-\begin_layout Section
-Temperature of the Mass Transferred based on 
-\begin_inset Formula $\nabla^{2}\theta$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Comment
-status open
-
-\begin_layout Plain Layout
-This section needs to be fixed so that 
-\begin_inset Formula 
-\begin{equation}
-\sigma_{1}\rho_{1}H_{12}=-\sigma_{2}\rho_{2}H_{21}
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Standard
 If mass is transferred based on its anomalous temperature, then it makes
  sense that the mass transferred has a different mean temperature to the
@@ -3365,10 +3336,10 @@ and assuming that
 \end_inset
 
  can be positive and negative and that 
-\begin_inset Formula $H_{ji}=-H_{ij}$
+\begin_inset Formula $\sigma_{1}\rho_{1}H_{12}=-\sigma_{2}\rho_{2}H_{21}$
 \end_inset
 
-.
+ for energy conservation.
  We want positive 
 \begin_inset Formula $\theta_{i}$
 \end_inset
@@ -3386,16 +3357,25 @@ and assuming that
 \end_inset
 
 .
- 
+ We assume that we are using mass transfers:
+\begin_inset Formula 
+\begin{eqnarray}
+S_{12} & = & \begin{cases}
+\max\left(-K_{\theta}\frac{\nabla^{2}\theta_{1}}{\theta_{1}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+S_{21} & = & \begin{cases}
+\max\left(K_{\theta}\frac{\nabla^{2}\theta_{2}}{\theta_{2}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+
+\end_inset
+
+then we can use 
 \begin_inset Formula 
 \begin{equation}
-H_{ij}=-\begin{cases}
-K_{\theta}\nabla^{2}\theta_{i} & \ \text{where}\ \nabla^{2}\theta_{i}<0\\
-0 & \ \text{otherwise}
-\end{cases}-\begin{cases}
-K_{\theta}\nabla^{2}\theta_{j} & \ \text{where}\ \nabla^{2}\theta_{j}>0\\
-0 & \ \text{otherwise}
-\end{cases}
+H_{ij}=\frac{\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{j}\rho_{j}\theta_{j}S_{ji}}{\sigma_{i}\rho_{i}}=\theta_{i}S_{ij}-\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\theta_{j}S_{ji}
 \end{equation}
 
 \end_inset
@@ -3410,20 +3390,30 @@ This means that
 
  will always increase.
  This is what is wanted.
- This term should not need to be treated implicitly.
- 
+ This term should not need to be treated implicitly but it will need limiting
+ for stability.
+ For stability we need 
+\begin_inset Formula $\Delta tS_{ij}<1$
+\end_inset
+
+ which implies that
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\rho_{i}\theta_{i}|H_{ij}| & < & \sigma_{i}\rho_{i}\theta_{i}\\
+\sigma_{j}\rho_{j}\theta_{j}|H_{ji}| & < & \sigma_{j}\rho_{j}\theta_{j}
+\end{eqnarray*}
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Standard
-This is unstable - there is nothing to stop partition 
-\begin_inset Formula $i$
+\begin_layout Section
+Temperature of the Mass Transferred based on 
+\begin_inset Formula $\nabla^{2}\theta$
 \end_inset
 
- from getting colder and colder and 
-\begin_inset Formula $j$
-\end_inset
 
- from getting hotter and hotter - in spikes.
 \end_layout
 
 \begin_layout Standard
