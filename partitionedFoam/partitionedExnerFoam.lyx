@@ -3016,6 +3016,12 @@ for either
 \end_inset
 
 .
+ But if 
+\begin_inset Formula $\nabla\sigma=0$
+\end_inset
+
+ then there can be no transfer.
+ 
 \end_layout
 
 \begin_layout Section
@@ -3023,72 +3029,35 @@ Mass Transfers Between Partitions based on horizontal divergence
 \end_layout
 
 \begin_layout Standard
-We can calculate the horizontal divergence as
+We can calculate the horizontal divergence of a vector 
+\begin_inset Formula $\mathbf{v}$
+\end_inset
+
+ as
 \begin_inset Formula 
 \begin{equation}
-\nabla_{h}\cdot\mathbf{u}_{i}=\nabla\cdot\left(\mathbf{u}-(\mathbf{u}\cdot\hat{\mathbf{g}})\hat{\mathbf{g}}\right).
+\nabla_{h}\cdot\mathbf{v}=\nabla\cdot\left(\mathbf{v}-(\mathbf{v}\cdot\hat{\mathbf{g}})\hat{\mathbf{g}}\right).
 \end{equation}
 
 \end_inset
 
-Then the mass transfer can be calculated as
-\end_layout
-
-\begin_layout Standard
-\begin_inset Formula 
-\begin{eqnarray}
-S_{12} & = & \begin{cases}
-\nabla_{h}\cdot\mathbf{u}_{1} & \ \text{if}\ \nabla_{h}\cdot\mathbf{u}_{1}>0\\
-0 & \ \text{otherwise}
-\end{cases}\\
-S_{21} & = & \begin{cases}
--\nabla_{h}\cdot\mathbf{u}_{2} & \ \text{if}\ \nabla_{h}\cdot\mathbf{u}_{2}<0\\
-0 & \ \text{otherwise}
-\end{cases}
-\end{eqnarray}
-
-\end_inset
-
-However 
-\begin_inset Formula $S_{ij}$
-\end_inset
-
- is always multiplied by 
-\begin_inset Formula $\sigma_{i}\rho_{i}$
-\end_inset
-
- so maybe we should consider the mass divergence instead:
+The mass transfer can be calculated from the horizontal mass divergence
+ as:
 \begin_inset Formula 
 \begin{eqnarray}
 \sigma_{1}\rho_{1}S_{12} & = & \begin{cases}
-\nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1})>0\\
+-\nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1})<0\ \text{and}\ \mathbf{u}_{1}\cdot\mathbf{g}<0\\
 0 & \ \text{otherwise}
 \end{cases}\\
 \sigma_{2}\rho_{2}S_{21} & = & \begin{cases}
--\nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2})<0\\
+\nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2})>0\ \text{and}\ \mathbf{u}_{2}\cdot\mathbf{g}>0\\
 0 & \ \text{otherwise}
 \end{cases}.
 \end{eqnarray}
 
 \end_inset
 
-Problems:
-\end_layout
-
-\begin_layout Enumerate
-Mass is transferred very slowly.
- Not sure why
-\end_layout
-
-\begin_layout Enumerate
-Mass is transferred out of the buoyant partition above the strongest point
- of convection.
- It should stay in the buoyant partition until it stops rising.
- So 
-\begin_inset Formula $S_{21}$
-\end_inset
-
- needs to be different.
+A problem is that mass is transferred to the buoyant partition rather slowly.
 \end_layout
 
 \begin_layout Section
