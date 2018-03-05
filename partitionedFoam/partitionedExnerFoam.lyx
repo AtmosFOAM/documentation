@@ -3184,6 +3184,60 @@ and then limited as before:
 \end_layout
 
 \begin_layout Section
+Mass Transfer based on Partition Divergence
+\end_layout
+
+\begin_layout Standard
+There is nothing to control the partition divergence, 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}$
+\end_inset
+
+ so it can become large which leads to large changes in 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+.
+ We want 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ to move 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ around but we the partition divergence is a problem.
+ How about getting partition divergence to move fluid into the other partition.
+ Considering just two partitions, this could be achieved by:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}=\sigma_{i}\rho_{i}\left(\nabla\cdot\mathbf{u}_{i}-\nabla\cdot\overline{\mathbf{u}}\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\rho_{i}\mathbf{u}_{i}\bigg/\sum_{i}\sigma_{i}\rho_{i}$
+\end_inset
+
+.
+ This formulation means that 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ is still changed by global divergence but not by local divergence.
+ In order to separate this into strictly positive source terms we can use:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{j}\rho_{j}S_{ji} & = & \max\left(\sigma_{i}\rho_{i}\left(\nabla\cdot\mathbf{u}_{i}-\nabla\cdot\overline{\mathbf{u}}\right),\ 0\right)\\
+\sigma_{i}\rho_{i}S_{ij} & = & \max\left(\sigma_{j}\rho_{j}\left(\nabla\cdot\mathbf{u}_{j}-\nabla\cdot\overline{\mathbf{u}}\right),\ 0\right).
+\end{eqnarray*}
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
 Temperature of the Mass Transferred based on swapping
 \end_layout
 
