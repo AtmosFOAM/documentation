@@ -3210,31 +3210,33 @@ There is nothing to control the partition divergence,
  Considering just two partitions, this could be achieved by:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}=\sigma_{i}\rho_{i}\left(\nabla\cdot\mathbf{u}_{i}-\nabla\cdot\overline{\mathbf{u}}\right)
+\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}=\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j}.
 \end{equation}
 
 \end_inset
 
-where 
-\begin_inset Formula $\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\rho_{i}\mathbf{u}_{i}\bigg/\sum_{i}\sigma_{i}\rho_{i}$
-\end_inset
-
-.
- This formulation means that 
-\begin_inset Formula $\sigma_{i}\rho_{i}$
-\end_inset
-
- is still changed by global divergence but not by local divergence.
- In order to separate this into strictly positive source terms we can use:
+In order to separate this into strictly positive source terms we can use:
 \begin_inset Formula 
 \begin{eqnarray*}
-\sigma_{j}\rho_{j}S_{ji} & = & \max\left(\sigma_{i}\rho_{i}\left(\nabla\cdot\mathbf{u}_{i}-\nabla\cdot\overline{\mathbf{u}}\right),\ 0\right)\\
-\sigma_{i}\rho_{i}S_{ij} & = & \max\left(\sigma_{j}\rho_{j}\left(\nabla\cdot\mathbf{u}_{j}-\nabla\cdot\overline{\mathbf{u}}\right),\ 0\right).
+\sigma_{j}\rho_{j}S_{ji} & = & \max\left(\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j},\ 0\right).
 \end{eqnarray*}
 
 \end_inset
 
- 
+This is equivalent to the transport equation for 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ being: 
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla(\sigma_{i}\rho_{i})+\sigma_{j}\rho_{j}\nabla\cdot(\mathbf{u}_{j})=0.
+\end{equation}
+
+\end_inset
+
+This is badly behaved.
+ Abandon.
 \end_layout
 
 \begin_layout Section
