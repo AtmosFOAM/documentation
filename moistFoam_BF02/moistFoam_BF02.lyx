@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass article
@@ -47,13 +47,13 @@
 \font_roman times
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -64,15 +64,24 @@
 \use_hyperref false
 \papersize a4paper
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
-\cite_engine natbib_authoryear
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 0
 \index Index
 \shortcut idx
@@ -253,11 +262,11 @@ The condensation rate is give by:
 \begin_layout Standard
 \begin_inset Tabular
 <lyxtabular version="3" rows="41" columns="4">
-<features tabularvalignment="middle" tabularwidth="100text%">
-<column alignment="center" valignment="top" width="0">
+<features rotate="0" tabularvalignment="middle" tabularwidth="100text%">
+<column alignment="center" valignment="top">
 <column alignment="left" valignment="top" width="35text%">
 <column alignment="left" valignment="top" width="0pt">
-<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
@@ -2083,11 +2092,113 @@ p_{d}=p\frac{1}{1+r_{v}/\varepsilon}
 
 \end_layout
 
+\begin_layout Section*
+Derive Transport Equation for 
+\begin_inset Formula $\theta_{\rho}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\theta_{\rho}=\theta\left(1+q_{v}\left(\frac{R_{v}}{R}\right)-q_{\ell}\right)=\theta\ \frac{1+r_{v}/\varepsilon}{1+r_{t}}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
 bibfiles "numerics"
 options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\theta}{\partial t}+\mathbf{u}\cdot\nabla\theta & = & -\theta\left(\frac{R_{m}}{c_{vml}}-\frac{Rc_{pml}}{c_{p}c_{vml}}\right)\nabla\cdot\mathbf{u}+\left[\frac{c_{v}L_{v}}{c_{vml}c_{p}\pi}-\theta\frac{R_{v}}{c_{vml}}\left(1-\frac{R}{c_{p}}\frac{c_{pml}}{R_{m}}\right)\right]\dot{r}\\
+\frac{\partial q_{v}}{\partial t}+\mathbf{u}\cdot\nabla q_{v} & = & -\dot{q}=-\frac{\rho_{a}}{\rho}\dot{r}\\
+\frac{\partial q_{\ell}}{\partial t}+\mathbf{u}\cdot\nabla q_{\ell} & = & \dot{q}=\frac{\rho_{a}}{\rho}\dot{r}
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\implies\frac{\partial\theta_{\rho}}{\partial t} & = & \frac{\partial\theta}{\partial t}\left(1+q_{v}\left(\frac{R_{v}}{R}\right)-q_{\ell}\right)+\theta\left(1+\frac{\partial q_{v}}{\partial t}\left(\frac{R_{v}}{R}\right)-\frac{\partial q_{\ell}}{\partial t}\right)\\
+ & = & \frac{\theta_{\rho}}{\theta}\left\{ -\mathbf{u}\cdot\nabla\theta-\theta\left(\frac{R_{m}}{c_{vml}}-\frac{Rc_{pml}}{c_{p}c_{vml}}\right)\nabla\cdot\mathbf{u}+\left[\frac{c_{v}L_{v}}{c_{vml}c_{p}\pi}-\theta\frac{R_{v}}{c_{vml}}\left(1-\frac{R}{c_{p}}\frac{c_{pml}}{R_{m}}\right)\right]\dot{r}\right\} \\
+ & + & \theta\left(1+\left\{ -\mathbf{u}\cdot\nabla q_{v}-\dot{q}\right\} \left(\frac{R_{v}}{R}\right)-\left\{ -\mathbf{u}\cdot\nabla q_{\ell}+\dot{q}\right\} \right)
+\end{eqnarray*}
+
+\end_inset
+
+Use:
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbf{u}\cdot\nabla\theta_{\rho} & = & \frac{\theta_{\rho}}{\theta}\mathbf{u}\cdot\nabla\theta+\theta\mathbf{u}\cdot\nabla\frac{\theta_{\rho}}{\theta}\\
+ & = & \frac{\theta_{\rho}}{\theta}\mathbf{u}\cdot\nabla\theta+\theta\mathbf{u}\cdot\nabla\left\{ 1+q_{v}\left(\frac{R_{v}}{R}\right)-q_{\ell}\right\} \\
+ & = & \frac{\theta_{\rho}}{\theta}\mathbf{u}\cdot\nabla\theta+\theta\mathbf{u}\cdot\nabla\left\{ q_{v}\left(\frac{R_{v}}{R}\right)-q_{\ell}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\implies\frac{\partial\theta_{\rho}}{\partial t} & = & -\frac{\theta_{\rho}}{\theta}\mathbf{u}\cdot\nabla\theta-\theta\mathbf{u}\cdot\nabla\left\{ q_{v}\left(\frac{R_{v}}{R}\right)-q_{\ell}\right\} \\
+ & - & \theta_{\rho}\left(\frac{R_{m}}{c_{vml}}-\frac{Rc_{pml}}{c_{p}c_{vml}}\right)\nabla\cdot\mathbf{u}+\frac{\theta_{\rho}}{\theta}\left[\frac{c_{v}L_{v}}{c_{vml}c_{p}\pi}-\theta\frac{R_{v}}{c_{vml}}\left(1-\frac{R}{c_{p}}\frac{c_{pml}}{R_{m}}\right)\right]\dot{r}\\
+ & + & \theta\left(1-\dot{q}\left(1+\frac{R_{v}}{R}\right)\right)\\
+\implies\frac{D\theta_{\rho}}{Dt} & =- & \theta_{\rho}\left(\frac{R_{m}}{c_{vml}}-\frac{Rc_{pml}}{c_{p}c_{vml}}\right)\nabla\cdot\mathbf{u}+\frac{\theta_{\rho}}{\theta}\left[\frac{c_{v}L_{v}}{c_{vml}c_{p}\pi}-\theta\frac{R_{v}}{c_{vml}}\left(1-\frac{R}{c_{p}}\frac{c_{pml}}{R_{m}}\right)\right]\dot{r}\\
+ & + & \theta\left(1-\frac{\rho_{a}}{\rho}\dot{r}\left(1+\frac{R_{v}}{R}\right)\right)
+\end{eqnarray*}
+
+\end_inset
+
+Whereas if we use:
+\begin_inset Formula 
+\begin{equation}
+\tilde{\theta}_{\rho}=\tilde{\theta}\left(1+q_{v}\left(\frac{R_{v}}{R}\right)-q_{\ell}\right)
+\end{equation}
+
+\end_inset
+
+with 
+\begin_inset Formula $\tilde{\pi}=\left(\frac{p}{p_{0}}\right)^{\frac{R_{m}}{c_{pml}}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\tilde{\theta}=T/\tilde{\pi}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{cond}=\rho_{a}\dot{r}$
+\end_inset
+
+ then we get:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\rho\tilde{\theta}_{\rho}}{\partial t}+\nabla\cdot\left(\tilde{\theta}_{\rho}\rho\mathbf{u}\right) & = & -\frac{\tilde{\theta}_{\rho}}{q_{d}}\left(\frac{R_{v}}{R_{m}}-\ln\tilde{\pi}\left[\frac{R_{v}}{R_{m}}+\frac{c_{pl}-c_{pv}}{c_{pml}}\right]-\frac{L_{v}}{c_{pml}T}\right)S_{cond}
+\end{eqnarray*}
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\begin{eqnarray*}
+c_{pa}\theta_{\rho}\nabla\pi & = & c_{pa}\tilde{\theta}_{\rho}\frac{\theta}{\tilde{\theta}}\nabla\left(\tilde{\pi}^{\frac{c_{pml}}{R_{m}}\frac{R}{c_{pa}}}\right)\\
+ & = & c_{pa}\tilde{\theta}_{\rho}\frac{\tilde{\pi}}{\pi}\frac{c_{pml}}{R_{m}}\frac{R}{c_{pa}}\tilde{\pi}^{\frac{c_{pml}}{R_{m}}\frac{R}{c_{pa}}-1}\nabla\tilde{\pi}\\
+ & = & c_{pml}\frac{R}{R_{m}}\tilde{\theta}_{\rho}\nabla\tilde{\pi}
+\end{eqnarray*}
 
 \end_inset
 

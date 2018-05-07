@@ -3210,7 +3210,7 @@ There is nothing to control the partition divergence,
  Considering just two partitions, this could be achieved by:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}=\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j}.
+\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}=\frac{1}{2}\left(\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j}.\right)
 \end{equation}
 
 \end_inset
@@ -3218,7 +3218,7 @@ There is nothing to control the partition divergence,
 In order to separate this into strictly positive source terms we can use:
 \begin_inset Formula 
 \begin{eqnarray*}
-\sigma_{j}\rho_{j}S_{ji} & = & \max\left(\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j},\ 0\right).
+\sigma_{j}\rho_{j}S_{ji} & = & \frac{1}{2}\max\left(\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j},\ 0\right).
 \end{eqnarray*}
 
 \end_inset
@@ -3230,13 +3230,117 @@ This is equivalent to the transport equation for
  being: 
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla(\sigma_{i}\rho_{i})+\sigma_{j}\rho_{j}\nabla\cdot(\mathbf{u}_{j})=0.
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla(\sigma_{i}\rho_{i})=-\frac{1}{2}\overline{\rho}\nabla\cdot\overline{\mathbf{u}}
 \end{equation}
 
 \end_inset
 
-This is badly behaved.
- Abandon.
+where 
+\begin_inset Formula $\overline{\rho}\nabla\cdot\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}$
+\end_inset
+
+, satisfying the criteria that, in the absence of global divergence, advection
+ of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ is bounded.
+ This transfer term is formulated to stabilise the equations rather than
+ to represent buoyant convection.
+\end_layout
+
+\begin_layout Section
+Internal Energy Conservation on Mass Transfer
+\end_layout
+
+\begin_layout Standard
+Internal energy should be conserved on mass transfer and we would like our
+ numerical method to have the same property.
+ This implies that we would like:
+\begin_inset Formula 
+\begin{equation}
+\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n+1}=\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n}
+\end{equation}
+
+\end_inset
+
+Considering only the transfer terms we use an explicit update of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+(\sigma_{i}\rho_{i})^{n+1}=(\sigma_{i}\rho_{i})^{n}+\Delta t\left((\sigma_{j}\rho_{j})^{n}S_{ji}^{n}-(\sigma_{i}\rho_{i})^{n}S_{ij}^{n}\right)
+\end{equation}
+
+\end_inset
+
+and an implicit update of 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\theta_{0}^{n+1} & = & \frac{\left(1+T_{01}\right)\theta_{0}^{n}+T_{10}\theta_{1}^{n}}{1+T_{10}+T_{01}}\\
+\theta_{1}^{n+1} & = & \frac{\theta_{1}^{n}+T_{01}\theta_{0}^{n+1}}{1+T_{01}}
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $T_{ij}=\Delta t\ \frac{\sigma_{i}\rho_{i}}{\sigma_{j}\rho_{j}}S_{ij}$
+\end_inset
+
+.
+ Without loss of generality we can consider the case where 
+\begin_inset Formula $S_{ji}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $i=0$
+\end_inset
+
+, 
+\begin_inset Formula $j=1$
+\end_inset
+
+ and use the shorthand 
+\begin_inset Formula $h_{i}=\sigma_{i}\rho_{i}$
+\end_inset
+
+ giving:
+\begin_inset Formula 
+\begin{eqnarray*}
+h_{o}^{n+1} & = & h_{0}^{n}\left(1-\Delta t\ S_{01}\right)\\
+h_{1}^{n+1} & = & h_{1}^{n}+h_{o}^{n}\Delta t\ S_{01}\\
+\theta_{0}^{n+1} & = & \theta_{0}^{n}\\
+\theta_{1}^{n+1} & = & \frac{\theta_{1}^{n}+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}\theta_{0}^{n}}{1+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}}
+\end{eqnarray*}
+
+\end_inset
+
+So the energy conservation error is:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n+1}-\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n} & = & h_{0}^{n}\left(1-\Delta t\ S_{01}\right)\theta_{0}^{n}+\left(h_{1}^{n}+h_{o}^{n}\Delta t\ S_{01}\right)\frac{\theta_{1}^{n}+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}\theta_{0}^{n}}{1+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}}\\
+ & - & h_{0}^{n}\theta_{0}^{n}-h_{1}^{n}\theta_{1}^{n}\\
+ & =- & \Delta t\ S_{01}h_{0}^{n}\theta_{0}^{n}+h_{1}^{n}\Delta t\ \frac{h_{0}}{h_{1}}S_{01}\theta_{0}^{n}\\
+ & = & \Delta t\ S_{01}\theta_{0}^{n}\left(-h_{0}^{n}+h_{1}^{n}\frac{h_{0}}{h_{1}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+So energy conservation is achieved as long as we use old values of 
+\begin_inset Formula $\sigma_{i}\rho_{i}$
+\end_inset
+
+ in the calculation of 
+\begin_inset Formula $T_{ij}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section

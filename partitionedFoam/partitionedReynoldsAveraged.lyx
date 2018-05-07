@@ -1,0 +1,1330 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Conditionally Averaged, Reynolds Averaged Compressible Equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Section*
+Reynolds Averaged Equations Generalised from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "TKP+18"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="4">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="left" valignment="top" width="59text%">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Symbol
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Units
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Rotation of geometry (or planet)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\bm{\Omega}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Reference pressure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $p_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $10^{5}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pa
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Dry air 
+\begin_inset Formula $\kappa$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\kappa$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R_{a}/c_{pa}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Acceleration due to gravity
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $g$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.81
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m s}^{-2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Reference temperature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $T_{0}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+273.16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gas constant of dry air
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $R$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+287
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{J kg}^{-1}\text{ K }^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Heat capacity at constant pressure of dry air
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $c_{p}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1004
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{J kg}^{-1}\text{ K }^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Face area vector (normal to each face)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m}^{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Constants of the conditionally averaged dry Euler equations.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:constants"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="3">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="left" valignment="top" width="39text%">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Variable
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total = Mean + anomaly in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Units
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Velocity
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{u}_{i}=\overline{\mathbf{u}_{i}}=\mathbf{u}_{i}^{\prime}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{m s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Density
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{i}=\overline{\rho_{i}}+\rho_{i}^{\prime}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg m}^{-3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Volume fraction of partition
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Transfer rate from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Drag on 
+\begin_inset Formula $i$
+\end_inset
+
+ from 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{d}_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\text{kg m}^{-2}\text{s}^{-1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Potential temperature
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\theta_{i}=\overline{\theta_{i}}+\theta_{i}^{\prime}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+K
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pressure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $p$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Pa
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exner pressure
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\pi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $(p/p_{0})^{\kappa}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Diagnostic variables of the conditionally and Reynolds averaged dry Euler
+ equations.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:diags"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Transport equations for mean variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}\overline{\mathbf{u}_{i}}\right) & = & -\nabla\cdot\left(\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\mathbf{u}_{i}^{\prime}}\right)-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla\pi+\sigma_{i}\rho_{i}\mathbf{g}\label{eq:condMom}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\overline{\mathbf{u}_{j}}S_{ji}-\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont}\\
+\frac{\partial\sigma_{i}\rho_{i}\overline{\theta_{i}}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}\overline{\theta_{i}}\right) & = & -\nabla\cdot\left(\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\theta_{i}^{\prime}}\right)+\sum_{j\ne i}\left(\sigma_{j}\rho_{j}\overline{\theta_{j}}S_{ji}-\sigma_{i}\rho_{i}\overline{\theta_{i}}S_{ij}\right)\label{eq:condTheta}
+\end{eqnarray}
+
+\end_inset
+
+General equation for co-variances, 
+\begin_inset Formula $\overline{\phi_{i}^{\prime}\psi_{i}^{\prime}}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{flalign}
+\frac{\partial\sigma_{i}\rho_{i}\overline{\phi_{i}^{\prime}\psi_{i}^{\prime}}}{\partial t}+\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}\overline{\phi_{i}^{\prime}\psi_{i}^{\prime}}= & -\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\psi_{i}^{\prime}}\cdot\nabla\overline{\phi_{i}}-\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\phi_{i}^{\prime}}\cdot\nabla\overline{\psi_{i}}\nonumber \\
+ & \text{cross gradient fluxes}\\
+ & +\sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}S_{ji}\left[\overline{\phi_{j}^{\prime}\psi_{j}^{\prime}}+\left(\overline{\phi_{j}}-\overline{\phi_{i}}\right)\left(\overline{\psi_{j}}-\overline{\psi_{i}}\right)\right]-\sigma_{i}\rho_{i}S_{ij}\overline{\phi_{i}^{\prime}\psi_{i}^{\prime}}\right\} \\
+ & \text{transfers between partitions}\\
+ & -\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\phi_{i}^{\prime}\psi_{i}^{\prime}}\\
+ & \text{turbulent transport}
+\end{flalign}
+
+\end_inset
+
+Turbulent kinetic energy, 
+\begin_inset Formula $\overline{e_{i}}=\frac{1}{2}\overline{\mathbf{u}_{i}^{\prime}\cdot\mathbf{u}_{i}^{\prime}}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{flalign}
+\frac{\partial\sigma_{i}\rho_{i}\overline{e_{i}}}{\partial t}+\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}\overline{e_{i}}= & -\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\mathbf{u}_{i}^{\prime}}:\nabla\overline{\mathbf{u}_{i}}\nonumber \\
+ & \text{shear production}\\
+ & +\sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}S_{ji}\left[\overline{e_{j}}+\frac{1}{2}|\overline{\mathbf{u}_{j}}-\overline{\mathbf{u}_{i}}|^{2}\right]-\sigma_{i}\rho_{i}S_{ij}\overline{e_{i}}\right\} \\
+ & \text{transfers between partitions}\\
+ & -\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}e_{i}^{\prime}}\\
+ & \text{turbulent transport}\\
+ & +\sigma_{i}\overline{\rho_{i}^{\prime}\mathbf{u}_{i}^{\prime}}\cdot\mathbf{g}-\sigma_{i}\overline{\mathbf{u}_{i}^{\prime}\cdot\nabla p^{\prime}}-\sigma_{i}\rho_{i}\overline{D_{e_{i}}}
+\end{flalign}
+
+\end_inset
+
+Eddy diffusivity using eddy mixing length, 
+\begin_inset Formula $\ell_{i}$
+\end_inset
+
+, and Monim Obukhov length, 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+, convective velocity scale for unstable boundary layers, 
+\begin_inset Formula $w_{*}$
+\end_inset
+
+, eddy turnover time, 
+\begin_inset Formula $\tau$
+\end_inset
+
+, dry convective boundary layer depth, 
+\begin_inset Formula $z_{*}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\overline{\mathbf{u}_{i}^{\prime}\phi_{i}^{\prime}} & = & K_{i}\nabla\overline{\phi_{i}}\\
+K_{i} & = & c_{K}\ell_{i}\sqrt{\overline{e_{i}}}\\
+\ell_{i} & = & \left(\ell_{s}^{-1}+\ell_{e}^{-1}\right)\\
+\ell_{s} & = & K_{i}z\left(1+a_{\ell}\frac{z}{\varLambda}\right)^{b_{\ell}}\\
+\ell_{e} & = & \tau\sqrt{\overline{e_{i}}}\\
+\tau & = & z_{*}/w_{*}\\
+(a_{\ell},b_{\ell}) & = & \begin{cases}
+(-100,0.2) & \text{ for }\Lambda<0\\
+(2.7,1) & \text{ for }\Lambda\ge0
+\end{cases}
+\end{eqnarray}
+
+\end_inset
+
+For drag, plume radius, 
+\begin_inset Formula $=r_{d}\sqrt{\sigma_{i}}$
+\end_inset
+
+ where spacing between plumes, 
+\begin_inset Formula $r_{d}=500\text{m}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Shear production of TKE:
+\begin_inset Formula 
+\begin{equation}
+-\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\mathbf{u}_{i}^{\prime}}:\nabla\overline{\mathbf{u}_{i}}\approx-\sigma_{i}\rho_{i}K_{i}\bigl|\nabla\overline{\mathbf{u}_{i}}\bigr|^{2}
+\end{equation}
+
+\end_inset
+
+Dissipation of TKE:
+\begin_inset Formula 
+\begin{equation}
+\overline{D_{e_{i}}}=c_{e}\frac{\overline{e_{i}}^{\frac{3}{2}}}{\ell_{i}}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $c_{e}=2.0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+I will start by ignoring the terms 
+\begin_inset Formula $\sigma_{i}\overline{\rho_{i}^{\prime}\mathbf{u}_{i}^{\prime}}\cdot\mathbf{g}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}\overline{\mathbf{u}_{i}^{\prime}\cdot\nabla p^{\prime}}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section*
+Closure Ideas
+\end_layout
+
+\begin_layout Subsection*
+Mass Transfer Terms for Initiating and Destroying Cloud
+\end_layout
+
+\begin_layout Standard
+There will be vertical acceleration if:
+\begin_inset Formula 
+\begin{equation}
+-c_{p}\theta_{\rho}\nabla\pi\cdot\mathbf{g}+|\mathbf{g}|^{2}>0
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta_{\rho}$
+\end_inset
+
+ is a potential temperature needed to pre-multiply 
+\begin_inset Formula $\nabla\pi$
+\end_inset
+
+ in order to get the pressure gradient term of the compressible Euler equations
+ in advective form depending on the moisture.
+ We assume that pressure decreases with height so there will be vertical
+ acceleration if
+\begin_inset Formula 
+\begin{equation}
+\nabla\theta_{\rho}\cdot\mathbf{g}>0
+\end{equation}
+
+\end_inset
+
+We will assume that 
+\begin_inset Formula $\theta_{\rho}$
+\end_inset
+
+ consists of a mean plus a positive perturbation so that we are considering
+ the warmest, most buoyant fluid:
+\begin_inset Formula 
+\begin{equation}
+\theta_{\rho}^{+}=\overline{\theta_{\rho}}+\theta_{\rho}^{\prime}
+\end{equation}
+
+\end_inset
+
+and we assume that fluid is transferred from the stable fluid, 
+\begin_inset Formula $i=0$
+\end_inset
+
+, to the buoyant fluid, 
+\begin_inset Formula $i=1$
+\end_inset
+
+, when there is a local maximum of 
+\begin_inset Formula $\theta_{\rho}$
+\end_inset
+
+ so we can set:
+\begin_inset Formula 
+\begin{equation}
+S_{01}=-K_{\theta}\min\left(\frac{\nabla^{2}\left(\theta_{\rho0}^{+}\right)}{\theta_{\rho0}^{+}},\ 0\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $K_{\theta}$
+\end_inset
+
+ is a diffusivity.
+ Conversely, fluid is transferred back to the stable partition when it is
+ no longer buoyant:
+\begin_inset Formula 
+\begin{equation}
+S_{10}=K_{\theta}\max\left(\frac{\nabla^{2}\left(\theta_{\rho1}^{-}\right)}{\theta_{\rho1}^{-}},\ 0\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta_{\rho}^{-}=\overline{\theta_{\rho}}-\theta_{\rho}^{\prime}$
+\end_inset
+
+.
+ This diffusivity is not directly related to turbulence so it may take a
+ different value to that used in the TKE equation.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Equation for 
+\begin_inset Formula $\overline{\theta_{\rho}^{\prime}\theta_{\rho}^{\prime}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Due to the importance of 
+\begin_inset Formula $\theta_{\rho}^{\prime}$
+\end_inset
+
+, we probably need a transport equation for 
+\begin_inset Formula $\overline{\theta_{\rho}^{\prime}\theta_{\rho}^{\prime}}$
+\end_inset
+
+ similar to that for the TKE.
+ For simplicity, we will write an equation for 
+\begin_inset Formula $\overline{\theta_{i}^{\prime}\theta_{i}^{\prime}}$
+\end_inset
+
+ instead:
+\begin_inset Formula 
+\begin{flalign}
+\frac{\partial\sigma_{i}\rho_{i}\overline{\theta_{i}^{\prime}\theta_{i}^{\prime}}}{\partial t}+\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}\overline{\theta_{i}^{\prime}\theta_{i}^{\prime}}= & -2\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\theta_{i}^{\prime}}\cdot\nabla\overline{\theta_{i}}\nonumber \\
+ & +\sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}S_{ji}\left[\overline{\theta_{j}^{\prime}\theta_{j}^{\prime}}+|\overline{\theta_{j}^{\prime}\theta_{j}^{\prime}}-\overline{\theta_{i}^{\prime}\theta_{i}^{\prime}}|^{2}\right]-\sigma_{i}\rho_{i}S_{ij}\overline{\theta_{i}^{\prime}\theta_{i}^{\prime}}\right\} \\
+ & -\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\theta_{i}^{\prime}\theta_{i}^{\prime}}-\sigma_{i}\rho_{i}\overline{D_{\theta_{i}}}
+\end{flalign}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Entrainment and Detrainment
+\end_layout
+
+\begin_layout Standard
+Lateral, turbulent entrainment and detrainment (in 
+\begin_inset Formula $\text{kg}\ \text{m}^{-3}\ \text{s}^{-1}$
+\end_inset
+
+) should depend on 
+\begin_inset Formula $\nabla^{2}\sigma$
+\end_inset
+
+ (in 
+\begin_inset Formula $\text{m}^{-2}$
+\end_inset
+
+), and 
+\begin_inset Formula $\nabla\mathbf{u}$
+\end_inset
+
+ (in 
+\begin_inset Formula $\text{s}^{-1}$
+\end_inset
+
+) and 
+\begin_inset Formula $|\mathbf{u}_{i}-\mathbf{u}_{j}|$
+\end_inset
+
+ (in 
+\begin_inset Formula $\text{ms}^{-1}$
+\end_inset
+
+).
+ 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "TKP+18"
+
+\end_inset
+
+ give turbulent entrainment proportional to 
+\begin_inset Formula $b/w$
+\end_inset
+
+ where 
+\begin_inset Formula $b$
+\end_inset
+
+ is buoyancy.
+ Formulations based on each of these could be:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\max\left(\nabla\cdot K_{\sigma}\nabla\left(\sigma_{j}\rho_{j}-\sigma_{i}\rho_{i}\right),\ 0\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $K_{\sigma}$
+\end_inset
+
+ is a diffusivity with units 
+\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+\end_inset
+
+.
+ The diffusivity needs to be set by 
+\begin_inset Formula $\nabla\mathbf{u}_{i,j}$
+\end_inset
+
+ and 
+\begin_inset Formula $|\mathbf{u}_{i}-\mathbf{u}_{j}|$
+\end_inset
+
+.
+ However we will start by using the same diffusivity as is used for TKE.
+ This should already be influenced indirectly by 
+\begin_inset Formula $\nabla\mathbf{u}_{i,j}$
+\end_inset
+
+ and 
+\begin_inset Formula $|\mathbf{u}_{i}-\mathbf{u}_{j}|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
