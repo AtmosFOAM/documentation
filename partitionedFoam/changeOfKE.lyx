@@ -1,0 +1,217 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Change of Kinetic Energy when Mass is Transferred in the Conditionally Averaged
+ Shallow Water Equations
+\end_layout
+
+\begin_layout Standard
+Considering only the transfer terms of the conditionally averaged continuity
+ and momentum equations of the shallow water equations, and using explicit
+ transfer for 
+\begin_inset Formula $h_{i}=\sigma_{i}h$
+\end_inset
+
+ and implicit transfer for 
+\begin_inset Formula $u_{i}$
+\end_inset
+
+ gives:
+\begin_inset Formula 
+\begin{eqnarray}
+h_{i}^{n+1} & = & h_{i}^{n}+\Delta t\left(h_{j}^{n}S_{ji}-h_{i}^{n}S_{ij}\right)\label{eq:hTransfer}\\
+u_{i}^{n+1} & = & u_{i}^{n}+\Delta t\frac{h_{j}}{h_{i}}S_{ji}\left(u_{j}^{n+1}-u_{i}^{n+1}\right).\label{eq:uTransfer}
+\end{eqnarray}
+
+\end_inset
+
+We will assume that 
+\begin_inset Formula $i,j=0,1$
+\end_inset
+
+, that 
+\begin_inset Formula $S_{01}>0$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{10}=0$
+\end_inset
+
+.
+ For simplicity of the notation we will use 
+\begin_inset Formula $h_{i}=h_{i}^{n}$
+\end_inset
+
+, 
+\begin_inset Formula $u_{i}=u_{u}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $S=\Delta t\ S_{01}$
+\end_inset
+
+ and we will assume that 
+\begin_inset Formula $S$
+\end_inset
+
+ is small in comparison to 1.
+ The equations for 
+\begin_inset Formula $h_{i}^{n+1}$
+\end_inset
+
+ and 
+\begin_inset Formula $u_{i}^{n+1}$
+\end_inset
+
+ become:
+\begin_inset Formula 
+\begin{eqnarray}
+h_{0}^{n+1} & = & h_{0}(1-S)\\
+h_{1}^{n+1} & = & h_{1}+h_{0}S\\
+u_{0}^{n+1} & = & u_{0}\\
+u_{1}^{n+1} & = & \frac{u_{1}+\frac{h_{0}}{h_{1}}Su_{0}}{1+\frac{h_{0}}{h_{1}}S}.
+\end{eqnarray}
+
+\end_inset
+
+These can be substituted into the equation for the kinetic energy at time
+ level 
+\begin_inset Formula $n+1$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+KE^{n+1} & = & \frac{1}{2}\sum_{i}h_{i}^{n+1}\left(u_{i}^{n+1}\right)^{2}.
+\end{eqnarray}
+
+\end_inset
+
+We want to show that 
+\begin_inset Formula $KE^{n+1}\le KE^{n}$
+\end_inset
+
+.
+ After some manipulation we can get
+\begin_inset Formula 
+\begin{eqnarray}
+2KE^{n+1} & = & h_{0}u_{0}^{2}\left(1-\frac{S}{1+\frac{h_{0}}{h_{1}}S}\right)+\frac{h_{1}u_{1}^{2}}{1+\frac{h_{0}}{h_{1}}S}+\frac{2Sh_{0}u_{0}u_{1}}{1+\frac{h_{0}}{h_{1}}S}.
+\end{eqnarray}
+
+\end_inset
+
+Since 
+\begin_inset Formula $S$
+\end_inset
+
+ is small and we can assume that 
+\begin_inset Formula $h_{0}/h_{1}S$
+\end_inset
+
+ is small it is clear that the first two terms are less than or equal to
+ 
+\begin_inset Formula $2KE^{n}$
+\end_inset
+
+.
+ However the last term could make it bigger.
+ Therefore it remains to show that:
+\begin_inset Formula 
+\begin{eqnarray}
+-h_{0}u_{0}^{2}\frac{S}{1+\frac{h_{0}}{h_{1}}S}-h_{0}u_{1}^{2}\frac{S}{1+\frac{h_{0}}{h_{1}}S} & + & \frac{2Sh_{0}u_{0}u_{1}}{1+\frac{h_{0}}{h_{1}}S}\le0\\
+\iff2u_{0}u_{1} & \le & u_{0}^{2}+u_{1}^{2}\\
+\iff\left(u_{0}-u_{1}\right)^{2} & \ge & 0
+\end{eqnarray}
+
+\end_inset
+
+which is true.
+ Therefore using the transfer terms as discretised in equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:hTransfer"
+
+\end_inset
+
+) and (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:uTransfer"
+
+\end_inset
+
+) will always lead to a reduction of kinetic energy, as required.
+ This form also conserves momentum and means that velocity is bounded.
+ r
+\end_layout
+
+\end_body
+\end_document

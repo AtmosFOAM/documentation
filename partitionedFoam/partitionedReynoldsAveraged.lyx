@@ -1019,7 +1019,7 @@ Eddy diffusivity using eddy mixing length,
 \begin_inset Formula $\ell_{i}$
 \end_inset
 
-, and Monim Obukhov length, 
+, and Monin Obukhov length, 
 \begin_inset Formula $\Lambda$
 \end_inset
 
@@ -1058,6 +1058,88 @@ For drag, plume radius,
 
  where spacing between plumes, 
 \begin_inset Formula $r_{d}=500\text{m}$
+\end_inset
+
+.
+ The definition of the Monin Obukhov length is taken from 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://en.wikipedia.org/wiki/Monin-Obukhov_length
+\end_layout
+
+\end_inset
+
+ where it is described as the 
+\begin_inset Quotes eld
+\end_inset
+
+height at which turbulence is generated more by buoyancy than by wind shear
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset Formula 
+\begin{equation}
+\Lambda=-\frac{u_{*}^{3}\overline{\theta_{v}}}{\kappa g\left(\overline{w^{\prime}\theta_{v}^{\prime}}\right)_{s}}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $u_{*}$
+\end_inset
+
+ is the friction velocity and 
+\begin_inset Formula $\theta_{v}$
+\end_inset
+
+ is the virtual potential temperature.
+ The virtual potential temperature flux is given by:
+\begin_inset Formula 
+\begin{equation}
+\overline{w^{\prime}\theta_{v}^{\prime}}=\overline{w^{\prime}\theta^{\prime}}+0.61\overline{T}\overline{w^{\prime}q^{\prime}}.
+\end{equation}
+
+\end_inset
+
+The definition of Monin-Obukhov length from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Emm94"
+
+\end_inset
+
+ is:
+\begin_inset Formula 
+\begin{equation}
+\Lambda=-\frac{\left(\overline{u^{\prime}w^{\prime}}\right)^{3/2}}{\overline{w^{\prime}B^{\prime}}}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $B=-g\frac{\rho^{\prime}}{\overline{\rho}}$
+\end_inset
+
+ where the prime denotes deviation from basic state, 
+\begin_inset Formula $\overline{\rho}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $\Lambda$
+\end_inset
+
+ is usually negative during the day and positive at night.
+ 
+\begin_inset Formula $\theta_{v}$
+\end_inset
+
+ is a special case of 
+\begin_inset Formula $\theta_{\rho}$
 \end_inset
 
 .

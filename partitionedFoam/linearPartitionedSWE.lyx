@@ -1,0 +1,355 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Analysis and Simulation of the Linearised Conditionally Averaged SWE
+\end_layout
+
+\begin_layout Section*
+Analysis of the Continuous Equations
+\end_layout
+
+\begin_layout Standard
+The one-dimensional, linearised, conditionally averaged SWE are
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial h_{i}}{\partial t} & = & -U_{i}\frac{\partial h_{i}}{\partial x}-H_{i}\frac{\partial u_{i}}{\partial x}\\
+\frac{\partial u_{i}}{\partial t} & = & -U_{i}\frac{\partial u_{i}}{\partial x}-g\sum_{i}\frac{\partial h_{i}}{\partial x}.
+\end{eqnarray}
+
+\end_inset
+
+The stability of these equations for 
+\begin_inset Formula $i=0,1$
+\end_inset
+
+ can be analysed by defining 
+\begin_inset Formula $\mathbf{v}=\left(\frac{h_{0}}{H_{0}},\frac{h_{1}}{H_{1}},\frac{u_{0}}{U_{0}},\frac{u_{1}}{U_{1}}\right)^{T}$
+\end_inset
+
+ and defining the system as
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\mathbf{v}}{\partial t} & = & -M\frac{\partial\mathbf{v}}{\partial x}\\
+\text{where }M & = & \left(\begin{array}{cccc}
+U_{0} &  & U_{0}\\
+ & U_{1} &  & U_{1}\\
+\frac{gH_{0}}{U_{0}} & \frac{gH_{1}}{U_{0}} & U_{0}\\
+\frac{gH_{0}}{U_{1}} & \frac{gH_{1}}{U_{1}} &  & U_{1}
+\end{array}\right).
+\end{eqnarray}
+
+\end_inset
+
+This system will be unstable if any of the eigenvalues of 
+\begin_inset Formula $M$
+\end_inset
+
+ are imaginary.
+ For compactness we will write 
+\begin_inset Formula $g_{ij}=gH_{i}/U_{j}$
+\end_inset
+
+ The eigenvalues, 
+\begin_inset Formula $\lambda_{j}$
+\end_inset
+
+, are the solutions of:
+\begin_inset Formula 
+\begin{eqnarray}
+\left|-M-\lambda I\right| & = & 0\\
+\iff\left|\left(\begin{array}{cccc}
+\lambda+U_{0} &  & U_{0}\\
+ & \lambda+U_{1} &  & U_{1}\\
+g_{00} & g_{10} & \lambda+U_{0}\\
+g_{01} & g_{11} &  & \lambda+U_{1}
+\end{array}\right)\right| & = & 0\nonumber \\
+\iff\left(\lambda+U_{0}\right)\left|\left(\begin{array}{ccc}
+\lambda+U_{1} &  & U_{1}\\
+g_{10} & \lambda+U_{0}\\
+g_{11} &  & \lambda+U_{1}
+\end{array}\right)\right|+U_{0}\left|\left(\begin{array}{ccc}
+ & \lambda+U_{1} & U_{1}\\
+g_{00} & g_{10}\\
+g_{01} & g_{11} & \lambda+U_{1}
+\end{array}\right)\right| & = & 0\nonumber \\
+\nonumber \\
+\iff(\lambda+U_{0})^{2}(\lambda+U_{1})^{2}-U_{1}g_{11}(\lambda+U_{0})^{2}-U_{0}g_{00}(\lambda+U_{1})^{2} & = & 0\nonumber \\
+\text{(noting that }g_{00}g_{11}-g_{10}g_{01}=0)\nonumber \\
+\nonumber \\
+\iff\lambda^{4}+2\left(U_{0}+U_{1}\right)\lambda^{3}+\left(U_{0}^{2}+U_{1}^{2}+4U_{0}U_{1}\right)\lambda^{2}+2U_{0}U_{1}\left(U_{0}+U_{1}\right)\lambda+U_{0}^{2}U_{1}^{2}\nonumber \\
+-U_{1}g_{11}(\lambda^{2}+2U_{0}\lambda+U_{0}^{2})-U_{0}g_{00}(\lambda^{2}+2U_{1}\lambda+U_{1}^{2}) & = & 0\nonumber \\
+\nonumber \\
+\iff\lambda^{4}+2\left(U_{0}+U_{1}\right)\lambda^{3}+\left(U_{0}^{2}+U_{1}^{2}+4U_{0}U_{1}-gH_{1}-gH_{0}\right)\lambda^{2}\nonumber \\
++2\left(U_{0}U_{1}(U_{0}+U_{1})-gH_{1}U_{0}-gH_{1}U_{1}\right)\lambda\nonumber \\
++\left(U_{0}^{2}U_{1}^{2}-gH_{1}U_{0}^{2}-gH_{0}U_{1}^{2}\right) & = & 0
+\end{eqnarray}
+
+\end_inset
+
+The solutions of a quartic equation are taken from a screen capture from
+ Wikipedia:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename figures/quarticSolution.png
+	lyxscale 50
+	width 100line%
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+This is just getting too complicated with no end in sight.
+ Instead I will use various values of 
+\begin_inset Formula $gH_{i,j}$
+\end_inset
+
+ and find solutions numerically for 
+\begin_inset Formula $U_{ij}$
+\end_inset
+
+ in the range 
+\begin_inset Formula $\left[-1,1\right]^{2}$
+\end_inset
+
+ and plot the size of the largest imaginary part of the eigenvalue in figure
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:largestEigenVal"
+
+\end_inset
+
+.
+ These plots are not symmetric about 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="3">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SWE_stability/Iroots_gH0505.pdf
+	lyxscale 50
+	width 33line%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SWE_stability/Iroots_gH105.pdf
+	lyxscale 50
+	width 33line%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SWE_stability/Iroots_gH12.pdf
+	lyxscale 50
+	width 33line%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SWE_stability/Iroots_gH052.pdf
+	lyxscale 50
+	width 33line%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SWE_stability/Iroots_gH11.pdf
+	lyxscale 50
+	width 33line%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SWE_stability/Iroots_gH22.pdf
+	lyxscale 50
+	width 33line%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Size of the largest imaginary part of the eigenvalues of the linearised,
+ conditionally averaged SWE for various sets of parameters
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:largestEigenVal"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Analysis of the Discretised Equations
+\end_layout
+
+\begin_layout Standard
+The continuous equations are unstable for a lot of parameter ranges.
+ What about the discretised equations? They should be unstable too in the
+ same ranges.
+\end_layout
+
+\end_body
+\end_document
