@@ -15,7 +15,7 @@ def polyCoeffs(U,gH):
     return [1.,
            2*(u0+u1),
            u0**2 + u1**2 + 4*u0*u1 - gH0 -gH1,
-           2*(u0*u1*(u0 + u1) - gH1*u0 - gH1*u1),
+           2*(u0*u1*(u0 + u1) - gH1*u0 - gH0*u1),
            ((u0*u1)**2 - gH1*u0**2 - gH0*u1**2)]
 
 # Function to find the Matrix of largest imaginary part of eigenvalues
@@ -32,9 +32,8 @@ def calcIroots(U0, U1, gH):
     return Iroots
 
 # Plot Iroots for different values of g
-gHvals = [[1, 1], [1, 2], [1, 0.5], [0.5,0.5], [2,2], [0.5,2]]
-figNames = ['Iroots_gH11.pdf', 'Iroots_gH12.pdf', 'Iroots_gH105.pdf',
-            'Iroots_gH0505.pdf', 'Iroots_gH22.pdf', 'Iroots_gH052.pdf'];
+gHvals = [[0.5,0.5], [0.5,2]]
+figNames = ['Iroots_gH0505.pdf', 'Iroots_gH052.pdf'];
 
 for ifig in range(len(gHvals)):
     Iroots = calcIroots(U0, U1, gHvals[ifig])

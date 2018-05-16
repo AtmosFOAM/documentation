@@ -141,14 +141,14 @@ g_{00} & g_{10}\\
 g_{01} & g_{11} & \lambda+U_{1}
 \end{array}\right)\right| & = & 0\nonumber \\
 \nonumber \\
-\iff(\lambda+U_{0})^{2}(\lambda+U_{1})^{2}-U_{1}g_{11}(\lambda+U_{0})^{2}-U_{0}g_{00}(\lambda+U_{1})^{2} & = & 0\nonumber \\
+\iff(\lambda+U_{0})^{2}(\lambda+U_{1})^{2}-gH_{1}(\lambda+U_{0})^{2}-gH_{0}(\lambda+U_{1})^{2} & = & 0\nonumber \\
 \text{(noting that }g_{00}g_{11}-g_{10}g_{01}=0)\nonumber \\
 \nonumber \\
 \iff\lambda^{4}+2\left(U_{0}+U_{1}\right)\lambda^{3}+\left(U_{0}^{2}+U_{1}^{2}+4U_{0}U_{1}\right)\lambda^{2}+2U_{0}U_{1}\left(U_{0}+U_{1}\right)\lambda+U_{0}^{2}U_{1}^{2}\nonumber \\
--U_{1}g_{11}(\lambda^{2}+2U_{0}\lambda+U_{0}^{2})-U_{0}g_{00}(\lambda^{2}+2U_{1}\lambda+U_{1}^{2}) & = & 0\nonumber \\
+-gH_{1}(\lambda^{2}+2U_{0}\lambda+U_{0}^{2})-gH_{0}(\lambda^{2}+2U_{1}\lambda+U_{1}^{2}) & = & 0\nonumber \\
 \nonumber \\
 \iff\lambda^{4}+2\left(U_{0}+U_{1}\right)\lambda^{3}+\left(U_{0}^{2}+U_{1}^{2}+4U_{0}U_{1}-gH_{1}-gH_{0}\right)\lambda^{2}\nonumber \\
-+2\left(U_{0}U_{1}(U_{0}+U_{1})-gH_{1}U_{0}-gH_{1}U_{1}\right)\lambda\nonumber \\
++2\left(U_{0}U_{1}(U_{0}+U_{1})-gH_{1}U_{0}-gH_{0}U_{1}\right)\lambda\nonumber \\
 +\left(U_{0}^{2}U_{1}^{2}-gH_{1}U_{0}^{2}-gH_{0}U_{1}^{2}\right) & = & 0
 \end{eqnarray}
 
@@ -193,7 +193,7 @@ reference "fig:largestEigenVal"
 \end_inset
 
 .
- These plots are not symmetric about 
+ 
 \end_layout
 
 \begin_layout Standard
@@ -203,113 +203,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-\begin_inset Tabular
-<lyxtabular version="3" rows="2" columns="3">
-<features rotate="0" tabularvalignment="middle">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<column alignment="center" valignment="top">
-<row>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 \begin_inset Graphics
 	filename figures/SWE_stability/Iroots_gH0505.pdf
 	lyxscale 50
-	width 33line%
+	width 48line%
 
 \end_inset
 
 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/SWE_stability/Iroots_gH105.pdf
-	lyxscale 50
-	width 33line%
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/SWE_stability/Iroots_gH12.pdf
-	lyxscale 50
-	width 33line%
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
 \begin_inset Graphics
 	filename figures/SWE_stability/Iroots_gH052.pdf
 	lyxscale 50
-	width 33line%
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/SWE_stability/Iroots_gH11.pdf
-	lyxscale 50
-	width 33line%
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/SWE_stability/Iroots_gH22.pdf
-	lyxscale 50
-	width 33line%
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
+	width 48line%
 
 \end_inset
 
@@ -341,14 +246,9 @@ name "fig:largestEigenVal"
 
 \end_layout
 
-\begin_layout Section*
-Analysis of the Discretised Equations
-\end_layout
-
 \begin_layout Standard
-The continuous equations are unstable for a lot of parameter ranges.
- What about the discretised equations? They should be unstable too in the
- same ranges.
+I haven't found any parameter values that makes these equations stable.
+ 
 \end_layout
 
 \end_body
