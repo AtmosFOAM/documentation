@@ -2112,17 +2112,6 @@ Derive Transport Equation for
 \end_layout
 
 \begin_layout Standard
-\begin_inset CommandInset bibtex
-LatexCommand bibtex
-bibfiles "numerics"
-options "abbrvnat"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
 \frac{\partial\theta}{\partial t}+\mathbf{u}\cdot\nabla\theta & = & -\theta\left(\frac{R_{m}}{c_{vml}}-\frac{Rc_{pml}}{c_{p}c_{vml}}\right)\nabla\cdot\mathbf{u}+\left[\frac{c_{v}L_{v}}{c_{vml}c_{p}\pi}-\theta\frac{R_{v}}{c_{vml}}\left(1-\frac{R}{c_{p}}\frac{c_{pml}}{R_{m}}\right)\right]\dot{r}\\
@@ -2192,13 +2181,24 @@ with
 
 \end_inset
 
-and 
+and
 \begin_inset Formula 
 \begin{eqnarray*}
 c_{pa}\theta_{\rho}\nabla\pi & = & c_{pa}\tilde{\theta}_{\rho}\frac{\theta}{\tilde{\theta}}\nabla\left(\tilde{\pi}^{\frac{c_{pml}}{R_{m}}\frac{R}{c_{pa}}}\right)\\
  & = & c_{pa}\tilde{\theta}_{\rho}\frac{\tilde{\pi}}{\pi}\frac{c_{pml}}{R_{m}}\frac{R}{c_{pa}}\tilde{\pi}^{\frac{c_{pml}}{R_{m}}\frac{R}{c_{pa}}-1}\nabla\tilde{\pi}\\
  & = & c_{pml}\frac{R}{R_{m}}\tilde{\theta}_{\rho}\nabla\tilde{\pi}
 \end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
 
 \end_inset
 

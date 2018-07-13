@@ -1,0 +1,684 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+The OpenFOAM buoyantKEpsilon turbulence model
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Formula $k$
+\end_inset
+
+ and 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ equations are for the multi-phase buoyant 
+\begin_inset Formula $k-\varepsilon$
+\end_inset
+
+ model in OpenFOAM are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\alpha\rho k}{\partial t}+\nabla\cdot(\alpha\rho\mathbf{U}k)-\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{k}}\nabla k) & = & \alpha\rho G-\frac{2}{3}\alpha\rho\nabla\cdot\mathbf{U}k-\alpha\rho\varepsilon+S_{k}\label{eq:kFlux}\\
+\frac{\partial\alpha\rho\varepsilon}{\partial t}+\nabla\cdot(\alpha\rho\mathbf{U}\varepsilon)-\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{\varepsilon}}\nabla\varepsilon) & = & C_{1}\alpha\rho G\frac{\varepsilon}{k}-\left(\frac{2}{3}C_{1}-C_{3}\right)\alpha\rho\nabla\cdot\mathbf{U}\varepsilon-C_{2}\alpha\rho\frac{\varepsilon^{2}}{k}+S_{\varepsilon}\label{eq:epsilonFlux}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the phase fraction, 
+\begin_inset Formula $\mathbf{U}$
+\end_inset
+
+ is the mean velocity, 
+\begin_inset Formula $k$
+\end_inset
+
+ and 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ are the turbulent kinetic energy and dissipation and dimensionless parameters
+ 
+\begin_inset Formula $\sigma_{k,\varepsilon}$
+\end_inset
+
+, 
+\begin_inset Formula $C_{1,2,3,\mu,g}$
+\end_inset
+
+ are given in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:kEpsilonParameters"
+
+\end_inset
+
+.
+ The Reynolds stress tensor, 
+\begin_inset Formula $R$
+\end_inset
+
+, is modelled as:
+\begin_inset Formula 
+\begin{equation}
+R=\frac{2}{3}Ik-\nu_{t}\left(\nabla\mathbf{\mathbf{U}}+\nabla\mathbf{U}^{T}-\frac{2}{3}I\ tr(\nabla\mathbf{\mathbf{U}})\right)
+\end{equation}
+
+\end_inset
+
+and the turbulence generation rate is:
+\begin_inset Formula 
+\begin{equation}
+G=\nu_{t}\left(\nabla\mathbf{\mathbf{U}}+\nabla\mathbf{U}^{T}-\frac{2}{3}I\ tr(\nabla\mathbf{\mathbf{U}})\right):\nabla\mathbf{\mathbf{U}}.
+\end{equation}
+
+\end_inset
+
+The eddy viscosity is give by
+\begin_inset Formula 
+\begin{equation}
+\nu_{t}=C_{\mu}\frac{k^{2}}{\varepsilon}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="2">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $C_{1}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.44
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $C_{2}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.92
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $C_{3}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $C_{g}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $C_{\mu}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.09
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{k}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{\varepsilon}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.3
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Dimensionless parameter values in the OpenFOAM buoyant 
+\begin_inset Formula $k-\varepsilon$
+\end_inset
+
+ model
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:kEpsilonParameters"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+The source terms due to buoyancy are given by:
+\begin_inset Formula 
+\begin{eqnarray}
+S_{k} & = & -G_{c}k\\
+S_{\varepsilon} & = & C_{1}\tanh\frac{\mathbf{U}\cdot\hat{\mathbf{g}}}{\mathbf{U}-(\mathbf{U}\cdot\hat{\mathbf{g}})\hat{\mathbf{g}}}G_{c}\varepsilon\\
+G_{c} & = & C_{g}C_{\mu}\alpha\frac{k}{\varepsilon}\mathbf{g}\cdot\nabla\rho
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Gas18"
+
+\end_inset
+
+ give the following buoyancy production term for TKE
+\begin_inset Formula 
+\begin{equation}
+-c_{p}\overline{\rho\mathbf{U}^{\prime}\theta^{\prime}}\cdot\nabla\Pi\approx g\frac{\overline{\rho w^{\prime}\theta^{\prime}}}{\hat{\theta}}
+\end{equation}
+
+\end_inset
+
+which is parameterised as 
+\begin_inset Formula $\rho w^{2}R_{w}$
+\end_inset
+
+ where 
+\begin_inset Formula $R_{w}$
+\end_inset
+
+ is the Richardson number.
+\end_layout
+
+\begin_layout Standard
+Peter Clark and Tom Webb use the following buoyancy production term:8
+\begin_inset Formula 
+\begin{equation}
+-\nu Rs^{2}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\nu$
+\end_inset
+
+ is the Smagorinsky viscosity, 
+\begin_inset Formula $R$
+\end_inset
+
+ is the Richardson number and 
+\begin_inset Formula $s$
+\end_inset
+
+ is the strain rate.
+ The AMS glossary gives the following for the Richardson number:
+\begin_inset Formula 
+\begin{equation}
+R=\frac{\frac{g}{T_{v}}\frac{\partial\theta_{v}}{\partial z}}{\left(\frac{\partial U}{\partial z}\right)^{2}+\left(\frac{\partial V}{\partial z}\right)^{2}}.
+\end{equation}
+
+\end_inset
+
+Wikipedia give
+\begin_inset Formula 
+\begin{equation}
+R=\frac{g\nabla\rho}{\rho(\nabla\mathbf{u})^{2}}.
+\end{equation}
+
+\end_inset
+
+Monc uses 
+\begin_inset Formula $\nabla b$
+\end_inset
+
+ instead of 
+\begin_inset Formula $\nabla\rho$
+\end_inset
+
+ where buoyancy 
+\begin_inset Formula $b=g\theta_{v}^{\prime}/\theta_{v}$
+\end_inset
+
+.
+ I think that I will use:
+\begin_inset Formula 
+\begin{equation}
+-C_{g}C_{\mu}\frac{k^{2}}{\varepsilon}\rho\mathbf{g}\cdot\frac{\nabla\theta_{v}}{\theta_{v}}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The TKE equation given by 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "TKP+18"
+
+\end_inset
+
+ for multi-fluid equations (indexed by 
+\begin_inset Formula $i$
+\end_inset
+
+ with volume fraction 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+) and transfers between fluids contains a source term based on differences
+ between the mean fluid properties:
+\begin_inset Formula 
+\begin{flalign}
+\frac{\partial\sigma_{i}\rho_{i}k_{i}}{\partial t}+\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}}k_{i}= & -\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}\mathbf{u}_{i}^{\prime}}:\nabla\overline{\mathbf{u}_{i}}\nonumber \\
+ & \text{shear production}\\
+ & +\sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}S_{ji}\left[k_{j}+\frac{1}{2}|\overline{\mathbf{u}_{j}}-\overline{\mathbf{u}_{i}}|^{2}\right]-\sigma_{i}\rho_{i}S_{ij}k_{i}\right\} \\
+ & \text{transfers between partitions}\\
+ & -\nabla\cdot\sigma_{i}\rho_{i}\overline{\mathbf{u}_{i}^{\prime}k_{i}^{\prime}}\\
+ & \text{turbulent transport}\\
+ & +\sigma_{i}\overline{\rho_{i}^{\prime}\mathbf{u}_{i}^{\prime}}\cdot\mathbf{g}-\sigma_{i}\overline{\mathbf{u}_{i}^{\prime}\cdot\nabla p^{\prime}}-\sigma_{i}\rho_{i}\overline{D_{k_{i}}}
+\end{flalign}
+
+\end_inset
+
+where 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ is the mass transfer from fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ to fluid 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ We need an equivalent transfer term for 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+.
+ TKE in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ is defined as 
+\begin_inset Formula $k_{i}=\frac{1}{2}\overline{\mathbf{u}_{i}^{\prime}\cdot\mathbf{u}_{i}^{\prime}}$
+\end_inset
+
+ and turbulent dissipation by:
+\begin_inset Formula 
+\begin{equation}
+\varepsilon_{i}=2\nu\overline{e^{\prime}:e^{\prime}}
+\end{equation}
+
+\end_inset
+
+where the tensor 
+\begin_inset Formula 
+\begin{equation}
+e^{\prime}=\frac{1}{2}\left(\nabla\mathbf{u}^{\prime}+\nabla\mathbf{u}^{\prime T}\right)
+\end{equation}
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\begin{equation}
+\overline{e^{\prime}:e^{\prime}}=\overline{e_{11}^{\prime2}}+\overline{e_{22}^{\prime2}}+\overline{e_{33}^{\prime2}}+2(\overline{e_{12}^{\prime2}}+\overline{e_{13}^{\prime2}}+\overline{e_{23}^{\prime2}}).
+\end{equation}
+
+\end_inset
+
+Therefore by analogy, there is a transfer term in the 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+ equation:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}\rho_{i}\varepsilon_{i}}{\partial t} & + & \nabla\cdot(\sigma_{i}\rho_{i}\mathbf{U}_{i}\varepsilon_{i})-\nabla\cdot(\sigma_{i}\rho_{i}\frac{\nu_{ti}}{\sigma_{\varepsilon}}\nabla\varepsilon_{i})\\
+ & = & C_{1}\sigma_{i}\rho_{i}G\frac{\varepsilon_{i}}{k_{i}}-\left(\frac{2}{3}C_{1}-C_{3}\right)\sigma_{i}\rho_{i}\nabla\cdot\mathbf{U}_{i}\varepsilon_{i}-C_{2}\sigma_{i}\rho_{i}\frac{\varepsilon_{i}^{2}}{k_{i}}+S_{\varepsilon i}\\
+ & + & \sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}S_{ji}\left[\varepsilon_{j}+\nu|\nabla(\mathbf{U}_{j}-\mathbf{U}_{i})+\nabla(\mathbf{U}_{j}-\mathbf{U}_{i})^{T}|^{2}\right]-\sigma_{i}\rho_{i}S_{ij}\varepsilon_{i}\right\} .
+\end{eqnarray*}
+
+\end_inset
+
+A new turbulence model can be derived from buoyantkEpsilon, keeping the
+ same generation function, 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+Gcoef()
+\end_layout
+
+\end_inset
+
+ for 
+\begin_inset Formula $G$
+\end_inset
+
+ and adding new terms to 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+kSource()
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+epsilonSource()
+\end_layout
+
+\end_inset
+
+.
+ A tricky bit will be that it will need to know about the other fluid(s).
+ So the turbulence model will not be run time selectable.
+ 
+\end_layout
+
+\begin_layout Standard
+In the absence of transfer terms, the continuity equation for each phase
+ is given by
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\alpha\rho}{\partial t}+\nabla\cdot\alpha\rho\mathbf{U}=0.
+\end{equation}
+
+\end_inset
+
+This can be used to convert the 
+\begin_inset Formula $k$
+\end_inset
+
+ and 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ equations without transfer terms (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:kFlux"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:epsilonFlux"
+
+\end_inset
+
+) to advective form:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial k}{\partial t}+\mathbf{U}\cdot\nabla k-\frac{1}{\alpha\rho}\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{k}}\nabla k) & = & G-\frac{2}{3}\nabla\cdot\mathbf{U}k-\varepsilon+\frac{1}{\alpha\rho}S_{k}\label{eq:kAdv}\\
+\frac{\partial\varepsilon}{\partial t}+\mathbf{U}\cdot\nabla\varepsilon-\frac{1}{\alpha\rho}\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{\varepsilon}}\nabla\varepsilon) & = & C_{1}G\frac{\varepsilon}{k}-\left(\frac{2}{3}C_{1}-C_{3}\right)\nabla\cdot\mathbf{U}\varepsilon-C_{2}\frac{\varepsilon^{2}}{k}+\frac{1}{\alpha\rho}S_{\varepsilon}\label{eq:epsilonAdv}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

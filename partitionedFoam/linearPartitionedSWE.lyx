@@ -141,7 +141,7 @@ g_{00} & g_{10}\\
 g_{01} & g_{11} & \lambda+U_{1}
 \end{array}\right)\right| & = & 0\nonumber \\
 \nonumber \\
-\iff(\lambda+U_{0})^{2}(\lambda+U_{1})^{2}-gH_{1}(\lambda+U_{0})^{2}-gH_{0}(\lambda+U_{1})^{2} & = & 0\nonumber \\
+\iff(\lambda+U_{0})^{2}(\lambda+U_{1})^{2}-gH_{1}(\lambda+U_{0})^{2}-gH_{0}(\lambda+U_{1})^{2} & = & 0\label{eq:simpleEigs}\\
 \text{(noting that }g_{00}g_{11}-g_{10}g_{01}=0)\nonumber \\
 \nonumber \\
 \iff\lambda^{4}+2\left(U_{0}+U_{1}\right)\lambda^{3}+\left(U_{0}^{2}+U_{1}^{2}+4U_{0}U_{1}\right)\lambda^{2}+2U_{0}U_{1}\left(U_{0}+U_{1}\right)\lambda+U_{0}^{2}U_{1}^{2}\nonumber \\
@@ -212,7 +212,7 @@ status open
 
 
 \begin_inset Graphics
-	filename figures/SWE_stability/Iroots_gH052.pdf
+	filename figures/SWE_stability/Iroots_gH0012.pdf
 	lyxscale 50
 	width 48line%
 
@@ -247,7 +247,47 @@ name "fig:largestEigenVal"
 \end_layout
 
 \begin_layout Standard
-I haven't found any parameter values that makes these equations stable.
+It appears that we get stability for 
+\begin_inset Formula $U_{0}\approx-U_{1}$
+\end_inset
+
+ for small 
+\begin_inset Formula $gH_{0}$
+\end_inset
+
+ or 
+\begin_inset Formula $gH_{1}$
+\end_inset
+
+.
+ If we consider eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:simpleEigs"
+
+\end_inset
+
+) for 
+\begin_inset Formula $H_{1}=0$
+\end_inset
+
+ then we get:
+\begin_inset Formula 
+\begin{eqnarray*}
+(\lambda+U_{1})^{2}\left\{ (\lambda+U_{0})^{2}-gH_{0}\right\}  & = & 0
+\end{eqnarray*}
+
+\end_inset
+
+which has solutions 
+\begin_inset Formula $\lambda=-U_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda=-U_{0}\pm\sqrt{gH_{0}}$
+\end_inset
+
+ which are all real.
  
 \end_layout
 

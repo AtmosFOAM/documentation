@@ -1,6 +1,7 @@
 # Find and plot the imaginary eigenvalues of the linear system representing
 # the linearised, conditionally averaged SWE
 
+from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -32,12 +33,12 @@ def calcIroots(U0, U1, gH):
     return Iroots
 
 # Plot Iroots for different values of g
-gHvals = [[0.5,0.5], [0.5,2]]
-figNames = ['Iroots_gH0505.pdf', 'Iroots_gH052.pdf'];
+gHvals = [[0.1,0.1], [0.1,0.5], [0.01,2]]
+figNames = ['Iroots_gH0101.pdf', 'Iroots_gH0105.pdf', 'Iroots_gH0012.pdf'];
 
 for ifig in range(len(gHvals)):
     Iroots = calcIroots(U0, U1, gHvals[ifig])
-    plt.figure(ifig)
+    plt.figure(ifig+1)
     plt.ion()
     plt.clf()
     contourVals = np.arange(0,1.001,0.1)
