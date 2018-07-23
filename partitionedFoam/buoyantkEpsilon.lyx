@@ -396,9 +396,6 @@ G_{c} & = & C_{g}C_{\mu}\alpha\frac{k}{\varepsilon}\mathbf{g}\cdot\nabla\rho
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
 \begin_inset CommandInset citation
 LatexCommand citet
 key "Gas18"
@@ -422,10 +419,7 @@ which is parameterised as
 \end_inset
 
  is the Richardson number.
-\end_layout
-
-\begin_layout Standard
-Peter Clark and Tom Webb use the following buoyancy production term:8
+ Peter Clark and Tom Webb use the following buoyancy production term:
 \begin_inset Formula 
 \begin{equation}
 -\nu Rs^{2}
@@ -475,15 +469,43 @@ Monc uses
 \end_inset
 
 .
- I think that I will use:
+ Turbulence generation by buoyancy should be proportional to 
+\begin_inset Formula $\partial\theta_{v}/\partial z$
+\end_inset
+
+ rather than 
+\begin_inset Formula $\partial\rho/\partial z$
+\end_inset
+
+ and for a perfect gas
 \begin_inset Formula 
 \begin{equation}
--C_{g}C_{\mu}\frac{k^{2}}{\varepsilon}\rho\mathbf{g}\cdot\frac{\nabla\theta_{v}}{\theta_{v}}.
+\frac{\nabla\rho}{\rho}-\frac{1-\kappa}{\kappa}\frac{\nabla T}{T}=-\frac{1}{\kappa}\frac{\nabla\theta}{\theta}
 \end{equation}
 
 \end_inset
 
+Therefore I will use the following buoyancy production term: 
+\begin_inset Formula 
+\begin{equation}
+-C_{g}C_{\mu}\alpha\rho\frac{k^{2}}{\varepsilon}\mathbf{g}\cdot\left(\frac{\nabla\rho}{\rho}-\frac{1-\kappa}{\kappa}\frac{\nabla T}{T}\right)=-C_{g}C_{\mu}\alpha\rho\frac{k^{2}}{\varepsilon}\mathbf{g}\cdot\left(\frac{\nabla\rho}{\rho}-\frac{1}{\gamma-1}\frac{\nabla T}{T}\right)
+\end{equation}
 
+\end_inset
+
+where 
+\begin_inset Formula $\gamma=c_{p}/c_{v}$
+\end_inset
+
+, 
+\begin_inset Formula $\kappa=R/c_{p}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{p}-c_{v}=R$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -610,7 +632,7 @@ kSource()
 
  and 
 \begin_inset Flex URL
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -661,7 +683,26 @@ reference "eq:epsilonFlux"
 \begin_inset Formula 
 \begin{eqnarray}
 \frac{\partial k}{\partial t}+\mathbf{U}\cdot\nabla k-\frac{1}{\alpha\rho}\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{k}}\nabla k) & = & G-\frac{2}{3}\nabla\cdot\mathbf{U}k-\varepsilon+\frac{1}{\alpha\rho}S_{k}\label{eq:kAdv}\\
-\frac{\partial\varepsilon}{\partial t}+\mathbf{U}\cdot\nabla\varepsilon-\frac{1}{\alpha\rho}\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{\varepsilon}}\nabla\varepsilon) & = & C_{1}G\frac{\varepsilon}{k}-\left(\frac{2}{3}C_{1}-C_{3}\right)\nabla\cdot\mathbf{U}\varepsilon-C_{2}\frac{\varepsilon^{2}}{k}+\frac{1}{\alpha\rho}S_{\varepsilon}\label{eq:epsilonAdv}
+\frac{\partial\varepsilon}{\partial t}+\mathbf{U}\cdot\nabla\varepsilon-\frac{1}{\alpha\rho}\nabla\cdot(\alpha\rho\frac{\nu_{t}}{\sigma_{\varepsilon}}\nabla\varepsilon) & = & C_{1}G\frac{\varepsilon}{k}-\left(\frac{2}{3}C_{1}-C_{3}\right)\nabla\cdot\mathbf{U}\varepsilon-C_{2}\frac{\varepsilon^{2}}{k}+\frac{1}{\alpha\rho}S_{\varepsilon}.\label{eq:epsilonAdv}
+\end{eqnarray}
+
+\end_inset
+
+The multi-fluid 
+\begin_inset Formula $k$
+\end_inset
+
+ and 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ equations with transfer terms in advective form are
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial k_{i}}{\partial t}+\mathbf{U}_{i}\nabla k_{i}-\frac{1}{\alpha_{i}\rho_{i}}\nabla\cdot(\alpha_{i}\rho_{i}\frac{\nu_{ti}}{\sigma_{k}}\nabla k_{i}) & = & G-\frac{2}{3}\nabla\cdot\mathbf{U}_{i}k_{i}-\varepsilon_{i}+S_{k}/\alpha_{i}\rho_{i}\label{eq:kFlux-1}\\
+ & + & \sum_{j\ne i}\left\{ \frac{\alpha_{j}\rho_{j}}{\alpha_{i}\rho_{i}}S_{ji}\left(k_{j}-k_{i}\right)+S_{ji}\frac{1}{2}|\mathbf{U}_{j}-\mathbf{U}_{i}|^{2}\right\} \\
+\frac{\partial\varepsilon_{i}}{\partial t}+\mathbf{U}_{i}\nabla\varepsilon_{i}-\frac{1}{\alpha_{i}\rho_{i}}\nabla\cdot(\alpha_{i}\rho_{i}\frac{\nu_{ti}}{\sigma_{\varepsilon}}\nabla\varepsilon_{i}) & = & C_{1}G\frac{\varepsilon_{i}}{k_{i}}-\left(\frac{2}{3}C_{1}-C_{3}\right)\nabla\cdot\mathbf{U}_{i}\varepsilon_{i}-C_{2}\frac{\varepsilon_{i}^{2}}{k_{i}}+S_{\varepsilon}/\alpha_{i}\rho_{i}\label{eq:epsilonFlux-1}\\
+ & + & \sum_{j\ne i}\left\{ \frac{\alpha_{j}\rho_{j}}{\alpha_{i}\rho_{i}}S_{ji}\left(\varepsilon_{j}-\varepsilon_{i}\right)+S_{ji}\nu\biggl|\nabla\left(\mathbf{U}_{j}-\mathbf{U}_{i}\right)+\nabla\left(\mathbf{U}_{j}-\mathbf{U}_{i}\right)^{T}\biggr|^{2}\right\} 
 \end{eqnarray}
 
 \end_inset
