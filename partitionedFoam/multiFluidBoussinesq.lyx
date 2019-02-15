@@ -1,0 +1,233 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Multi-fluid Boussinesq Equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Section
+Single Fluid Boussinesq Equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D\mathbf{u}}{Dt}+\nabla P & = & b\mathbf{k}\\
+\frac{Db}{Dt}+N^{2}w & = & 0\\
+\nabla\cdot\mathbf{u} & = & 0
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $P=p^{\prime}\big/\rho_{0}$
+\end_inset
+
+, 
+\begin_inset Formula $b=-g\rho^{\prime}\big/\rho_{0}$
+\end_inset
+
+, 
+\begin_inset Formula $N^{2}=-g\big/\rho_{0}d\overline{\rho}\big/dz$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Multi-fluid
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\sigma_{i}S_{ji}-\sigma_{i}S_{ij}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)\\
+\frac{Db_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{j}-b_{i}\right)\\
+\nabla\cdot\overline{\mathbf{u}} & = & 0
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $D_{i}\big/Dt=\partial\big/\partial t+\mathbf{u}_{i}\cdot\nabla$
+\end_inset
+
+, 
+\begin_inset Formula $\sum_{i}\sigma_{i}=1$
+\end_inset
+
+, 
+\begin_inset Formula $\overline{b}=\sum_{i}\sigma_{i}b_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\mathbf{u}_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Numerical Solution
+\end_layout
+
+\begin_layout Standard
+Explicit part of 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ without transfers:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{u}_{i}^{\ell}=\mathbf{u}_{i}^{n}+(1-\alpha)\Delta t\left(\frac{\partial\mathbf{u}_{i}}{\partial t}\right)^{n}-\alpha\Delta t\left\{ \mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}-b_{i}\mathbf{k}\right\} 
+\end{equation}
+
+\end_inset
+
+so that 
+\begin_inset Formula 
+\begin{equation}
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\ell}-\Delta t\nabla P
+\end{equation}
+
+\end_inset
+
+The divergence constrain gives us the elliptic pressure equation:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nabla^{2}P=0
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Alternatives
+\end_layout
+
+\begin_layout Standard
+How can we increase 
+\begin_inset Formula $P$
+\end_inset
+
+ when 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}<0$
+\end_inset
+
+? Try solving
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\left(1-\frac{b_{i}}{\overline{b}}\right)\nabla P=b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

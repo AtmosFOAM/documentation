@@ -1,0 +1,821 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+multiFluidFoam
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Section
+Multi-fluid Euler Equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\eta_{i}}{\partial t}+\nabla\cdot(\eta_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\eta_{j}S_{ji}-\eta_{i}S_{ij}\right)\label{eq:etaTransport-1-1}\\
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\theta_{ji}^{T}-\theta_{i})-(\theta_{ij}^{T}-\theta_{i})S_{ij}\right)\\
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -c_{p}\theta_{i}\nabla\pi^{\ell}+\mathbf{g}+\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\eta_{i}=\sigma_{i}\rho_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{ij}^{T}$
+\end_inset
+
+ is the temperature of the fluid transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ The equation of state is
+\begin_inset Formula 
+\begin{eqnarray*}
+\overline{\rho\theta} & = & \sum_{i}\eta_{i}\theta_{i}=\sum_{i}\sigma_{i}\rho_{i}\theta_{i}=\sum_{i}\sigma_{i}\frac{p_{r}}{R\theta_{i}}\pi^{\frac{\kappa}{1-\kappa}}\theta_{i}=\frac{p_{r}}{R}\pi^{\frac{\kappa}{1-\kappa}}
+\end{eqnarray*}
+
+\end_inset
+
+so that 
+\begin_inset Formula $\rho_{i}=\overline{\rho\theta}\big/\theta_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Numerical Method for Multi-fluid, single Exner Pressure
+\end_layout
+
+\begin_layout Standard
+First solve
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\eta_{i}}{\partial t}+\nabla\cdot(\eta_{i}\mathbf{u}_{i})=\sum_{j\ne i}\left(\eta_{j}S_{ji}-\eta_{i}S_{ij}\right)\label{eq:etaTransport-1}
+\end{equation}
+
+\end_inset
+
+for 
+\begin_inset Formula $\eta_{i}=\sigma_{i}\rho_{i}$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\theta_{ji}^{T}-\theta_{i})-(\theta_{ij}^{T}-\theta_{i})S_{ij}\right)
+\end{equation}
+
+\end_inset
+
+for 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ where 
+\begin_inset Formula $\theta_{ij}^{T}$
+\end_inset
+
+ is the temperature of the fluid transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}=-c_{p}\theta_{i}\nabla\pi^{\ell}+\mathbf{g}+\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right).
+\end{equation}
+
+\end_inset
+
+for 
+\begin_inset Formula $u_{i}^{\ell}=\mathbf{u}_{i}\cdot\mathbf{S}$
+\end_inset
+
+ where super-script 
+\begin_inset Formula $\ell$
+\end_inset
+
+ means 
+\begin_inset Quotes eld
+\end_inset
+
+lagged
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Ie the version from the most up to date iteration which will be updated
+ after solution of the Helmholtz equation.
+ The Helmholtz equation is
+\begin_inset Formula 
+\begin{equation}
+\frac{\Psi\pi^{\prime}}{\Delta t}+\frac{\partial\rho}{\partial t}+\sum_{i}\nabla\cdot(\eta_{i}u_{i})-\nabla\cdot\alpha\Delta tc_{p}\overline{\rho\theta}\nabla_{n}\pi^{\prime}=0
+\end{equation}
+
+\end_inset
+
+ Define 
+\begin_inset Formula $\partial\rho/\partial t$
+\end_inset
+
+, 
+\begin_inset Formula $\Psi$
+\end_inset
+
+ and 
+\begin_inset Formula $\overline{\rho\theta}$
+\end_inset
+
+ so that:
+\begin_inset Formula 
+\begin{equation}
+\pi^{n+1}=\left(\frac{R\overline{\rho\theta}}{p_{r}}\right)^{\frac{\kappa}{1-\kappa}}=\left(\frac{R\rho_{i}\theta_{i}}{p_{r}}\right)^{\frac{\kappa}{1-\kappa}}
+\end{equation}
+
+\end_inset
+
+and
+\begin_inset Formula 
+\begin{equation}
+\pi^{n+1}=\pi^{\ell}+\pi^{\prime}
+\end{equation}
+
+\end_inset
+
+and
+\begin_inset Formula 
+\begin{equation}
+\sum_{i}\sigma_{i}=1.
+\end{equation}
+
+\end_inset
+
+Before the construction of the Helmholtz equation, define:
+\begin_inset Formula 
+\begin{eqnarray}
+\rho_{i} & = & \frac{p_{r}}{R\theta_{i}}\pi^{\frac{1-\kappa}{\kappa}}\\
+\overline{\rho} & = & \sum_{i}\eta_{i}\\
+\sigma_{i} & = & \eta_{i}/\rho_{i}
+\end{eqnarray}
+
+\end_inset
+
+But now we have
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i} & = & \sum_{i}\frac{\eta_{i}}{\rho_{i}}=\frac{R}{p_{r}}\pi^{\frac{1-\kappa}{-\kappa}}\sum_{i}\eta_{i}\theta_{i}\ne1
+\end{eqnarray*}
+
+\end_inset
+
+So re-define:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i} & = & \frac{\sigma_{i}}{\sum_{i}\sigma_{i}}\\
+\eta_{i} & = & \sigma_{i}\rho_{i}.
+\end{eqnarray*}
+
+\end_inset
+
+Now we have:
+\begin_inset Formula 
+\begin{eqnarray*}
+\overline{\rho\theta} & = & \sum_{i}\eta_{i}\theta_{i}=\sum_{i}\sigma_{i}\rho_{i}\theta_{i}=\sum_{i}\sigma_{i}\frac{p_{r}}{R\theta_{i}}\pi^{\frac{\kappa}{1-\kappa}}\theta_{i}=\frac{p_{r}}{R}\pi^{\frac{\kappa}{1-\kappa}}
+\end{eqnarray*}
+
+\end_inset
+
+as required.
+\end_layout
+
+\begin_layout Standard
+Define:
+\begin_inset Formula 
+\begin{equation}
+\Psi_{i}=\frac{1-\kappa}{\kappa}\frac{\rho_{i}}{\pi_{\ell}}\ \text{ and }\ \Psi=\sum_{i}\sigma_{i}\Psi_{i}
+\end{equation}
+
+\end_inset
+
+The Helmholtz equation is now:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\Psi\pi^{\prime}}{\Delta t}+\frac{\partial\overline{\rho}}{\partial t}+\nabla\cdot F-\nabla\cdot\alpha\Delta tc_{p}\overline{\rho\theta}\nabla_{n}\pi^{\prime} & = & 0
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\begin{eqnarray}
+u_{i}^{\ell} & = & u_{i}^{n}+(1-\alpha)\Delta t\left(\frac{\partial u_{i}}{\partial t}\right)^{n}-\alpha\Delta t\left\{ \left(\nabla\cdot\mathbf{u}_{i}\mathbf{u}_{i}-\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}-\mathbf{g}\right)\cdot\mathbf{n}+c_{p}\theta_{i}\nabla_{n}\pi_{r}\right\} ^{\ell}\\
+F_{i} & = & \left(\eta_{i}\right)_{f}u_{i}^{\ell}\\
+F & = & \sum_{i}F_{i}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Back substitutions:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+u_{i}^{n+1} & = & u_{i}^{\ell}-\alpha\Delta tc_{p}\theta_{i}\nabla_{n}\pi^{\prime}.\label{eq:uBackSubs}\\
+\pi^{n+1} & = & \pi^{\ell}+\pi^{\prime}\\
+\rho_{i} & = & \rho_{i}+\Psi_{i}\pi^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+and hence recalculate 
+\begin_inset Formula $\eta_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\overline{\rho}$
+\end_inset
+
+, 
+\begin_inset Formula $(\eta_{i})_{f}$
+\end_inset
+
+, 
+\begin_inset Formula $\overline{\rho\theta}$
+\end_inset
+
+, 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $F$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Lagrangian Conservation of 
+\begin_inset Formula $\eta_{i}$
+\end_inset
+
+ – Divergence Transfer
+\end_layout
+
+\begin_layout Standard
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:etaTransport-1"
+
+\end_inset
+
+) can be split up into
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\eta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\eta_{i}+\eta_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\left(\eta_{j}S_{ji}-\eta_{i}S_{ij}\right).\label{eq:etaTransport-split}
+\end{equation}
+
+\end_inset
+
+To get Lagrangian conservation of 
+\begin_inset Formula $\eta_{i}$
+\end_inset
+
+ we can set:
+\begin_inset Formula 
+\begin{equation}
+S_{ij}=-\min\left(\nabla\cdot\mathbf{u}_{i},\ 0\right)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Heat and Mass Transfer
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ equations including heat and mass transfer for two fluids are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{D_{0}\theta_{0}}{Dt}=\frac{\partial\theta_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla\theta_{0} & = & \frac{\eta_{1}}{\eta_{0}}S_{10}(\theta_{1}-\theta_{0})-\frac{H_{01}}{\eta_{0}}.\\
+\frac{D_{1}\theta_{1}}{Dt}=\frac{\partial\theta_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla\theta_{1} & = & \frac{\eta_{0}}{\eta_{1}}S_{01}(\theta_{0}-\theta_{1})-\frac{H_{10}}{\eta_{1}}.
+\end{eqnarray}
+
+\end_inset
+
+Warm air is transferred from fluid 1 to 0 and cold air to fluid 0 to 1 so
+ we can set
+\begin_inset Formula 
+\begin{eqnarray*}
+H_{01} & = & K_{\theta}\left\{ -\eta_{0}\min\left(\nabla^{2}\theta_{0},0\right)+\eta_{1}\max\left(\nabla^{2}\theta_{1},0\right)\right\} \\
+H_{10} & = & K_{\theta}\left\{ \eta_{0}\min\left(\nabla^{2}\theta_{0},0\right)-\eta_{1}\max\left(\nabla^{2}\theta_{1},0\right)\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $K_{\theta}$
+\end_inset
+
+ is a diffusivity.
+ In order to remove anomalies we want our final equations for 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ to end up as:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D\theta_{0}}{Dt} & = & K_{\theta}\left\{ \min\left(\nabla^{2}\theta_{0},\ 0\right)-\max\left(\nabla^{2}\theta_{1},\ 0\right)\right\} \\
+\frac{D\theta_{1}}{Dt} & = & K_{\theta}\left\{ \max\left(\nabla^{2}\theta_{1},\ 0\right)-\min\left(\nabla^{2}\theta_{0},\ 0\right)\right\} .
+\end{eqnarray*}
+
+\end_inset
+
+There we set
+\begin_inset Formula 
+\begin{eqnarray*}
+\text{For fluid 0: }\ \frac{\eta_{1}}{\eta_{0}}S_{10}(\theta_{1}-\theta_{0}) & - & \frac{K_{\theta}\left\{ -\eta_{0}\min\left(\nabla^{2}\theta_{0},0\right)+\eta_{1}\max\left(\nabla^{2}\theta_{1},0\right)\right\} }{\eta_{0}}\\
+ & = & K_{\theta}\left\{ \min\left(\nabla^{2}\theta_{0},\ 0\right)-\max\left(\nabla^{2}\theta_{1},\ 0\right)\right\} \\
+\text{For fluid 1: }\ \frac{\eta_{0}}{\eta_{1}}S_{01}(\theta_{0}-\theta_{1}) & - & \frac{K_{\theta}\left\{ \eta_{0}\min\left(\nabla^{2}\theta_{0},0\right)-\eta_{1}\max\left(\nabla^{2}\theta_{1},0\right)\right\} }{\eta_{1}}\\
+ & = & K_{\theta}\left\{ \max\left(\nabla^{2}\theta_{1},\ 0\right)-\min\left(\nabla^{2}\theta_{0},\ 0\right)\right\} \\
+\implies S_{10} & = & \frac{K_{\theta}}{\theta_{1}-\theta_{0}}\left(1-\frac{\eta_{0}}{\eta_{1}}\right)\max\left(\nabla^{2}\theta_{1},\ 0\right)\\
+\text{and }\ S_{01} & = & \frac{K_{\theta}}{\theta_{1}-\theta_{0}}\left(1-\frac{\eta_{1}}{\eta_{0}}\right)\min\left(\nabla^{2}\theta_{0},\ 0\right).
+\end{eqnarray*}
+
+\end_inset
+
+But 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ is always positive so we need
+\begin_inset Formula 
+\begin{eqnarray*}
+S_{01} & = & \max\left(\frac{K_{\theta}}{\theta_{\varepsilon}+\theta_{0}-\theta_{1}}\left(1-\frac{\eta_{1}}{\eta_{0}}\right)\max\left(-\nabla^{2}\theta_{0},\ 0\right),\ 0\right)\\
+S_{10} & = & \max\left(\frac{K_{\theta}}{\theta_{\varepsilon}+\theta_{0}-\theta_{1}}\left(\frac{\eta_{0}-\eta_{1}}{\eta_{1}}\right)\max\left(\nabla^{2}\theta_{1},\ 0\right),\ 0\right).
+\end{eqnarray*}
+
+\end_inset
+
+So that
+\begin_inset Formula 
+\begin{eqnarray*}
+S_{01}>0 & \text{as long as} & \theta_{0}>\theta_{1}-\theta_{\varepsilon},\ \eta_{0}>\eta_{1}\text{ and }\nabla^{2}\theta_{0}<0\\
+\text{and }S_{10}>0 & \text{when} & \theta_{0}>\theta_{1}-\theta_{\varepsilon},\ \eta_{0}>\eta_{1}\text{ and }\nabla^{2}\theta_{1}>0.
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $H_{ij}$
+\end_inset
+
+ is being applied explicitly then we need 
+\begin_inset Formula $K_{\theta}<\Delta x^{2}/\Delta t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Single Fluid
+\end_layout
+
+\begin_layout Standard
+We have
+\begin_inset Formula 
+\begin{equation}
+\frac{\Psi\pi^{\prime}+\rho_{r}-\rho^{n}}{\Delta t}+\nabla\cdot(\rho u^{t})-\nabla\cdot\alpha\Delta tc_{p}\rho\theta\nabla_{n}\pi=0\label{eq:HelmExnerPrime-1}
+\end{equation}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{equation}
+(\rho u){}^{n+1}=(\rho u)^{t}-\nabla\cdot\alpha\Delta tc_{p}\rho\theta\nabla_{n}\pi
+\end{equation}
+
+\end_inset
+
+then
+\begin_inset Formula 
+\begin{equation}
+\frac{\rho^{n+1}-\rho^{n}}{\Delta t}+\nabla\cdot\left(\rho u\right)^{n+1}=0
+\end{equation}
+
+\end_inset
+
+this implies that
+\begin_inset Formula 
+\begin{equation}
+\Psi\pi^{\prime}+\rho_{r}=\rho^{n+1}.
+\end{equation}
+
+\end_inset
+
+We also need
+\begin_inset Formula 
+\begin{equation}
+\pi^{n+1}=\left(\frac{R\rho^{n+1}\theta}{p_{r}}\right)^{\frac{\kappa}{1-\kappa}}.
+\end{equation}
+
+\end_inset
+
+If we assume 
+\begin_inset Formula 
+\begin{equation}
+\rho=\rho_{r}+\delta\pi\frac{\partial\rho}{\partial\pi}
+\end{equation}
+
+\end_inset
+
+From the equation of state
+\begin_inset Formula 
+\begin{eqnarray}
+\rho^{n+1} & = & \frac{p_{r}}{R\theta}\pi^{\frac{1-\kappa}{\kappa}}\ \implies\frac{\partial\rho}{\partial\pi}=\frac{p_{r}}{R\theta}\frac{1-\kappa}{\kappa}\frac{1}{\pi}\pi^{\frac{1-\kappa}{\kappa}}=\frac{1-\kappa}{\kappa}\frac{\rho}{\pi}\\
+\implies\rho^{n+1} & = & \rho_{r}+\frac{1-\kappa}{\kappa}\frac{\rho}{\pi}\pi^{\prime}.
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Multi-fluids with Auxiliary Pressure per fluid
+\end_layout
+
+\begin_layout Standard
+These multi-fluid Euler equations are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\eta_{i}}{\partial t}+\nabla\cdot(\eta_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\eta_{j}S_{ji}-\eta_{i}S_{ij}\right)\label{eq:etaTransport-2}\\
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\theta_{j}^{T}-\theta_{i})-(\theta_{i}^{T}-\theta_{i})S_{ij}\right)\\
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -c_{p}\theta_{i}\nabla\pi-\chi\nabla P_{i}+\mathbf{g}+\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)
+\end{eqnarray}
+
+\end_inset
+
+with equation of state:
+\begin_inset Formula 
+\begin{equation}
+\rho_{i}R\theta_{i}=p_{r}\pi^{\frac{1-\kappa}{\kappa}}.
+\end{equation}
+
+\end_inset
+
+The auxiliary pressure, 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ is used to control 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}$
+\end_inset
+
+ 
+\begin_inset Formula $\chi$
+\end_inset
+
+ is a measure of the compressibility.
+ If we add the transport equation
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial P_{i}}{\partial t}+\nabla\cdot P_{i}\mathbf{u}_{i}=0
+\end{equation}
+
+\end_inset
+
+then the system is closed.
+ 
+\begin_inset Formula $\chi$
+\end_inset
+
+ can be chosen to be small if we want to solve explicitly.
+ We also need 
+\begin_inset Formula 
+\begin{equation}
+\sum_{i}\eta_{i}P_{i}=0.
+\end{equation}
+
+\end_inset
+
+This should happen by magic but we could check and enforce with
+\begin_inset Formula 
+\begin{equation}
+P_{i}\rightarrow P_{i}-\frac{1}{\rho_{i}}\sum_{i}\eta_{i}P_{i}
+\end{equation}
+
+\end_inset
+
+For an explicit simulation, we need to obey the wave Courant number with
+ wave speed 
+\begin_inset Formula $\sqrt{\chi}$
+\end_inset
+
+ so we need 
+\begin_inset Formula $\chi<(\Delta x/\Delta t)^{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+How should 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ affect 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+? If 
+\begin_inset Formula $P_{i}>P_{j}$
+\end_inset
+
+ then fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ should squeeze fluid 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Or there should be a mass transfer based on 
+\begin_inset Formula $P_{i}-P_{j}$
+\end_inset
+
+.
+ How about 
+\begin_inset Formula 
+\begin{equation}
+S_{ij}=\frac{P_{i}-P_{j}}{\tau}
+\end{equation}
+
+\end_inset
+
+for a time scale 
+\begin_inset Formula $\tau$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Multi-fluids with multiple Exner Pressures
+\end_layout
+
+\begin_layout Standard
+The single pressure multi-fluid Euler equations are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\eta_{i}}{\partial t}+\nabla\cdot(\eta_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\eta_{j}S_{ji}-\eta_{i}S_{ij}\right)\label{eq:etaTransport}\\
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\theta_{j}^{T}-\theta_{i})-(\theta_{i}^{T}-\theta_{i})S_{ij}\right)\\
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -c_{p}\theta_{i}\nabla\pi+\mathbf{g}+\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\eta_{i}=\sigma_{i}\rho_{i}$
+\end_inset
+
+ with equation of state:
+\begin_inset Formula 
+\begin{equation}
+\rho_{i}R\theta_{i}=p_{r}\pi_{i}^{\frac{1-\kappa}{\kappa}}.
+\end{equation}
+
+\end_inset
+
+We want to define an Exner pressure per fluid to get Lagrangian conservation
+ of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+ Eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:etaTransport"
+
+\end_inset
+
+) can be split up into
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\left\{ \frac{\partial\rho_{i}}{\partial t}+\nabla\cdot(\rho_{i}\mathbf{u}_{i})\right\} +\rho_{i}\left\{ \frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i}\right\}  & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right).
+\end{eqnarray*}
+
+\end_inset
+
+We can hypothesise that the following two are both satisfied
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \sum_{j\ne i}\left(\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\right)\label{eq:justSigma}\\
+\frac{\partial\rho_{i}}{\partial t}+\nabla\cdot(\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\rho_{j}-\rho_{i}\right)-\rho_{i}S_{ij}\right).\label{eq:justRhoi}
+\end{eqnarray}
+
+\end_inset
+
+Eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:justSigma"
+
+\end_inset
+
+) can be used to predict 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ whereas eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:justRhoi"
+
+\end_inset
+
+) can be used to construct a Helmholtz equation for each Exner pressure.
+ 
+\end_layout
+
+\begin_layout Standard
+However the two fluids evolve in isolation from each other and there is
+ nothing to constrain 
+\begin_inset Formula $\sum_{i}\sigma_{i}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Drag in the Momentum Equation
+\end_layout
+
+\begin_layout Standard
+Drag in the momentum equation now couples the two fluids.
+ The drag is
+\begin_inset Formula 
+\begin{equation}
+\mathbf{D}_{ij}=\sigma_{j}\frac{C_{D}}{r_{c}}\frac{\bar{\rho}}{\rho_{i}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\end{equation}
+
+\end_inset
+
+For two fluids, in the absence of mass transfers, the momentum equation
+ is
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}=-c_{p}\theta_{i}\nabla\pi+\mathbf{g}-\sigma_{j}\frac{C_{D}}{r_{c}}\frac{\bar{\rho}}{\rho_{i}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\end{equation}
+
+\end_inset
+
+To avoid coupling the two pressure equations together, the drag will have
+ to be treated explicitly.
+ Therefore the drag must be limited for stability.
+ We need:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{j}\frac{C_{D}}{r_{c}}\frac{\bar{\rho}}{\rho_{i}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\le\frac{.5}{\Delta t}\implies\frac{C_{D}\bar{\rho}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\le\frac{.5}{\Delta t}\frac{\rho_{i}}{\sigma_{j}}\ \forall i,j
+\end{equation}
+
+\end_inset
+
+
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,7 +1,9 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass article
 \begin_preamble
 \usepackage{color}
@@ -19,16 +21,16 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman times
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
+\font_sf_scale 100 100
+\font_tt_scale 100 100
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -86,8 +88,8 @@
 \begin_body
 
 \begin_layout Title
-partionedExnerFoam -- numerical solution of the conditionally averaged compressi
-ble Euler equations
+partionedExnerFoam – numerical solution of the conditionally averaged compressib
+le Euler equations
 \end_layout
 
 \begin_layout Author
@@ -153,7 +155,7 @@ Each partition has separate prognostic variables of density,
 \frac{\partial\sigma_{i}\rho_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla\pi+\sigma_{i}\rho_{i}\mathbf{g}\label{eq:condMom}\\
  & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\nonumber \\
 \frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont}\\
-\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condTheta}
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-H_{ij}\right)\label{eq:condTheta}
 \end{eqnarray}
 
 \end_inset
@@ -209,7 +211,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="5" columns="4">
-<features rotate="0" tabularvalignment="middle">
+<features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -476,7 +478,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="4">
-<features rotate="0" tabularvalignment="middle">
+<features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="59text%">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -913,7 +915,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="13" columns="4">
-<features rotate="0" tabularvalignment="middle">
+<features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -1278,7 +1280,7 @@ reference "sec:transfers"
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $\text{K s}^{-1}$
+\begin_inset Formula $\text{kg}\ \text{m}^{-3}\text{K s}^{-1}$
 \end_inset
 
 
@@ -1819,7 +1821,7 @@ However even using the maximum heat transfer between partitions, the model
 It is essential to ensure that:
 \begin_inset Formula 
 \begin{equation}
-\sigma_{i}\rho_{i}H_{ij}=-\sigma_{j}\rho_{j}H_{ji}
+H_{ij}=-H_{ji}
 \end{equation}
 
 \end_inset
@@ -1835,7 +1837,7 @@ Diffusion of partition volume fraction,
 
 \begin_inset CommandInset label
 LatexCommand label
-name "sub:diffusionTransfer"
+name "subsec:diffusionTransfer"
 
 \end_inset
 
@@ -1974,7 +1976,7 @@ where
 \frac{\partial F_{i}}{\partial t}+\nabla\cdot\left(F_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}(\boldsymbol{\Omega}\times\mathbf{u}_{i})\cdot\mathbf{S}-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla_{S}\pi+\sigma_{i}\rho_{i}\mathbf{g}\cdot\mathbf{S}\label{eq:condMomFlux}\\
  & + & \sum_{j\ne i}\left(F_{j}S_{ji}-F_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\cdot\mathbf{S}\right)\nonumber \\
 \frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot F_{i} & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condContFlux}\\
-\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(F_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condThetaFlux}
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(F_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-H_{ij}\right)\label{eq:condThetaFlux}
 \end{eqnarray}
 
 \end_inset
@@ -2562,7 +2564,7 @@ The conditionally averaged equations in advective form are:
 \frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}\label{eq:condMomAdv}\\
  & + & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)\\
 \frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont-1}\\
-\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-H_{ij}\right)\label{eq:condThetaAdv}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-\frac{H_{ij}}{\sigma_{i}\rho_{i}}\right)\label{eq:condThetaAdv}
 \end{eqnarray}
 
 \end_inset
@@ -3072,7 +3074,7 @@ Mass Transfers Between Partitions based on
 Section 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sub:diffusionTransfer"
+reference "subsec:diffusionTransfer"
 
 \end_inset
 
@@ -3247,6 +3249,52 @@ where
  is bounded.
  This transfer term is formulated to stabilise the equations rather than
  to represent buoyant convection.
+\end_layout
+
+\begin_layout Subsection
+Correct version
+\end_layout
+
+\begin_layout Standard
+The above I think is wrong.
+ I am going to try this instead:
+\begin_inset Formula 
+\begin{eqnarray}
+S_{ij} & = & \max\left(-\nabla\cdot\mathbf{u}_{i},\ 0\right)
+\end{eqnarray}
+
+\end_inset
+
+so that the 
+\begin_inset Formula $\eta_{i}=\sigma_{i}\rho_{i}$
+\end_inset
+
+ equation becomes
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\eta_{i}}{\partial t}+\nabla\cdot\eta_{i}\mathbf{u}_{i}=\sum_{j\ne i}\eta_{j}\max\left(-\nabla\cdot\mathbf{u}_{j},\ 0\right)-\eta_{i}\max\left(-\nabla\cdot\mathbf{u}_{i},\ 0\right).
+\end{equation}
+
+\end_inset
+
+We need an additional constraint based on vertical velocity, so that fluid
+ 1 is rising and fluid 0 is sinking.
+ 
+\begin_inset Formula 
+\begin{eqnarray}
+S_{01} & = & \begin{cases}
+\max\left(-\nabla\cdot\mathbf{u}_{0},\ 0\right) & \text{if }\ w_{0}<0\\
+0 & \text{otherwise}
+\end{cases}\\
+S_{10} & = & \begin{cases}
+\max\left(-\nabla\cdot\mathbf{u}_{1},\ 0\right) & \text{if }\ w_{1}>0\\
+0 & \text{otherwise}
+\end{cases}
+\end{eqnarray}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -3424,8 +3472,8 @@ and
 
 \end_inset
 
-This doesn't work -- it just makes the temperatures equilibrate because
- there is only heat transfer when there is a difference.
+This doesn't work – it just makes the temperatures equilibrate because there
+ is only heat transfer when there is a difference.
  It doesn't make them swap.
 \end_layout
 
@@ -3455,7 +3503,7 @@ reference "eq:condThetaAdv"
  equation:
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-H_{ij}\right)
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-\frac{H_{ij}}{\sigma_{i}\rho_{i}}\right)
 \end{equation}
 
 \end_inset
@@ -3465,7 +3513,7 @@ and assuming that
 \end_inset
 
  can be positive and negative and that 
-\begin_inset Formula $\sigma_{1}\rho_{1}H_{12}=-\sigma_{2}\rho_{2}H_{21}$
+\begin_inset Formula $H_{12}=-H_{21}$
 \end_inset
 
  for energy conservation.
@@ -3504,7 +3552,7 @@ S_{21} & = & \begin{cases}
 then we can use 
 \begin_inset Formula 
 \begin{equation}
-H_{ij}=\frac{\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{j}\rho_{j}\theta_{j}S_{ji}}{\sigma_{i}\rho_{i}}=\theta_{i}S_{ij}-\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\theta_{j}S_{ji}
+H_{ij}=\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{j}\rho_{j}\theta_{j}S_{ji}
 \end{equation}
 
 \end_inset
@@ -3528,18 +3576,194 @@ This means that
  which implies that
 \begin_inset Formula 
 \begin{eqnarray*}
-\sigma_{i}\rho_{i}\theta_{i}|H_{ij}| & < & \sigma_{i}\rho_{i}\theta_{i}\\
-\sigma_{j}\rho_{j}\theta_{j}|H_{ji}| & < & \sigma_{j}\rho_{j}\theta_{j}
+|H_{ij}| & < & \sigma_{i}\rho_{i}\\
+|H_{ji}| & < & \sigma_{j}\rho_{j}
 \end{eqnarray*}
 
+\end_inset
+
+
+\begin_inset Newpage clearpage
 \end_inset
 
 
 \end_layout
 
 \begin_layout Section
-Temperature of the Mass Transferred based on 
-\begin_inset Formula $\nabla^{2}\theta$
+Temperature of the Mass Transferred
+\end_layout
+
+\begin_layout Standard
+If the temperature of the transferred air is not the same as the temperature
+ of the fluid that is donating air, the flux form potential temperature
+ equation becomes:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right)=\sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}^{T}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}^{T}S_{ij}-H_{ij}\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\theta_{i}^{T}$
+\end_inset
+
+ is the temperature of the air leaving fluid 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Therefore the advective form is
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}^{T}-\theta_{i})-(\theta_{i}^{T}-\theta_{i})S_{ij}-\frac{H_{ij}}{\sigma_{i}\rho_{i}}\right).
+\end{equation}
+
+\end_inset
+
+If we want to effectively solve an advective form advection diffusion equation
+ for 
+\begin_inset Formula $\theta_{0}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\theta_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla\theta_{0}=K_{\theta}\nabla^{2}\theta_{0}
+\end{equation}
+
+\end_inset
+
+assuming that 
+\begin_inset Formula $S_{01}>0$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{10}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $\nabla^{2}\theta_{0}<0$
+\end_inset
+
+ then we can use:
+\begin_inset Formula 
+\begin{equation}
+S_{01}=-K_{\theta}\frac{\nabla^{2}\theta_{0}}{\theta_{0}^{t}}.
+\end{equation}
+
+\end_inset
+
+In order to find 
+\begin_inset Formula $\theta_{0}^{t}$
+\end_inset
+
+ we could set:
+\begin_inset Formula 
+\begin{equation}
+S_{01}=\begin{cases}
+\frac{1}{\Delta t} & \ \text{if}\ \nabla^{2}\theta_{0}<0\\
+0 & \ \text{otherwise}.
+\end{cases}
+\end{equation}
+
+\end_inset
+
+Equating these expressions for 
+\begin_inset Formula $S_{01}$
+\end_inset
+
+ gives:
+\begin_inset Formula 
+\begin{equation}
+\theta_{t}^{0}=-K_{\theta}\Delta t\nabla^{2}\theta_{0}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Treating the transfer terms implicitly, ignoring 
+\begin_inset Formula $H_{ij}$
+\end_inset
+
+ and writing 
+\begin_inset Formula $\theta_{i}^{T}=\theta_{i}+\theta_{i}^{t}$
+\end_inset
+
+ leads to
+\begin_inset Formula 
+\begin{eqnarray}
+\theta_{i}^{n+1} & = & \theta_{i}^{\prime}+\Delta t\sum_{j\ne i}\left(T_{ji}(\theta_{j}^{n+1}+\theta_{j}^{t}-\theta_{i}^{n+1})-\theta_{i}^{t}S_{ij}\right)\label{eq:condThetaAdv-1-1}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $T_{ji}=\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $i,j=1,2$
+\end_inset
+
+ then this can be re-arranged as:
+\begin_inset Formula 
+\begin{eqnarray}
+\left(\begin{array}{cc}
+1+\Delta t\ T_{21} & -\Delta t\ T_{21}\\
+-\Delta t\ T_{12} & 1+\Delta t\ T_{12}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\theta_{1}^{\prime}+\Delta t\left(T_{21}\theta_{2}^{t}-S_{12}\theta_{1}^{t}\right)\\
+\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)
+\end{array}\right)
+\end{eqnarray}
+
+\end_inset
+
+which can be solved implicitly for 
+\begin_inset Formula $\theta_{i}$
+\end_inset
+
+ with construction of only local two by two matrices, for example:
+\begin_inset Formula 
+\begin{equation}
+\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right)=\frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\begin{array}{cc}
+1+\Delta t\ T_{12} & \Delta t\ T_{21}\\
+\Delta t\ T_{12} & 1+\Delta t\ T_{21}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{\prime}+\Delta t\left(T_{21}\theta_{2}^{t}-S_{12}\theta_{1}^{t}\right)\\
+\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)
+\end{array}\right).
+\end{equation}
+
+\end_inset
+
+Alternatively, to limit storage, 
+\begin_inset Formula $\theta_{1}^{n+1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{2}^{n+1}$
+\end_inset
+
+ can be calculated as:
+\begin_inset Formula 
+\begin{eqnarray*}
+\theta_{1}^{n+1} & = & \left(\left(1+\Delta t\ T_{12}\right)\left(\theta_{1}^{\prime}+\Delta t\left(T_{21}\theta_{2}^{t}-S_{12}\theta_{1}^{t}\right)\right)+\Delta t\ T_{21}\left(\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)\right)\right)\\
+ &  & \bigg/\left(1+\Delta t\ T_{21}+\Delta t\ T_{12}\right)\\
+\theta_{2}^{n+1} & = & \frac{\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)+\Delta t\ T_{12}\theta_{1}^{n+1}}{1+\Delta tT_{12}}.
+\end{eqnarray*}
+
 \end_inset
 
 

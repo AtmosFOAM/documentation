@@ -1,0 +1,856 @@
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,british]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\pagestyle{plain}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\usepackage{array}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{partionedExnerFoam \textendash{} numerical solution of the conditionally
+averaged compressible Euler equations}
+
+\author{Hilary Weller}
+\maketitle
+
+\section{Continuous Equations}
+
+The compressible Euler equations can be conditionally averaged in
+order to divide the atmosphere into partitions based on, for example,
+the presence of buoyant updrafts, stable air and downdraughts. These
+three partitions are labelled using $i$: 
+\[
+i=\begin{cases}
+0 & \text{ stable}\\
+1 & \text{ updraught}\\
+2 & \text{ downdraught. }
+\end{cases}
+\]
+Each partition has separate prognostic variables of density, $\rho_{i}$,
+potential temperature, $\theta_{i}$, and velocity, $\mathbf{u}_{i}$,
+but all regions share the same pressure, $p$ and Exner pressure,
+$\pi=(p/p_{0})^{\kappa}$. Assuming that the atmosphere is a perfect
+dry gas in a frame rotating with rate $\bm{\Omega}$, the conditionally
+averaged Euler equations are:
+
+\begin{eqnarray}
+\frac{\partial\sigma_{i}\rho_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla\pi+\sigma_{i}\rho_{i}\mathbf{g}\label{eq:condMom}\\
+ & + & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right)\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont}\\
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condTheta}
+\end{eqnarray}
+with the global equation of state and the equation of state for each
+partition:
+\begin{eqnarray}
+p_{0}\pi^{\frac{1-\kappa}{\kappa}} & = & R\rho\theta=R\sum_{i}\sigma_{i}\rho_{i}\theta_{i}\label{eq:condState}\\
+p_{0}\pi^{\frac{1-\kappa}{\kappa}} & =R & \rho_{i}\theta_{i}\label{eq:condStatei}
+\end{eqnarray}
+and subject to
+\begin{equation}
+\sum_{i}\sigma_{i}=1.
+\end{equation}
+The prognostic variables are given in table \ref{tab:progs}, the
+constants in table \ref{tab:constants} and the diagnostic variables
+in table \ref{tab:diags}.
+
+\begin{table}[H]
+\begin{tabular}{|>{\raggedright}p{0.39\textwidth}|c|c|c|}
+\hline 
+ & Symbol & Value & Units\tabularnewline
+\hline 
+\hline 
+Exner pressure & $\pi$ & $(p/p_{0})^{\kappa}$  & -\tabularnewline
+\hline 
+Potential temperature & $\theta_{i}$ & $T_{i}/\pi$  & K\tabularnewline
+\hline 
+Mass flux & $F_{i}$ & $\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$ & $\text{kg s}^{-1}$\tabularnewline
+\hline 
+Mass in partition $i$ & $(\sigma_{i}\rho_{i})$ &  & $\text{kg m}^{-3}$\tabularnewline
+\hline 
+\end{tabular}
+
+\caption{Prognostic variables of the conditionally averaged dry Euler equations.\label{tab:progs}}
+\end{table}
+
+\begin{table}[H]
+\begin{tabular}{|>{\raggedright}p{0.59\textwidth}|c|c|c|}
+\hline 
+ & Symbol & Value & Units\tabularnewline
+\hline 
+\hline 
+Rotation of geometry (or planet) & $\bm{\Omega}$ &  & $\text{s}^{-1}$\tabularnewline
+\hline 
+Reference pressure & $p_{0}$ & $10^{5}$ & Pa\tabularnewline
+\hline 
+Dry air $\kappa$ & $\kappa$ & $R_{a}/c_{pa}$ & -\tabularnewline
+\hline 
+Acceleration due to gravity & $g$ & 9.81 & $\text{m s}^{-2}$\tabularnewline
+\hline 
+Reference temperature & $T_{0}$ & 273.16 & K\tabularnewline
+\hline 
+Gas constant of dry air & $R$ & 287 & $\text{J kg}^{-1}\text{ K }^{-1}$\tabularnewline
+\hline 
+Heat capacity at constant pressure of dry air & $c_{p}$ & 1004 & $\text{J kg}^{-1}\text{ K }^{-1}$\tabularnewline
+\hline 
+Face area vector (normal to each face) & $\mathbf{S}$ &  & $\text{m}^{2}$\tabularnewline
+\hline 
+\end{tabular}
+
+\caption{Constants of the conditionally averaged dry Euler equations.\label{tab:constants}}
+\end{table}
+
+\begin{table}[H]
+\begin{tabular}{|>{\raggedright}p{0.39\textwidth}|c|c|c|}
+\hline 
+Diagnostic variable & Symbol & Calculated as & Units\tabularnewline
+\hline 
+\hline 
+Velocity of partition $i$ & $\mathbf{u}_{i}$ & Equation (\ref{eq:reconU}) & $\text{m s}^{-1}$\tabularnewline
+\hline 
+Density of partition $i$ & $\rho_{i}$ & $\frac{p_{0}}{R\theta_{i}}\pi^{\frac{1-\kappa}{\kappa}}$ & $\text{kg m}^{-3}$\tabularnewline
+\hline 
+Volume fraction of partition $i$ & $\sigma_{i}$ & $\frac{(\sigma_{i}\rho_{i})}{\rho_{i}}$ & \tabularnewline
+\hline 
+Transfer rate from $i$ to $j$ & $S_{ij}$ & See section \ref{sec:transfers} & $\text{s}^{-1}$\tabularnewline
+\hline 
+Drag on $i$ from $j$ & $\mathbf{d}_{ij}$ & See section \ref{sec:transfers} & $\text{kg m}^{-2}\text{s}^{-1}$\tabularnewline
+\hline 
+Heat transfer from $i$ to $j$ & $H_{ij}$ & See section \ref{sec:transfers} & $\text{K s}^{-1}$\tabularnewline
+\hline 
+Compressibility & $\Psi$ & $\rho/\pi$ & \tabularnewline
+\hline 
+Temperature in $i$ & $T_{i}$ & $\theta_{i}\pi$ & K\tabularnewline
+\hline 
+Pressure & p & $p_{0}\pi^{1/\kappa}$ & Pa\tabularnewline
+\hline 
+Total density & $\rho$ & $\sum_{i}\sigma_{i}\rho_{i}$ & $\text{kg m}^{-3}$\tabularnewline
+\hline 
+Total potential temperature & $\theta$ & $\frac{\sum_{i}\sigma_{i}\rho_{i}\theta_{i}}{\rho}$ & K\tabularnewline
+\hline 
+Total mass fluxes & $F$ & $\sum_{i}F_{i}$ & $\text{kg s}^{-1}$\tabularnewline
+\hline 
+\end{tabular}
+
+\caption{Diagnostic variables of the conditionally averaged dry Euler equations.\label{tab:diags}}
+\end{table}
+
+\section{Transfers between Partitions\label{sec:transfers}}
+
+The transfers between partitions are the terms $S_{ij}$, the mass
+transfer rate from partition $i$ to $j$, $\mathbf{d}_{ij}$, the
+drag exerted on partition $i$ from partition $j$ and $H_{ij}$,
+the heat transfer from partition $j$ to partition $i$.
+
+\subsection{Drag Between Partitions}
+
+Drag between partitions is based on a model for drag on rising bubbles
+described by \citet{RLD+11}, assuming exactly two partitions. Assuming
+that we use the total fluid density, the drag between partitions in
+eqn (\ref{eq:condMom}) could be: 
+\begin{equation}
+\mathbf{d}_{ij}=\frac{\rho_{e}C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right)
+\end{equation}
+where $C_{D}$ is a drag coefficient and $r_{c}$ is the radius or
+length scale of a region of fluid. So that $\mathbf{d}_{ij}=-\mathbf{d}_{ji}$
+we would have to use $r_{c}$ the same for each partition. We will
+examine sensitivity to $C_{D}$ and $r_{c}$. $\rho_{e}$ is the density
+of the fluid surrounding the bubble. We can therefore use the density
+of the environmental air.
+
+\subsection{Heat Transfer between Partitions}
+
+The heat transfer coefficient is based on correlations reported in
+Wikipedia for convection above and below hot plates in turbulent flow.
+The amount of heat transferred is related to a heat transfer coefficient,
+$h$. For external, turbulent flow over a horizontal plate, the heat
+transfer coefficient can be modelled as
+\begin{equation}
+h=\frac{0.14\ k\ Ra_{L}^{\frac{1}{3}}}{L}
+\end{equation}
+where $L$ is the plate surface area divided by the plate perimeter,
+$k$ is the thermal conductivity (we use $k=0.024\ \text{W\ m}^{-1}\text{K}^{-1}=0.024\ \text{kg}\ \text{m}\ \text{s}^{-3}\text{K}^{-1}$
+for air) and $Ra_{L}$ is the Rayleigh number given by
+\begin{equation}
+Ra_{L}=\frac{g\beta}{\nu\alpha}\left(T_{s}-T_{\infty}\right)x^{3}
+\end{equation}
+where $\beta=1/T$ is the thermal expansion coefficient, $\nu=1.48\times10^{-1}\text{m}^{2}\text{s}^{-1}$
+is the kinematic viscosity, $\alpha=k/(\rho c_{p})\ \text{m}^{2}\text{s}^{-1}$
+is the thermal diffusivity, $T_{s}$ is the temperature of the plate,
+$T_{\infty}$ is the air temperature far from the plate and $x$ is
+a characteristic length scale. From these we derive:
+\begin{equation}
+H_{ij}=\frac{0.14\ k\ \left(T_{j}-T_{i}\right)}{\sigma_{i}\rho_{i}\ c_{p}\ L}\left(\frac{g\rho c_{p}}{\nu Tk}|T_{j}-T_{i}|\right)^{\frac{1}{3}}\ \text{kg}\ \text{s}^{-1}\ \text{K}
+\end{equation}
+for some length scale, $L$. In order to ensure that the same heat
+is transferred in both directions, $\rho$ and $T$ are respectively
+the volumetric and mass means of both partitions.
+
+The heat transfer between partitions should be limited by the amount
+of heat needed to equalised the temperatures in one time-step:
+\begin{equation}
+H_{ij\ \max}=\frac{\theta_{j}-\theta_{i}}{\Delta t}\frac{\sigma_{j}\rho_{j}\sigma_{i}\rho_{i}}{\sigma_{j}\rho_{j}+\sigma_{i}\rho_{i}}.
+\end{equation}
+However even using the maximum heat transfer between partitions, the
+model is still unstable.
+
+It is essential to ensure that:
+\begin{equation}
+\sigma_{i}\rho_{i}H_{ij}=-\sigma_{j}\rho_{j}H_{ji}
+\end{equation}
+for energy conservation.
+
+\subsection{Diffusion of partition volume fraction, $\sigma$\label{subsec:diffusionTransfer}}
+
+Changes in gradient of $\sigma$ (and in particular oscillations)
+can be reduced by diffusion between partitions through the mass transfer
+terms. We introduce diffusion of $\sigma$ in such a way that total
+mass is not diffused and so that the transfer from $i$ to $j$ is
+always positive:
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{j}\rho_{j}-\sigma_{i}\rho_{i}\right),\ 0\right)\label{eq:diffusionTransfer}
+\end{equation}
+ The equation for $\sigma_{i}\rho_{i}$ becomes:
+\begin{eqnarray}
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & K_{\sigma}\sum_{j\ne i}\left(\nabla^{2}\left(\sigma_{i}\rho_{i}-\sigma_{j}\rho_{j}\right)\right).\label{eq:sigmaRhoWithTransfer}
+\end{eqnarray}
+If eqn (\ref{eq:sigmaRhoWithTransfer}) is solved with operator splitting
+and the right hand side treated explicitly, positivity of $\sigma_{i}\rho_{i}$
+is not violated by the $K_{\sigma}\nabla^{2}\sigma_{i}\rho_{i}$ term
+as long as the ratio $K_{\sigma}\Delta t/\Delta x^{2}$ is small enough.
+In order to prevent the $K_{\sigma}\nabla^{2}\sigma_{j}\rho_{j}$
+term from removing too much $\sigma_{i}\rho_{i}$ in one time-step
+it can be limited, depending on the time-stepping scheme. For example:
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)\label{eq:limitDiffusionTransfer}
+\end{equation}
+
+\section{Transport Equations in Terms of Fluxes}
+
+For conservation and consistency, the same fluxes, $F_{i}=\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$,
+are used to update the density, potential temperature and velocity
+in each partition. For brevity, we write the divergence operator in
+semi-discretised form or in discretised form using Gauss's divergence
+theorem:
+\begin{equation}
+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}\Upsilon)=\nabla\cdot(F_{i}\Upsilon)=\frac{1}{V}\sum_{f}F_{i}\Upsilon_{f}
+\end{equation}
+where $V$ is the volume of a cell, $f$ is over each face of a cell
+and $\Upsilon$ is a variable with $\Upsilon_{f}$ being the value
+of the variable at the face $f$. Thus we can re-write the transport
+equations in terms of $F_{i}$:
+\begin{eqnarray}
+\frac{\partial F_{i}}{\partial t}+\nabla\cdot\left(F_{i}\mathbf{u}_{i}\right) & = & -2\sigma_{i}\rho_{i}(\boldsymbol{\Omega}\times\mathbf{u}_{i})\cdot\mathbf{S}-\sigma_{i}\rho_{i}c_{p}\theta_{i}\nabla_{S}\pi+\sigma_{i}\rho_{i}\mathbf{g}\cdot\mathbf{S}\label{eq:condMomFlux}\\
+ & + & \sum_{j\ne i}\left(F_{j}S_{ji}-F_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\cdot\mathbf{S}\right)\nonumber \\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot F_{i} & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condContFlux}\\
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(F_{i}\theta_{i}\right) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)\label{eq:condThetaFlux}
+\end{eqnarray}
+Before the construction and numerical solution of the Helmholtz equation
+to update $\pi$ (section \ref{sec:helm}), new values of $\sigma_{i}\rho_{i}$
+are predicted using eqn (\ref{eq:condContFlux}) and values of $\theta_{i}$
+are predicted using eqn (\ref{eq:condThetaFlux}) and using the new
+values of $\sigma_{i}\rho_{i}$. These initial predictions are corrected
+in an iterative outer predictor-corrector loop.
+
+The fluxes, $F_{i}$, in equation (\ref{eq:condContFlux}) can lead
+to unbounded solutions for $\sigma_{i}\rho_{i}$. In order to avoid
+this, $F_{i}$ is rewritten as:
+\begin{eqnarray*}
+F_{i} & = & \sigma_{i}F-\sigma_{i}\sum_{j}F_{j}+\sigma_{i}\frac{F_{i}}{\sigma_{i}}\\
+ & = & \sigma_{i}F+\sigma_{i}\frac{F_{i}}{\sigma_{i}}-\sigma_{i}(1-\sigma_{i})\sum_{j}\frac{F_{j}}{(1-\sigma_{i})}\\
+ & = & \sigma_{i}F+\sigma_{i}(1-\sigma_{i})\left(\frac{F_{i}}{\sigma_{i}}-\frac{\sum_{j\ne i}F_{j}}{\sum_{j\ne i}\sigma_{j}}\right)
+\end{eqnarray*}
+This doesn't work. It only makes things worse.
+
+\section{Constructing the Helmholtz Equation\label{sec:helm}}
+
+The Helmholtz equation for $\pi$ is constructed from the continuity
+equation by substituting
+\begin{equation}
+\rho=\Psi\pi\label{eq:rhoComp}
+\end{equation}
+into the rate of change of density in eqn (\ref{eq:condContFlux})
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot F=0.\label{eq:contForPi}
+\end{equation}
+$\Psi$ is the compressibility which is calculated as $\Psi=\rho/\pi$.
+$\rho$ is calculated from the sum of the partitions, $\rho=\sum_{i}\sigma_{i}\rho_{i}$
+where each $\sigma_{i}\rho_{i}$ is updated from eqn (\ref{eq:condContFlux})
+and $\pi$ is calculated from the equation of state (\ref{eq:condState})
+using updated values of $\theta_{i}$. The fluxes, $F_{i}$, are updated
+using the momentum equation (\ref{eq:condMomFlux}):
+\begin{equation}
+F_{i}^{n+1}=F_{i}^{\prime}-\alpha\Delta tc_{p}\sigma_{i}\rho_{i}\theta_{i}\nabla_{S}\pi^{n+1}\label{eq:newFluxi}
+\end{equation}
+where
+\begin{equation}
+\nabla_{S}\pi=\mathbf{S}\cdot\nabla\pi,
+\end{equation}
+$\alpha$ is the off-centering parameter for the time-stepping and
+the explicit component of $F_{i}$ is $F_{i}^{\prime}$ calculated
+from the momentum equation (\ref{eq:condMomFlux}) without the new
+value of the pressure gradient term
+\begin{eqnarray*}
+F_{i}^{\prime}=F_{i}^{n}- & (1-\alpha)\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}+c_{p}\sigma_{i}\rho_{i}\theta_{i}\nabla\pi-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{n}\cdot\mathbf{S}\\
+- & \alpha\Delta t & \left\{ \nabla\cdot\left(F_{i}\mathbf{u}_{i}\right)+2\sigma_{i}\rho_{i}\boldsymbol{\Omega}\times\mathbf{u}_{i}-\sigma_{i}\rho_{i}\mathbf{g}\right\} ^{\ell}\cdot\mathbf{S}\\
+ & + & \Delta t\sum_{j\ne i}\left\{ \sigma_{j}\rho_{j}\mathbf{u}_{j}S_{ji}-\sigma_{i}\rho_{i}\mathbf{u}_{i}S_{ij}-\sigma_{i}\sigma_{j}\mathbf{d}_{ij}\right\} ^{n+1/2}
+\end{eqnarray*}
+where superscripts $n$ and $n+1$ specify the time-level and superscript
+$\ell$ means the most up to date value of time level $n+1$ calculated
+explicitly. This assumes predictor-corrector time-stepping such as
+multi-stage RK2. Equation (\ref{eq:newFluxi}) is then substituted
+into equation (\ref{eq:contForPi}) to create the Helmholtz equation
+for $\pi$:
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\sum_{i}\sigma_{i}c_{p}\rho\theta\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz}
+\end{equation}
+The solution for $\pi^{n+1}$ is then substituted back into eqn (\ref{eq:newFluxi})
+to calculate each $F_{i}^{n+1}$. The coefficient $\sum_{i}\sigma_{i}$
+is retained in the Helmholtz equation because it may not exactly sum
+to one. 
+
+\section{Upwinding of $\sigma_{i}$}
+
+Equation (\ref{eq:newFluxi}) gives the flux of $\sigma_{i}\rho_{i}$
+and so the continuity equation for partition $i$ (eqn \ref{eq:condContFlux})
+can update $\sigma_{i}\rho_{i}$ without further numerical approximation.
+However this leads to unbounded solutions. Instead we need to advect
+$\sigma_{i}$ using the flux, $F_{i}/\sigma_{i}$ so that upwinding
+can be used in the advection to avoid spurious undershoots and overshoots.
+This will be attempted by calculating $F_{i}/\sigma_{i}$ using linear
+interpolation to interpolate $\sigma_{i}$ from cell centres onto
+faces (with $F_{i}$). Then upwinding of $\sigma_{i}$ can be used
+in the continuity equation:
+\begin{equation}
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot\left(\frac{F_{i}}{\sigma_{i\text{lin}}}\sigma_{i\text{up}}\right)=\sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)
+\end{equation}
+
+\section{Updating the partition fraction, $\sigma_{i}$}
+
+The above solution of the Helmholtz equation updates $\pi$ and the
+back substitution gives fluxes $F$ which satisfy eqn (\ref{eq:contForPi})
+and partition fluxes $F_{i}$ which satisfy $\sum_{i}F_{i}=F$ given
+$\rho\theta=\sum_{i}\sigma_{i}\rho_{i}\theta_{i}$. We now need to
+update $\sigma_{i}$ so that eqn (\ref{eq:condContFlux}) is satisfied
+in each partition, the equation of state (\ref{eq:condStatei}) is
+satisfied in each partition using the same pressure and satisfying
+$\sum_{i}\sigma_{i}=1$. In order to achieve this, the joint variables
+$(\sigma_{i}\rho_{i})$ are first updated using eqn (\ref{eq:condContFlux}).
+The density in each partition is calculated so that the equation of
+state holds in each partition:
+\begin{equation}
+\rho_{i}=\frac{p_{0}\pi^{\frac{1-\kappa}{\kappa}}}{R\theta_{i}}=\frac{\rho\theta}{\theta_{i}}\label{eq:stateForRhoi}
+\end{equation}
+and finally $\sigma_{i}=\frac{(\sigma_{i}\rho_{i})}{\rho_{i}}$. This
+will automatically guarantee $\sum_{i}\sigma_{i}=1$ since if we substitute
+eqn (\ref{eq:stateForRhoi}) into the definition of $\sigma_{i}$
+we get:
+\begin{equation}
+\sum_{i}\sigma_{i}=\sum_{i}\frac{(\sigma_{i}\rho_{i})}{\rho_{i}}=\sum_{i}\frac{(\sigma_{i}\rho_{i})}{\rho\theta/\theta_{i}}=\frac{\rho\theta}{\rho\theta}=1.
+\end{equation}
+
+\section{Spatial Discretisation}
+
+A staggered finite volume discretisation is used. The velocity at
+cell faces for each partition is reconstructed from the face mass
+flux and the partition density:
+\begin{equation}
+\mathbf{u}_{i}=\left(\left(\sum_{\text{faces}}\mathbf{S}\mathbf{S}^{T}\right)^{-1}\sum_{\text{faces}}F_{i}\mathbf{S}\right)_{f}\bigg/\left(\sigma_{i}\rho_{i}\right)_{f}\label{eq:reconU}
+\end{equation}
+where operator $\left(\right)_{f}$ means interpolation from cell
+centre values onto face values and $\mathbf{S}$ is the face area
+vector (outward pointing normal to each face with magnitude of the
+face area. For a uniform velocity field, this reconstruction formula
+reproduces exactly the definition of the face flux, $F_{i}=\sigma_{i}\rho_{i}\mathbf{u}_{i}\cdot\mathbf{S}$
+given in table \ref{tab:progs}. The summations are over all of the
+faces of a cell.
+
+The velocity field in each partition is updated after updating $\sigma_{i}\rho_{i}$,
+$\rho_{i}$ and $\sigma_{i}$.
+
+A multi-dimensional, method of lines, linear upwind advection scheme
+is used for advecting species concentrations, velocity and potential
+temperature.
+
+\section{Defining Boundary Conditions}
+
+Boundary conditions must be set for the variables $\pi$ and $\partial F_{i}/\partial t$.
+Fixed flux boundary conditions are applied by ensuring that $\partial F_{i}/\partial t$
+is zero at these boundaries. $\pi$ is set at fixed flux boundaries
+by assuming hydrostatic pressure in the direction normal to each boundary:
+\begin{equation}
+c_{p}\theta_{\rho}\nabla_{S}\pi=\mathbf{g}\cdot\mathbf{S}.
+\end{equation}
+
+\section{Advective Form of the equations}
+
+The conditionally averaged equations in advective form are:
+\begin{eqnarray}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -2\boldsymbol{\Omega}\times\mathbf{u}_{i}-c_{p}\theta_{i}\nabla\pi+\mathbf{g}\label{eq:condMomAdv}\\
+ & + & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)\\
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\rho_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}\right)\label{eq:condCont-1}\\
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-H_{ij}\right)\label{eq:condThetaAdv}
+\end{eqnarray}
+where $\mathbf{D}_{ij}$ is now the drag per unit mass. The Helmholtz
+equation for $\pi$ is constructed in a similar way, substituting
+\begin{equation}
+\rho=\Psi\pi\label{eq:rhoComp-1}
+\end{equation}
+into the rate of change of density in eqn (\ref{eq:condContFlux})
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot F=0.\label{eq:contForPi-1}
+\end{equation}
+$\Psi$ is the compressibility which is calculated as $\Psi=\rho/\pi$.
+$\rho$ is calculated from the sum of the partitions, $\rho=\sum_{i}\sigma_{i}\rho_{i}$
+where each $\sigma_{i}\rho_{i}$ is updated from eqn (\ref{eq:condContFlux})
+and $\pi$ is calculated from the equation of state (\ref{eq:condState})
+using updated values of $\theta_{i}$. The fluxes, $F_{i}$, are updated
+using the momentum equation (\ref{eq:condMomAdv}):
+\begin{equation}
+F_{i}^{n+1}=F_{i}^{\prime}-\alpha\Delta tc_{p}\left(\sigma_{i}\rho_{i}\theta_{i}\right)^{\ell}\nabla_{S}\pi^{n+1}\label{eq:newFluxi-1}
+\end{equation}
+where
+\begin{equation}
+\nabla_{S}\pi=\mathbf{S}\cdot\nabla\pi,
+\end{equation}
+$\alpha$ is the off-centering parameter for the time-stepping and
+the explicit component of $F_{i}$ is $F_{i}^{\prime}$ calculated
+from the momentum equation (\ref{eq:condThetaAdv}) without the new
+value of the pressure gradient term
+\begin{eqnarray*}
+F_{i}^{\prime}= & \left(\sigma_{i}\rho_{i}\right)^{n+1}S\cdot\biggl\{\mathbf{u}_{i}^{n}+\Delta t\mathbf{g} & -(1-\alpha)\Delta t\left(\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+2\boldsymbol{\Omega}\times\mathbf{u}_{i}+c_{p}\theta_{i}\nabla\pi\right)^{n}\\
+ &  & -\alpha\Delta t\left(\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+2\boldsymbol{\Omega}\times\mathbf{u}_{i}\right)^{\ell}\biggr\}
+\end{eqnarray*}
+where superscripts $n$ and $n+1$ specify the time-level and superscript
+$\ell$ means the most up to date value of time level $n+1$ calculated
+explicitly. This assumes predictor-corrector time-stepping such as
+multi-stage RK2. Equation (\ref{eq:newFluxi-1}) is then substituted
+into equation (\ref{eq:contForPi-1}) to create the Helmholtz equation
+for $\pi$:
+\begin{equation}
+\frac{\partial\Psi\pi}{\partial t}+\nabla\cdot\sum_{i}F_{i}^{\prime}-\alpha\Delta t\sum_{i}\sigma_{i}c_{p}\rho\theta\nabla_{S}\pi^{n+1}=0.\label{eq:Helmholtz-1}
+\end{equation}
+The solution for $\pi^{n+1}$ is then substituted back into eqn (\ref{eq:newFluxi-1})
+to calculate each $F_{i}^{n+1}$. The coefficient $\sum_{i}\sigma_{i}$
+is retained in the Helmholtz equation because it may not exactly sum
+to one. 
+
+For the drag, we will try the form:
+\begin{equation}
+\mathbf{D}_{ij}=\sigma_{j}\frac{C_{D}}{r_{c}}\frac{\bar{\rho}}{\rho_{i}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\end{equation}
+As $\sigma_{i}$ becomes small in any partition, we need $r_{c}$
+to become small which increases the drag between partitions. If we
+assume a maximum and minimum could radius, $r_{\max}$ and $r_{\min}$,
+then the cloud radius can take the form
+\begin{equation}
+r_{c}=\max\left(r_{\min},\ r_{\max}\prod_{i}\sigma_{i}\right).
+\end{equation}
+The term $\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}$ appears
+on the right hand side of equations (\ref{eq:condMomAdv}) and (\ref{eq:condThetaAdv})
+and so these source terms will diverge when $\sigma_{i}\rho_{i}\rightarrow0$.
+Therefore this term needs to be limited:
+\begin{equation}
+T_{ji}=\frac{\sigma_{j}\rho_{j}}{\rho_{i}\max(\sigma_{i},\ \varepsilon)}S_{ji}
+\end{equation}
+for some small $\varepsilon$. However these source terms can still
+become very large for small $\sigma_{i}$ and so should be treated
+implicitly with operator splitting so that equations (\ref{eq:condMomAdv})
+and (\ref{eq:condThetaAdv}) are solved with a zero right hand side
+and the solutions are $\mathbf{u}_{i}^{\prime}$ and $\theta_{i}^{\prime}$.
+Then equations (\ref{eq:condMomAdv}) and (\ref{eq:condThetaAdv})
+can be re-written (without drag or heat transfer) as:
+\begin{eqnarray}
+\mathbf{u}_{i}^{n+1} & = & \mathbf{u}_{i}^{\prime}+\Delta t\sum_{j\ne i}\left(T_{ji}(\mathbf{u}_{j}^{n+1}-\mathbf{u}_{i}^{n+1})\right)\label{eq:condMomAdv-1}\\
+\theta_{i}^{n+1} & = & \theta_{i}^{\prime}+\Delta t\sum_{j\ne i}\left(T_{ji}(\theta_{j}^{n+1}-\theta_{i}^{n+1})\right).\label{eq:condThetaAdv-1}
+\end{eqnarray}
+If $i,j=1,2$ then these can be re-arranged as:
+\begin{eqnarray}
+\left(\begin{array}{cc}
+1+\Delta t\ T_{21} & -\Delta t\ T_{21}\\
+-\Delta t\ T_{12} & 1+\Delta t\ T_{12}
+\end{array}\right)\left(\begin{array}{c}
+\mathbf{u}_{1}^{n+1}\\
+\mathbf{u}_{2}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\mathbf{u}_{1}^{\prime}\\
+\mathbf{u}_{2}^{\prime}
+\end{array}\right)\\
+\left(\begin{array}{cc}
+1+\Delta t\ T_{21} & -\Delta t\ T_{21}\\
+-\Delta t\ T_{12} & 1+\Delta t\ T_{12}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\theta_{1}^{\prime}\\
+\theta_{2}^{\prime}
+\end{array}\right)
+\end{eqnarray}
+which can be solved implicitly for $\mathbf{u}_{i}$ and $\theta_{i}$
+with construction of only local two by two matrices, for example:
+\begin{equation}
+\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right)=\frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\begin{array}{cc}
+1+\Delta t\ T_{12} & \Delta t\ T_{21}\\
+\Delta t\ T_{12} & 1+\Delta t\ T_{21}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{\prime}\\
+\theta_{2}^{\prime}
+\end{array}\right).
+\end{equation}
+Alternatively, to limit storage, $\theta_{1}^{n+1}$ and $\theta_{2}^{n+1}$
+can be calculated as:
+\begin{eqnarray*}
+\theta_{1}^{n+1} & = & \frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\left(1+\Delta t\ T_{12}\right)\theta_{1}^{\prime}+\Delta t\ T_{21}\theta_{2}^{\prime}\right)\\
+\theta_{2}^{n+1} & = & \frac{\theta_{2}^{\prime}+\Delta t\ T_{12}\theta_{1}^{n+1}}{1+\Delta T_{12}}.
+\end{eqnarray*}
+
+\section{Mass Transfer Between Partitions based on vertical velocity}
+
+In order to estimate the mass transfer between partitions we need
+to know the area of the interface between the partitions, $A=A_{ij}=A_{ji}$.
+The the mass transfer can be defined as
+\begin{eqnarray}
+M_{12} & = & \sigma_{1}\rho_{1}S_{12}=\begin{cases}
+\rho_{1}w_{1}A & \ \text{when}\ w_{1}>0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+M_{21} & = & \sigma_{2}\rho_{2}S_{21}=\begin{cases}
+-\rho_{2}w_{2}A & \ \text{when}\ w_{2}<0\\
+0 & \ \text{otherwise}.
+\end{cases}
+\end{eqnarray}
+For an arbitrary shaped cell, the area $A$ can be estimated as
+\begin{equation}
+A=\frac{1}{2}\sum_{f\in\text{faces}}\biggl|\mathbf{S}_{f}\cdot\widehat{\nabla\sigma}\biggr|\approx\frac{1}{2}\frac{\sum_{f\in\text{faces}}\biggl|\nabla_{S}\sigma\biggr|}{|\nabla\sigma|}
+\end{equation}
+for either $\sigma$ where $\widehat{\nabla\sigma}=\frac{\nabla\sigma}{|\nabla\sigma|}$
+and $\nabla_{S}\sigma=\mathbf{S}_{f}\cdot\nabla\sigma$. But if $\nabla\sigma=0$
+then there can be no transfer. 
+
+\section{Mass Transfers Between Partitions based on horizontal divergence}
+
+We can calculate the horizontal divergence of a vector $\mathbf{v}$
+as
+\begin{equation}
+\nabla_{h}\cdot\mathbf{v}=\nabla\cdot\left(\mathbf{v}-(\mathbf{v}\cdot\hat{\mathbf{g}})\hat{\mathbf{g}}\right).
+\end{equation}
+The mass transfer can be calculated from the horizontal mass divergence
+as:
+\begin{eqnarray}
+\sigma_{1}\rho_{1}S_{12} & = & \begin{cases}
+-\nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{1}\rho_{1}\mathbf{u}_{1})<0\ \text{and}\ \mathbf{u}_{1}\cdot\mathbf{g}<0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+\sigma_{2}\rho_{2}S_{21} & = & \begin{cases}
+\nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2}) & \ \text{if}\ \nabla_{h}\cdot(\sigma_{2}\rho_{2}\mathbf{u}_{2})>0\ \text{and}\ \mathbf{u}_{2}\cdot\mathbf{g}>0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+A problem is that mass is transferred to the buoyant partition rather
+slowly.
+
+\section{Mass Transfers Between Partitions based on $\nabla^{2}\theta$}
+
+Section \ref{subsec:diffusionTransfer} defined mass transfer terms
+between partitions based on diffusion which will smooth out the $\sigma$
+fields. However mass transfers are also needed in order to direct
+buoyant or convecting air into the unstable partition. In the absence
+of information on sub-grid scale variability, we assume that there
+is no sub-grid scale variability and so we want rising motion or buoyant
+air to be in the buoyant partition. Assuming that the stable partition
+is number 1 and the buoyant partition is number 2, to send buoyant
+air into the buoyant partition if it is warmer than it's surrounding,
+ie if $\nabla^{2}\theta<0$. The rate of sending air into the buoyant
+partition should be dependent on the size of $\nabla^{2}\theta<0$.
+We could choose a frequency $K_{\theta}\frac{\nabla^{2}\theta}{\theta}$
+where $K_{\theta}$ is a diffusivity in $\text{m}^{2}\text{s}^{-1}$.
+\begin{eqnarray}
+S_{12} & = & \begin{cases}
+\max\left(-K_{\theta}\frac{\nabla^{2}\theta_{1}}{\theta_{1}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+S_{21} & = & \begin{cases}
+\max\left(K_{\theta}\frac{\nabla^{2}\theta_{2}}{\theta_{2}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+This frequency seems to work ok but however you start it, both partitions
+end up with the same properties. We need somehow to transfer the excess
+$\theta$ into the other partition so as to remove variations in $\theta$.
+Ie the mass transferred sucks heat out of where it came from.
+
+These need to be combined with equations (\ref{eq:diffusionTransfer})
+and (\ref{eq:limitDiffusionTransfer}) so that diffusion can be used
+in combination:
+\begin{eqnarray}
+\sigma_{1}\rho_{1}S_{12} & = & \frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{2}\rho_{2}-\sigma_{1}\rho_{1}\right),\ 0\right)+\begin{cases}
+-K_{\theta}\frac{\nabla^{2}\theta_{1}}{\theta_{1}} & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+\sigma_{2}\rho_{2}S_{21} & = & \frac{K_{\sigma}}{2}\max\left(\nabla^{2}\left(\sigma_{1}\rho_{1}-\sigma_{2}\rho_{2}\right),\ 0\right)+\begin{cases}
+K_{\theta}\frac{\nabla^{2}\theta_{2}}{\theta_{2}} & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+and then limited as before:
+\begin{equation}
+\sigma_{i}\rho_{i}S_{ij}=\min\left(\sigma_{i}\rho_{i}S_{ij},\ \sigma_{i}\rho_{i}/\Delta t\right)\label{eq:limitDiffusionTransfer-1}
+\end{equation}
+
+\section{Mass Transfer based on Partition Divergence}
+
+There is nothing to control the partition divergence, $\nabla\cdot\mathbf{u}_{i}$
+so it can become large which leads to large changes in $\sigma_{i}\rho_{i}$.
+We want $\mathbf{u}_{i}$ to move $\sigma_{i}\rho_{i}$ around but
+we the partition divergence is a problem. How about getting partition
+divergence to move fluid into the other partition. Considering just
+two partitions, this could be achieved by:
+\begin{equation}
+\sigma_{j}\rho_{j}S_{ji}-\sigma_{i}\rho_{i}S_{ij}=\frac{1}{2}\left(\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j}.\right)
+\end{equation}
+In order to separate this into strictly positive source terms we can
+use:
+\begin{eqnarray*}
+\sigma_{j}\rho_{j}S_{ji} & = & \frac{1}{2}\max\left(\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}-\sigma_{j}\rho_{j}\nabla\cdot\mathbf{u}_{j},\ 0\right).
+\end{eqnarray*}
+This is equivalent to the transport equation for $\sigma_{i}\rho_{i}$
+being: 
+\begin{equation}
+\frac{\partial\sigma_{i}\rho_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla(\sigma_{i}\rho_{i})=-\frac{1}{2}\overline{\rho}\nabla\cdot\overline{\mathbf{u}}
+\end{equation}
+where $\overline{\rho}\nabla\cdot\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\rho_{i}\nabla\cdot\mathbf{u}_{i}$,
+satisfying the criteria that, in the absence of global divergence,
+advection of $\sigma_{i}\rho_{i}$ is bounded. This transfer term
+is formulated to stabilise the equations rather than to represent
+buoyant convection.
+
+\section{Internal Energy Conservation on Mass Transfer}
+
+Internal energy should be conserved on mass transfer and we would
+like our numerical method to have the same property. This implies
+that we would like:
+\begin{equation}
+\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n+1}=\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n}
+\end{equation}
+Considering only the transfer terms we use an explicit update of $\sigma_{i}\rho_{i}$:
+\begin{equation}
+(\sigma_{i}\rho_{i})^{n+1}=(\sigma_{i}\rho_{i})^{n}+\Delta t\left((\sigma_{j}\rho_{j})^{n}S_{ji}^{n}-(\sigma_{i}\rho_{i})^{n}S_{ij}^{n}\right)
+\end{equation}
+and an implicit update of $\theta_{i}$:
+\begin{eqnarray*}
+\theta_{0}^{n+1} & = & \frac{\left(1+T_{01}\right)\theta_{0}^{n}+T_{10}\theta_{1}^{n}}{1+T_{10}+T_{01}}\\
+\theta_{1}^{n+1} & = & \frac{\theta_{1}^{n}+T_{01}\theta_{0}^{n+1}}{1+T_{01}}
+\end{eqnarray*}
+where $T_{ij}=\Delta t\ \frac{\sigma_{i}\rho_{i}}{\sigma_{j}\rho_{j}}S_{ij}$.
+Without loss of generality we can consider the case where $S_{ji}=0$
+and $i=0$, $j=1$ and use the shorthand $h_{i}=\sigma_{i}\rho_{i}$
+giving:
+\begin{eqnarray*}
+h_{o}^{n+1} & = & h_{0}^{n}\left(1-\Delta t\ S_{01}\right)\\
+h_{1}^{n+1} & = & h_{1}^{n}+h_{o}^{n}\Delta t\ S_{01}\\
+\theta_{0}^{n+1} & = & \theta_{0}^{n}\\
+\theta_{1}^{n+1} & = & \frac{\theta_{1}^{n}+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}\theta_{0}^{n}}{1+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}}
+\end{eqnarray*}
+So the energy conservation error is:
+\begin{eqnarray*}
+\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n+1}-\sum_{i}(\sigma_{i}\rho_{i}\theta_{i})^{n} & = & h_{0}^{n}\left(1-\Delta t\ S_{01}\right)\theta_{0}^{n}+\left(h_{1}^{n}+h_{o}^{n}\Delta t\ S_{01}\right)\frac{\theta_{1}^{n}+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}\theta_{0}^{n}}{1+\Delta t\ \frac{h_{0}}{h_{1}}S_{01}}\\
+ & - & h_{0}^{n}\theta_{0}^{n}-h_{1}^{n}\theta_{1}^{n}\\
+ & =- & \Delta t\ S_{01}h_{0}^{n}\theta_{0}^{n}+h_{1}^{n}\Delta t\ \frac{h_{0}}{h_{1}}S_{01}\theta_{0}^{n}\\
+ & = & \Delta t\ S_{01}\theta_{0}^{n}\left(-h_{0}^{n}+h_{1}^{n}\frac{h_{0}}{h_{1}}\right)
+\end{eqnarray*}
+So energy conservation is achieved as long as we use old values of
+$\sigma_{i}\rho_{i}$ in the calculation of $T_{ij}$.
+
+\section{Temperature of the Mass Transferred based on swapping}
+
+Equation (\ref{eq:condThetaAdv}) assumes that the mass transferred
+has the temperature of the partition that it is leaving. Thus there
+is nothing in these equations that forces the temperatures in each
+partition away from each other. If instead we assume that the temperature
+of the mass transferred from partition 1 to 2 has the higher of the
+two temperatures and vice-verca then partition 2 will always tend
+to be warmer, consistent with it rising. Then the flux form of the
+$\theta$ equations become: 
+\begin{eqnarray}
+\frac{\partial\sigma_{1}\rho_{1}\theta_{1}}{\partial t}+\nabla\cdot\sigma_{1}\rho_{1}\theta_{1}\mathbf{u}_{1} & = & \sigma_{2}\rho_{2}S_{21}\max(\theta_{1},\theta_{2})-\sigma_{1}\rho_{1}S_{12}\min(\theta_{1},\theta_{2})\\
+\frac{\partial\sigma_{2}\rho_{2}\theta_{2}}{\partial t}+\nabla\cdot\sigma_{2}\rho_{2}\theta_{2}\mathbf{u}_{2} & = & \sigma_{1}\rho_{1}S_{12}\min(\theta_{1},\theta_{2})-\sigma_{2}\rho_{2}S_{21}\max(\theta_{1},\theta_{2}).
+\end{eqnarray}
+With the continuity equation, this leads to the advective form:
+\begin{eqnarray*}
+\frac{\partial\theta_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla\theta_{1} & = & \frac{\sigma_{2}\rho_{2}}{\sigma_{1}\rho_{1}}S_{21}\left(\max(\theta_{1},\theta_{2})-\theta_{1}\right)-S_{12}\left(\min(\theta_{1},\theta_{2})-\theta_{1}\right)\\
+\frac{\partial\theta_{2}}{\partial t}+\mathbf{u}_{2}\cdot\nabla\theta_{2} & = & \frac{\sigma_{1}\rho_{1}}{\sigma_{2}\rho_{2}}S_{12}\left(\min(\theta_{1},\theta_{2})-\theta_{2}\right)-S_{21}\left(\max(\theta_{1},\theta_{2})-\theta_{2}\right)
+\end{eqnarray*}
+It is going to be much more difficult to make this implicit due to
+the severe non-linearity of the min and max functions. 
+
+\section{Swapping Temperature through the Heat Transfer Term}
+
+If $\theta_{1}>\theta_{2}$ and $S_{12}>0$ then we want the temperatures
+to swap (or tend towards swapping). This can be achieved by:
+\begin{eqnarray*}
+\sigma_{1}\rho_{1}H_{12} & = & M_{12}\max(\theta_{1}-\theta_{2},0)-M_{21}\min(\theta_{2}-\theta_{1},0)
+\end{eqnarray*}
+and $\sigma_{2}\rho_{2}H_{21}=-\sigma_{1}\rho_{1}H_{12}$ for energy
+conservation. This will require some limiting for stability:
+\begin{equation}
+\sigma_{1}\rho_{1}H_{12}=\min\left(\sigma_{1}\rho_{1}H_{12},\ \frac{\sigma_{1}\rho_{1}|\theta_{1}-\theta_{2}|}{\Delta t},\ \frac{\sigma_{2}\rho_{2}|\theta_{1}-\theta_{2}|}{\Delta t}\right).
+\end{equation}
+This doesn't work \textendash{} it just makes the temperatures equilibrate
+because there is only heat transfer when there is a difference. It
+doesn't make them swap.
+
+If mass is transferred based on its anomalous temperature, then it
+makes sense that the mass transferred has a different mean temperature
+to the mass left behind. However we know nothing about the sub-grid
+scale variability and we are not solving equations involving the sub-grid
+scale variability. Therefore the $H_{ij}$ term in equation \ref{eq:condThetaAdv}
+will be used to transfer additional heat between partitions as this
+term acts independently of the mass transfer. Considering again the
+$\theta$ equation:
+\begin{equation}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}-\theta_{i})-H_{ij}\right)
+\end{equation}
+and assuming that $H_{ij}$ can be positive and negative and that
+$\sigma_{1}\rho_{1}H_{12}=-\sigma_{2}\rho_{2}H_{21}$ for energy conservation.
+We want positive $\theta_{i}$ anomalies transferred to $j$ and negative
+$\theta_{j}$ anomalies transferred to $i$. We assume that we are
+using mass transfers:
+\begin{eqnarray}
+S_{12} & = & \begin{cases}
+\max\left(-K_{\theta}\frac{\nabla^{2}\theta_{1}}{\theta_{1}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{1}<0\\
+0 & \ \text{otherwise}
+\end{cases}\\
+S_{21} & = & \begin{cases}
+\max\left(K_{\theta}\frac{\nabla^{2}\theta_{2}}{\theta_{2}},\ 1/\Delta t\right) & \ \text{when}\ \nabla^{2}\theta_{2}>0\\
+0 & \ \text{otherwise}
+\end{cases}.
+\end{eqnarray}
+then we can use 
+\begin{equation}
+H_{ij}=\frac{\sigma_{i}\rho_{i}\theta_{i}S_{ij}-\sigma_{j}\rho_{j}\theta_{j}S_{ji}}{\sigma_{i}\rho_{i}}=\theta_{i}S_{ij}-\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}\theta_{j}S_{ji}
+\end{equation}
+This means that $\theta_{i}$ will always decrease and $\theta_{j}$
+will always increase. This is what is wanted. This term should not
+need to be treated implicitly but it will need limiting for stability.
+For stability we need $\Delta tS_{ij}<1$ which implies that
+\begin{eqnarray*}
+\sigma_{i}\rho_{i}\theta_{i}|H_{ij}| & < & \sigma_{i}\rho_{i}\theta_{i}\\
+\sigma_{j}\rho_{j}\theta_{j}|H_{ji}| & < & \sigma_{j}\rho_{j}\theta_{j}
+\end{eqnarray*}
+\clearpage{}
+
+\section{Temperature of the Mass Transferred}
+
+If the temperature of the transferred air is not the same as the temperature
+of the fluid that is donating air, the flux form potential temperature
+equation becomes:
+\begin{equation}
+\frac{\partial\sigma_{i}\rho_{i}\theta_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\rho_{i}\mathbf{u}_{i}\theta_{i}\right)=\sum_{j\ne i}\left(\sigma_{j}\rho_{j}\theta_{j}^{T}S_{ji}-\sigma_{i}\rho_{i}\theta_{i}^{T}S_{ij}-\sigma_{i}\rho_{i}H_{ij}\right)
+\end{equation}
+where $\theta_{i}^{T}$ is the temperature of the air leaving fluid
+$i$. Therefore the advective form is
+\begin{equation}
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i}=\sum_{j\ne i}\left(\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}(\theta_{j}^{T}-\theta_{i})-(\theta_{i}^{T}-\theta_{i})S_{ij}-H_{ij}\right).
+\end{equation}
+If we want to effectively solve an advective form advection diffusion
+equation for $\theta_{0}$:
+\begin{equation}
+\frac{\partial\theta_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla\theta_{0}=K_{\theta}\nabla^{2}\theta_{0}
+\end{equation}
+
+$\alpha\beta\sum\frac{1}{2}$
+
+assuming that $S_{01}>0$ and $S_{10}=0$ and $\nabla^{2}\theta_{0}<0$
+then we can use:
+\begin{equation}
+S_{01}=-K_{\theta}\frac{\nabla^{2}\theta_{0}}{\theta_{0}^{t}}.
+\end{equation}
+In order to find $\theta_{0}^{t}$ we could set:
+\begin{equation}
+S_{01}=\begin{cases}
+\frac{1}{\Delta t} & \ \text{if}\ \nabla^{2}\theta_{0}<0\\
+0 & \ \text{otherwise}.
+\end{cases}
+\end{equation}
+Equating these expressions for $S_{01}$ gives:
+\begin{equation}
+\theta_{t}^{0}=-K_{\theta}\Delta t\nabla^{2}\theta_{0}.
+\end{equation}
+
+Treating the transfer terms implicitly, ignoring $H_{ij}$ and writing
+$\theta_{i}^{T}=\theta_{i}+\theta_{i}^{t}$ leads to
+\begin{eqnarray}
+\theta_{i}^{n+1} & = & \theta_{i}^{\prime}+\Delta t\sum_{j\ne i}\left(T_{ji}(\theta_{j}^{n+1}+\theta_{j}^{t}-\theta_{i}^{n+1})-\theta_{i}^{t}S_{ij}\right)\label{eq:condThetaAdv-1-1}
+\end{eqnarray}
+where $T_{ji}=\frac{\sigma_{j}\rho_{j}}{\sigma_{i}\rho_{i}}S_{ji}$.
+If $i,j=1,2$ then this can be re-arranged as:
+\begin{eqnarray}
+\left(\begin{array}{cc}
+1+\Delta t\ T_{21} & -\Delta t\ T_{21}\\
+-\Delta t\ T_{12} & 1+\Delta t\ T_{12}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\theta_{1}^{\prime}+\Delta t\left(T_{21}\theta_{2}^{t}-S_{12}\theta_{1}^{t}\right)\\
+\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)
+\end{array}\right)
+\end{eqnarray}
+which can be solved implicitly for $\theta_{i}$ with construction
+of only local two by two matrices, for example:
+\begin{equation}
+\left(\begin{array}{c}
+\theta_{1}^{n+1}\\
+\theta_{2}^{n+1}
+\end{array}\right)=\frac{1}{1+\Delta t\ T_{21}+\Delta t\ T_{12}}\left(\begin{array}{cc}
+1+\Delta t\ T_{12} & \Delta t\ T_{21}\\
+\Delta t\ T_{12} & 1+\Delta t\ T_{21}
+\end{array}\right)\left(\begin{array}{c}
+\theta_{1}^{\prime}+\Delta t\left(T_{21}\theta_{2}^{t}-S_{12}\theta_{1}^{t}\right)\\
+\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)
+\end{array}\right).
+\end{equation}
+Alternatively, to limit storage, $\theta_{1}^{n+1}$ and $\theta_{2}^{n+1}$
+can be calculated as:
+\begin{eqnarray*}
+\theta_{1}^{n+1} & = & \left(\left(1+\Delta t\ T_{12}\right)\left(\theta_{1}^{\prime}+\Delta t\left(T_{21}\theta_{2}^{t}-S_{12}\theta_{1}^{t}\right)\right)+\Delta t\ T_{21}\left(\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)\right)\right)\\
+ &  & \bigg/\left(1+\Delta t\ T_{21}+\Delta t\ T_{12}\right)\\
+\theta_{2}^{n+1} & = & \frac{\theta_{2}^{\prime}+\Delta t\left(T_{12}\theta_{1}^{t}-S_{21}\theta_{2}^{t}\right)+\Delta t\ T_{12}\theta_{1}^{n+1}}{1+\Delta tT_{12}}.
+\end{eqnarray*}
+
+\bibliographystyle{abbrvnat}
+\bibliography{numerics}
+
+\end{document}
