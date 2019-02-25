@@ -807,14 +807,6 @@ To avoid coupling the two pressure equations together, the drag will have
 \end_inset
 
 
-\begin_inset CommandInset bibtex
-LatexCommand bibtex
-bibfiles "numerics"
-options "abbrvnat"
-
-\end_inset
-
-
 \end_layout
 
 \end_body
