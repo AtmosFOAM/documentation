@@ -148,10 +148,10 @@ Multi-fluid
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\sigma_{i}S_{ji}-\sigma_{i}S_{ij}\\
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
 \frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)\\
-\frac{Db_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{j}-b_{i}\right)\\
-\nabla\cdot\overline{\mathbf{u}} & = & 0
+\frac{D_{i}b_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{j}-b_{i}\right)\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0
 \end{eqnarray*}
 
 \end_inset
@@ -200,19 +200,16 @@ so that
 
 \end_inset
 
-The divergence constrain gives us the elliptic pressure equation:
-\begin_inset Formula 
-\begin{equation}
-\nabla\cdot\sum_{i}\sigma_{i}\left(\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}-b_{i}\mathbf{k}\right)+\nabla^{2}P=0
-\end{equation}
-
+The divergence constrain gives us the elliptic pressure equation (with 
+\begin_inset Formula $\sum_{i}\sigma_{i}$
 \end_inset
 
-or
+ as diffusivity):
 \begin_inset Formula 
-\begin{equation}
-\nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}^{\ell}-\alpha\Delta t\nabla^{2}P=0
-\end{equation}
+\begin{eqnarray}
+\nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}^{n+1} & = & 0\\
+\implies\nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}^{\ell} & = & \alpha\Delta t\nabla\cdot\sum_{i}\sigma_{i}\nabla P
+\end{eqnarray}
 
 \end_inset
 
@@ -235,15 +232,97 @@ How can we increase
 ? Try solving
 \begin_inset Formula 
 \begin{equation}
-\frac{D_{i}\mathbf{u}_{i}}{Dt}+\left(2-\frac{b_{i}}{\overline{b}}\right)\nabla P=b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i}=b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right).
 \end{equation}
 
 \end_inset
 
+We want:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i}P_{i} & = & P\\
+P_{i}>P & \text{when} & \nabla\cdot\sigma_{i}\mathbf{u}_{i}<0\\
+P_{i}=P & \text{when} & \nabla\cdot\sigma_{i}\mathbf{u}_{i}=0
+\end{eqnarray*}
 
+\end_inset
+
+So we need
+\begin_inset Formula 
+\begin{equation}
+P_{i}=P-\frac{\gamma\nabla\cdot\sigma_{i}\mathbf{u}_{i}}{\sigma_{i}}=P-\gamma\nabla\cdot\mathbf{u}_{i}+\frac{\gamma\mathbf{u}_{i}\cdot\nabla\sigma_{i}}{\sigma_{i}}
+\end{equation}
+
+\end_inset
+
+for some constant 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ with units 
+\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Divergence Transfer
 \end_layout
 
 \begin_layout Standard
+The 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ equation is
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}=\frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}
+\end{equation}
+
+\end_inset
+
+For Lagrangian conservation of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ and for two fluids, 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+, we want:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sigma_{j}S_{ji}-\sigma_{i}S_{ij}.
+\end{equation}
+
+\end_inset
+
+We also know that 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}$
+\end_inset
+
+ has the opposite sign to 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{j}$
+\end_inset
+
+.
+ So set:
+\begin_inset Formula 
+\begin{equation}
+S_{ij}=\begin{cases}
+-\nabla\cdot\mathbf{u}_{i} & \text{if }\nabla\cdot\mathbf{u}_{i}<0\\
+0 & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\end_inset
+
 
 \end_layout
 
