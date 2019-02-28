@@ -326,5 +326,73 @@ S_{ij}=\begin{cases}
 
 \end_layout
 
+\begin_layout Section
+Transfers to keep 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ constant in selected cells
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ equation is
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}.
+\end{equation}
+
+\end_inset
+
+To keep 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ constant at cells labelled by 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ (where 
+\begin_inset Formula $\lambda_{i}$
+\end_inset
+
+ is one only where 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ is to be kept constant and zero elsewhere), we need to set:
+\begin_inset Formula 
+\begin{equation}
+S_{ij}=\begin{cases}
+\max\left(\nabla\cdot\sigma_{j}\mathbf{u}_{j},\ 0\right) & \text{where }\lambda_{i}=1\\
+0 & \text{elsewhere}.
+\end{cases}
+\end{equation}
+
+\end_inset
+
+This will not keep 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ constant if 
+\begin_inset Formula $\nabla\cdot\sigma_{j}\mathbf{u}_{j}<0$
+\end_inset
+
+.
+ In order to keep 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ completely constant then we need 
+\begin_inset Formula $\lambda_{i}=\lambda_{j}$
+\end_inset
+
+.
+\end_layout
+
 \end_body
 \end_document
