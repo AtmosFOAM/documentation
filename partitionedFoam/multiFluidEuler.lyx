@@ -103,8 +103,8 @@ Multi-fluid Euler Equations
 \begin_inset Formula 
 \begin{eqnarray}
 \frac{\partial\eta_{i}}{\partial t}+\nabla\cdot(\eta_{i}\mathbf{u}_{i}) & = & \sum_{j\ne i}\left(\eta_{j}S_{ji}-\eta_{i}S_{ij}\right)\label{eq:etaTransport-1-1}\\
-\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\theta_{ji}^{T}-\theta_{i})-(\theta_{ij}^{T}-\theta_{i})S_{ij}\right)\\
-\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -c_{p}\theta_{i}\nabla\pi^{\ell}+\mathbf{g}+\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\mathbf{u}_{j}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)
+\frac{\partial\theta_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\theta_{i} & = & \sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\theta_{ji}^{T}-\theta_{i})-S_{ij}(\theta_{ij}^{T}-\theta_{i})\right)\\
+\frac{\partial\mathbf{u}_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i} & = & -c_{p}\theta_{i}\nabla\pi^{\ell}+\mathbf{g}+\sum_{j\ne i}\left(\frac{\eta_{j}}{\eta_{i}}S_{ji}(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i})-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right)
 \end{eqnarray}
 
 \end_inset

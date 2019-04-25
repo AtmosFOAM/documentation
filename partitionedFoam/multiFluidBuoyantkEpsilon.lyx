@@ -173,8 +173,18 @@ G=\nu_{t}\left(\nabla\mathbf{\mathbf{U}}+\nabla\mathbf{U}^{T}-\frac{2}{3}I\ tr(\
 The eddy viscosity is give by
 \begin_inset Formula 
 \begin{equation}
-\nu_{t}=C_{\mu}\frac{k^{2}}{\varepsilon}.
+\nu_{t}=C_{\mu}\frac{k^{2}}{\varepsilon}=u_{t}\ell
 \end{equation}
+
+\end_inset
+
+and the turbulent length, time and velocity scales are
+\begin_inset Formula 
+\begin{eqnarray*}
+\ell & = & C_{\mu}k^{3/2}\big/\varepsilon\\
+u_{t} & = & \sqrt{k}\\
+\tau & = & \ell\big/u_{t}=C_{\mu}k\big/\varepsilon.
+\end{eqnarray*}
 
 \end_inset
 

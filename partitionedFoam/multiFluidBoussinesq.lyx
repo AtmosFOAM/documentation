@@ -479,5 +479,170 @@ H_{ij} & = & \sigma_{i}\sigma_{j}\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{
 
 \end_layout
 
+\begin_layout Section
+Calculating 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ from High Resolution single fluid data
+\end_layout
+
+\begin_layout Standard
+We know that 
+\begin_inset Formula $\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}$
+\end_inset
+
+ and we can define
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{0} & = & \begin{cases}
+0 & \text{if }w>0\\
+1 & \text{otherwise}
+\end{cases}\\
+\sigma_{1} & = & 1-\sigma_{0}.
+\end{eqnarray*}
+
+\end_inset
+
+Based on 
+\begin_inset Formula $w^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $w^{n+1}$
+\end_inset
+
+ define 
+\begin_inset Formula $\sigma_{i}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}^{n+1}$
+\end_inset
+
+.
+ We can also define 
+\begin_inset Formula $\sigma_{i}^{\prime}$
+\end_inset
+
+ which is the result of advecting 
+\begin_inset Formula $\sigma_{i}^{n}$
+\end_inset
+
+ for one time step.
+ We can then average onto a coarser grid to find 
+\begin_inset Formula $\sigma_{i}^{n+1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma^{\prime}$
+\end_inset
+
+ and conditionally average to find 
+\begin_inset Formula $\mathbf{u}_{i}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{u}_{i}^{n+1}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ can then be found as:
+\begin_inset Formula 
+\begin{equation}
+S_{ij}=\begin{cases}
+\frac{\sigma_{i}^{\prime}-\sigma_{i}^{n+1}}{\sigma_{i}} & \text{if }\sigma_{i}^{\prime}>\sigma_{i}^{n+1}\\
+0 & \text{otherwise}.
+\end{cases}
+\end{equation}
+
+\end_inset
+
+Should 
+\begin_inset Formula $\sigma_{i}^{\prime}$
+\end_inset
+
+ be calculated on the fine grid or on the coarse grid from 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ on the coarse grid? 
+\begin_inset Formula $\sigma_{i}^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{i}^{n+1}$
+\end_inset
+
+ should be calculated on the fine grid.
+ Then 
+\begin_inset Formula $\sigma_{i}^{\prime}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ should be calculated on the coarse grid to satisfy
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}^{\prime} & = & \sigma_{i}^{n}-\Delta t\nabla\cdot\sigma_{i}\mathbf{u}_{i}\\
+\sigma_{i}^{n+1} & =\sigma_{i}^{\prime}+\Delta t & \sum_{j\ne i}\left(\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Heat Flux Boundary Condition
+\end_layout
+
+\begin_layout Standard
+We need a fixed heat flux boundary condition rather than a fixed gradient
+ because the heat flux only goes into one of the fluids which may not have
+ 
+\begin_inset Formula $\sigma=1$
+\end_inset
+
+.
+ The heat flux at the boundary is
+\begin_inset Formula 
+\begin{equation}
+H=\sum_{i}\sigma_{i}\alpha\nabla_{n}b_{i}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\nabla_{n}b_{i}$
+\end_inset
+
+ is the gradient of the buoyancy in the direction normal to the boundary
+ and 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the thermal diffusivity.
+ Therefore to fix the heat transfer into one of the fluids to 
+\begin_inset Formula $H_{i}$
+\end_inset
+
+ we need to calculate:
+\begin_inset Formula 
+\begin{equation}
+\nabla_{n}b_{i}=\frac{H}{\sigma_{i}\alpha}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document
