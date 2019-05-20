@@ -217,53 +217,85 @@ The divergence constrain gives us the elliptic pressure equation (with
 \end_layout
 
 \begin_layout Section
-Alternatives
+Pressure for each fluid
 \end_layout
 
 \begin_layout Standard
-How can we increase 
-\begin_inset Formula $P$
-\end_inset
-
- when 
-\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}<0$
-\end_inset
-
-? Try solving
-\begin_inset Formula 
-\begin{equation}
-\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i}=b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right).
-\end{equation}
-
-\end_inset
-
-We want:
-\begin_inset Formula 
-\begin{eqnarray*}
-\sum_{i}\sigma_{i}P_{i} & = & P\\
-P_{i}>P & \text{when} & \nabla\cdot\sigma_{i}\mathbf{u}_{i}<0\\
-P_{i}=P & \text{when} & \nabla\cdot\sigma_{i}\mathbf{u}_{i}=0
-\end{eqnarray*}
-
-\end_inset
-
-So we need
-\begin_inset Formula 
-\begin{equation}
-P_{i}=P-\frac{\gamma\nabla\cdot\sigma_{i}\mathbf{u}_{i}}{\sigma_{i}}=P-\gamma\nabla\cdot\mathbf{u}_{i}+\frac{\gamma\mathbf{u}_{i}\cdot\nabla\sigma_{i}}{\sigma_{i}}
-\end{equation}
-
-\end_inset
-
-for some constant 
-\begin_inset Formula $\gamma$
-\end_inset
-
- with units 
-\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+We need a separate pressure for each fluid to control each 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}$
 \end_inset
 
 .
+ Then the momentum equation for each fluid becomes:
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P+\nabla P_{i}=b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right).\label{eq:ui_with_Pi}
+\end{equation}
+
+\end_inset
+
+We assume that 
+\begin_inset Formula $\sum_{i}\sigma_{i}P_{i}=0$
+\end_inset
+
+ so that the Helmholtz equation for 
+\begin_inset Formula $P$
+\end_inset
+
+ is not changed.
+ We could set the single fluid pressure to be inversely proportional to
+ the local divergence:
+\begin_inset Formula 
+\begin{equation}
+P_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}.\label{eq:Pi_divui}
+\end{equation}
+
+\end_inset
+
+Substituting (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ui_with_Pi"
+
+\end_inset
+
+) into (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Pi_divui"
+
+\end_inset
+
+) gives a Poisson equation for 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+P_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}^{\prime}+\gamma\alpha\Delta t\nabla\cdot\nabla P_{i}.\label{eq:Pi_poisson}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the time off-centering parameter and 
+\begin_inset Formula $\mathbf{u}_{i}^{\prime}$
+\end_inset
+
+ is the velocity after the global pressure solve and back substitution.
+ The back-substitution is:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime}-\alpha\Delta t\nabla P_{i}.
+\end{equation}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -642,6 +674,194 @@ where
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Transferring Velocity and Temperature Different from the Mean
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\\
+\frac{D_{i}b_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{ji}^{T}-b_{i}\right)-S_{ij}\left(b_{ij}^{T}-b_{i}\right)\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0
+\end{eqnarray*}
+
+\end_inset
+
+Assuming two fluids and operator split, implicit transfers, updates due
+ to transfers of variable 
+\begin_inset Formula $\psi_{i}$
+\end_inset
+
+ can be calculated as
+\begin_inset Formula 
+\begin{equation}
+\left(\begin{array}{c}
+\psi_{0}\\
+\psi_{1}
+\end{array}\right)^{n+1}=\left(\begin{array}{c}
+\psi_{0}\\
+\psi_{1}
+\end{array}\right)^{\prime}+\Delta t\left(\begin{array}{cc}
+-\frac{\sigma_{1}}{\sigma_{0}}S_{10} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
+\frac{\sigma_{0}}{\sigma_{1}}S_{01} & -\frac{\sigma_{0}}{\sigma_{1}}S_{01}
+\end{array}\right)\left(\begin{array}{c}
+\psi_{0}\\
+\psi_{1}
+\end{array}\right)^{n+1}+\Delta t\left(\begin{array}{cc}
+-S_{01} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
+\frac{\sigma_{0}}{\sigma_{1}}S_{01} & -S_{10}
+\end{array}\right)\left(\begin{array}{c}
+\psi_{01}^{t}\\
+\psi_{10}^{t}
+\end{array}\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\psi_{i}^{\prime}$
+\end_inset
+
+ is the value of 
+\begin_inset Formula $\psi_{i}$
+\end_inset
+
+ after advection but before transfers and 
+\begin_inset Formula $\psi_{ij}^{T}=\psi_{i}+\psi_{ij}^{t}$
+\end_inset
+
+.
+ Rearranging gives
+\begin_inset Formula 
+\begin{eqnarray}
+\left(\begin{array}{c}
+\psi_{0}\\
+\psi_{1}
+\end{array}\right)^{n+1} & = & \left(\begin{array}{cc}
+1+\Delta t\frac{\sigma_{1}}{\sigma_{0}}S_{10} & -\Delta t\frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
+-\Delta t\frac{\sigma_{0}}{\sigma_{1}}S_{01} & 1+\Delta t\frac{\sigma_{0}}{\sigma_{1}}S_{01}
+\end{array}\right)^{-1}\left\{ \left(\begin{array}{c}
+\psi_{0}\\
+\psi_{1}
+\end{array}\right)^{\prime}+\Delta t\left(\begin{array}{cc}
+-S_{01} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
+\frac{\sigma_{0}}{\sigma_{1}}S_{01} & -S_{10}
+\end{array}\right)\left(\begin{array}{c}
+\psi_{01}^{t}\\
+\psi_{10}^{t}
+\end{array}\right)\right\} \\
+ & = & \frac{1}{1+T_{10}+T_{01}}\left(\begin{array}{cc}
+1+T_{01} & T_{10}\\
+T_{01} & 1+T_{10}
+\end{array}\right)\left(\begin{array}{c}
+\psi_{0}^{\prime}-\Delta tS_{01}\psi_{01}^{t}+T_{10}\psi_{10}^{t}\\
+\psi_{1}^{\prime}+T_{01}\psi_{01}^{t}-\Delta tS_{10}\psi_{10}^{t}
+\end{array}\right)
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $T_{ij}=\Delta t\sigma_{i}/\sigma_{j}S_{ij}$
+\end_inset
+
+.
+ The most efficient solution involves different equations for 
+\begin_inset Formula $\psi_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\psi_{1}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\psi_{0}^{n+1} & = & \frac{(1+T_{01})\left(\psi_{0}^{\prime}-\Delta tS_{01}\psi_{01}^{t}+T_{10}\psi_{10}^{t}\right)+T_{10}\left(\psi_{1}^{\prime}+T_{01}\psi_{01}^{t}-\Delta tS_{10}\psi_{10}^{t}\right)}{1+T_{10}+T_{01}}\\
+\psi_{1}^{n+1} & = & \frac{\psi_{1}^{\prime}+T_{01}\psi_{0}^{n+1}+T_{01}\psi_{01}^{t}-\Delta tS_{10}\psi_{10}^{t}}{1+T_{01}}.
+\end{eqnarray}
+
+\end_inset
+
+For velocity we can assume that 
+\begin_inset Formula 
+\[
+\mathbf{u}_{ij}^{T}=\left(\begin{array}{c}
+u_{i}\\
+v_{i}\\
+0
+\end{array}\right),\ \text{ or }\mathbf{u}_{ij}^{t}=\left(\begin{array}{c}
+0\\
+0\\
+-w_{i}
+\end{array}\right)
+\]
+
+\end_inset
+
+so that the equation for 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+ is
+\begin_inset Formula 
+\begin{eqnarray*}
+w_{i}^{n+1} & = & \frac{w_{i}^{\prime}}{1+T_{ji}-\Delta tS_{ij}}.
+\end{eqnarray*}
+
+\end_inset
+
+So we have 
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbf{u}_{0}^{n+1}\cdot\mathbf{S} & = & \left(\begin{array}{c}
+\frac{(1+T_{01})u_{0}^{\prime}+T_{10}u_{1}^{\prime}}{1+T_{10}+T_{01}}\\
+\frac{(1+T_{01})v_{0}^{\prime}+T_{10}v_{1}^{\prime}}{1+T_{10}+T_{01}}\\
+\frac{w_{0}^{\prime}}{1+T_{10}-\Delta tS_{01}}
+\end{array}\right)\cdot\mathbf{S}\\
+ & = & \left(\begin{array}{ccc}
+\frac{1+T_{01}}{1+T_{10}+T_{01}} & 0 & 0\\
+0 & \frac{1+T_{01}}{1+T_{10}+T_{01}} & 0\\
+0 & 0 & \frac{1}{1+T_{10}-\Delta tS_{01}}
+\end{array}\right)\left(\begin{array}{c}
+u_{0}^{\prime}\\
+v_{0}^{\prime}\\
+w_{0}^{\prime}
+\end{array}\right)\cdot\mathbf{S}+\left(\begin{array}{ccc}
+\frac{T_{10}}{1+T_{10}+T_{01}} & 0 & 0\\
+0 & \frac{1+T_{10}}{1+T_{10}+T_{01}} & 0\\
+0 & 0 & 0
+\end{array}\right)\left(\begin{array}{c}
+u_{1}^{\prime}\\
+v_{1}^{\prime}\\
+w^{\prime}
+\end{array}\right)\cdot\mathbf{S}.
+\end{eqnarray*}
+
+\end_inset
+
+Alternatively if we use the form 
+\begin_inset Formula $\mathbf{u}_{ij}^{t}=\left(\begin{array}{c}
+0\\
+0\\
+-w_{i}
+\end{array}\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $\mathbf{u}_{ij}^{t}\cdot\mathbf{S}=-w_{i}\mathbf{S}\cdot\mathbf{k}$
+\end_inset
+
+ so we need to calculate 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+ before we can find the transfers.
+ 
 \end_layout
 
 \end_body
