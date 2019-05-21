@@ -677,7 +677,7 @@ where
 \end_layout
 
 \begin_layout Section
-Transferring Velocity and Temperature Different from the Mean
+Transferring Velocity and Buoyancy Different from the Mean
 \end_layout
 
 \begin_layout Standard
@@ -862,6 +862,77 @@ Alternatively if we use the form
 
  before we can find the transfers.
  
+\end_layout
+
+\begin_layout Section
+Buoyancy of the Fluid Transferred
+\end_layout
+
+\begin_layout Standard
+Assuming two fluids, the buoyancy equations are:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\left(b_{10}^{t}+b_{1}-b_{0}\right)-S_{01}b_{01}^{t}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}S_{01}\left(b_{01}^{t}+b_{0}-b_{1}\right)-S_{10}b_{10}^{t}.
+\end{eqnarray*}
+
+\end_inset
+
+We want transfer of fluid to remove anomalies and to transfer the most buoyant
+ air to the buoyant fluid and vice-versa.
+ Therefore we can set:
+\begin_inset Formula 
+\begin{eqnarray*}
+S_{01} & = & \begin{cases}
+-K_{b}\frac{\nabla^{2}b_{0}}{g} & \text{\text{if }}\nabla^{2}b_{0}<0\\
+0 & \text{otherwise}
+\end{cases}\\
+S_{10} & = & \begin{cases}
+K_{b}\frac{\nabla^{2}b_{1}}{-b_{10}^{t}}=\frac{1}{\tau} & \text{\text{if }}\nabla^{2}b_{1}>0\\
+0 & \text{otherwise}
+\end{cases}\\
+b_{01}^{t} & = & \begin{cases}
+-K_{b}\tau\nabla^{2}b_{0} & \text{\text{if }}\nabla^{2}b_{0}<0\\
+0 & \text{otherwise}
+\end{cases}\\
+b_{10}^{t} & = & \begin{cases}
+-K_{b}\tau\nabla^{2}b_{1} & \text{\text{if }}\nabla^{2}b_{1}>0\\
+0 & \text{otherwise}.
+\end{cases}
+\end{eqnarray*}
+
+\end_inset
+
+With these transfers, warm anomalies are removed from fluid 0 and cold anomalies
+ are removed from fluid 1.
+ If we assume two fluids with 
+\begin_inset Formula $\nabla^{2}b_{0}<0$
+\end_inset
+
+ and 
+\begin_inset Formula $\nabla^{2}b_{1}<0$
+\end_inset
+
+ (ie warm anomalies in both fluids), the multi-fluid buoyancy equations
+ become:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & -\frac{K_{b}^{2}\tau}{g}\left(\nabla^{2}b_{0}\right)^{2}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}K_{b}\frac{\nabla^{2}b_{0}}{g}\left(K_{b}\tau\nabla^{2}b_{0}+b_{0}-b_{1}\right)
+\end{eqnarray*}
+
+\end_inset
+
+so warm anomalies are removed from fluid 0 and added to fluid 1.
+ We need to set the diffusion coefficient for removing anomalies, 
+\begin_inset Formula $K_{b}$
+\end_inset
+
+, and the transfer timescale, 
+\begin_inset Formula $\tau$
+\end_inset
+
+.
 \end_layout
 
 \end_body

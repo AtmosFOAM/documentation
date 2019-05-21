@@ -3676,15 +3676,11 @@ Equating these expressions for
  gives:
 \begin_inset Formula 
 \begin{equation}
-\theta_{t}^{0}=-K_{\theta}\Delta t\nabla^{2}\theta_{0}.
+\theta_{0}^{t}=-K_{\theta}\Delta t\nabla^{2}\theta_{0}.
 \end{equation}
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 Treating the transfer terms implicitly, ignoring 
 \begin_inset Formula $H_{ij}$
 \end_inset
