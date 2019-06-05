@@ -888,17 +888,17 @@ S_{01} & = & \begin{cases}
 0 & \text{otherwise}
 \end{cases}\\
 S_{10} & = & \begin{cases}
-K_{b}\frac{\nabla^{2}b_{1}}{-b_{10}^{t}}=\frac{1}{\tau} & \text{\text{if }}\nabla^{2}b_{1}>0\\
+K_{b}\frac{\nabla^{2}b_{1}}{g} & \text{\text{if }}\nabla^{2}b_{1}>0\\
 0 & \text{otherwise}
 \end{cases}\\
 b_{01}^{t} & = & \begin{cases}
--K_{b}\tau\nabla^{2}b_{0} & \text{\text{if }}\nabla^{2}b_{0}<0\\
+-\sigma_{0}K_{b}\tau\nabla^{2}b_{0} & \text{\text{if }}\nabla^{2}b_{0}<0\\
 0 & \text{otherwise}
-\end{cases}\\
+\end{cases}\text{(ie }b_{01}^{t}>0)\\
 b_{10}^{t} & = & \begin{cases}
--K_{b}\tau\nabla^{2}b_{1} & \text{\text{if }}\nabla^{2}b_{1}>0\\
-0 & \text{otherwise}.
-\end{cases}
+-\sigma_{1}K_{b}\tau\nabla^{2}b_{1} & \text{\text{if }}\nabla^{2}b_{1}>0\\
+0 & \text{otherwise}
+\end{cases}\text{(ie }b_{10}^{t}<0)
 \end{eqnarray*}
 
 \end_inset
@@ -914,16 +914,7 @@ With these transfers, warm anomalies are removed from fluid 0 and cold anomalies
 \end_inset
 
  (ie warm anomalies in both fluids), the multi-fluid buoyancy equations
- become:
-\begin_inset Formula 
-\begin{eqnarray*}
-\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & -\frac{K_{b}^{2}\tau}{g}\left(\nabla^{2}b_{0}\right)^{2}\\
-\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}K_{b}\frac{\nabla^{2}b_{0}}{g}\left(K_{b}\tau\nabla^{2}b_{0}+b_{0}-b_{1}\right)
-\end{eqnarray*}
-
-\end_inset
-
-so warm anomalies are removed from fluid 0 and added to fluid 1.
+ become:so warm anomalies are removed from fluid 0 and added to fluid 1.
  We need to set the diffusion coefficient for removing anomalies, 
 \begin_inset Formula $K_{b}$
 \end_inset
@@ -933,6 +924,204 @@ so warm anomalies are removed from fluid 0 and added to fluid 1.
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & -\sigma_{0}\frac{K_{b}^{2}\tau}{g}\left(\nabla^{2}b_{0}\right)^{2}\label{eq:diffusionSource-1}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}K_{b}\frac{\nabla^{2}b_{0}}{g}\left(\sigma_{1}K_{b}\tau\nabla^{2}b_{0}+b_{0}-b_{1}\right).
+\end{eqnarray}
+
+\end_inset
+
+However if 
+\begin_inset Formula $\nabla^{2}b_{0}<0$
+\end_inset
+
+ and 
+\begin_inset Formula $\nabla^{2}b_{1}>0$
+\end_inset
+
+, profiles can diverge: 
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & \frac{\sigma_{1}}{\sigma_{0}}K_{b}\frac{\nabla^{2}b_{1}}{g}\left(-\sigma_{1}K_{b}\tau\nabla^{2}b_{1}+b_{1}-b_{0}\right)-\sigma_{0}\frac{K_{b}^{2}\tau}{g}\left(\nabla^{2}b_{0}\right)^{2}\label{eq:diffusionSource}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & -\frac{\sigma_{0}}{\sigma_{1}}K_{b}\frac{\nabla^{2}b_{0}}{g}\left(-\sigma_{0}K_{b}\tau\nabla^{2}b_{0}+b_{0}-b_{1}\right)+K_{b}\frac{\nabla^{2}b_{1}}{g}\sigma_{1}K_{b}\tau\nabla^{2}b_{1}
+\end{eqnarray}
+
+\end_inset
+
+due to kinks in the profiles and the advection taking each fluid in opposite
+ directions.
+ To make this less likely, we should limit 
+\begin_inset Formula $b_{ij}^{t}$
+\end_inset
+
+.
+ However a simple limit on 
+\begin_inset Formula $b_{t}$
+\end_inset
+
+ is not sufficient.
+ 
+\begin_inset Formula $b_{0}$
+\end_inset
+
+ still goes negative.
+\end_layout
+
+\begin_layout Section
+Stability of Buoyancy Transfers
+\end_layout
+
+\begin_layout Standard
+Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diffusionSource"
+
+\end_inset
+
+) is solved explicitly with operator splitting so we need to find stability
+ conditions for
+\begin_inset Formula 
+\begin{equation}
+b^{n+1}-b^{\prime}=-\Delta t\frac{K_{b}^{2}\tau}{g}\left(\nabla^{2}b^{\prime}\right)^{2}.\label{eq:diffusionStability}
+\end{equation}
+
+\end_inset
+
+For stability we want 
+\begin_inset Formula $\nabla^{2}b^{n+1}$
+\end_inset
+
+ the same sign as 
+\series bold
+
+\begin_inset Formula $\nabla^{2}b^{\prime}$
+\end_inset
+
+
+\series default
+.
+ 
+\begin_inset Formula $\nabla^{2}b$
+\end_inset
+
+ is calculated using the finite volume method:
+\begin_inset Formula 
+\[
+\nabla^{2}b=\frac{1}{V}\sum_{f}\frac{b_{N}-b}{\delta}|\mathbf{S}|
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $f$
+\end_inset
+
+ are the faces of the cell with volume 
+\begin_inset Formula $V$
+\end_inset
+
+ and value 
+\begin_inset Formula $b$
+\end_inset
+
+.
+ The value of 
+\begin_inset Formula $b$
+\end_inset
+
+ on the other side of face f is 
+\begin_inset Formula $b_{N}$
+\end_inset
+
+, the face has area 
+\begin_inset Formula $|\mathbf{S}|$
+\end_inset
+
+ and the cell centre to cell centre distance over face 
+\begin_inset Formula $f$
+\end_inset
+
+ is 
+\begin_inset Formula $\delta$
+\end_inset
+
+.
+ For simplicity we will assume that only the central point changes within
+ one time step and the neighbour values do not change.
+ So
+\begin_inset Formula 
+\[
+\nabla^{2}b^{n+1}=\frac{1}{V}\sum_{f}\frac{b_{N}}{\delta}|\mathbf{S}|-b^{n+1}\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\[
+\nabla^{2}b^{\prime}=\frac{1}{V}\sum_{f}\frac{b_{N}}{\delta}|\mathbf{S}|-b^{\prime}\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}.
+\]
+
+\end_inset
+
+These combined with eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:diffusionStability"
+
+\end_inset
+
+) and the requirement that 
+\begin_inset Formula $\nabla^{2}b^{n+1}\nabla^{2}b^{\prime}>0$
+\end_inset
+
+ implies
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(\frac{1}{V}\sum_{f}\frac{b_{N}}{\delta}|\mathbf{S}|-b^{n+1}\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}\right)\nabla^{2}b^{\prime} & > & 0\\
+\iff\left(\nabla^{2}b^{\prime}+\left(b^{\prime}-b^{n+1}\right)\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}\right)\nabla^{2}b^{\prime} & > & 0\\
+\iff\left(1+\Delta t\frac{K_{b}^{2}\tau}{g}\nabla^{2}b^{\prime}\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}\right)\left(\nabla^{2}b^{\prime}\right)^{2} & > & 0\\
+\iff1+\Delta t\frac{K_{b}^{2}\tau}{g}\nabla^{2}b^{\prime}\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta} & > & 0.
+\end{eqnarray*}
+
+\end_inset
+
+Considering that we can have 
+\begin_inset Formula $\nabla^{2}b^{\prime}<0$
+\end_inset
+
+, stability requires
+\begin_inset Formula 
+\begin{eqnarray*}
+\Delta t\frac{K_{b}^{2}\tau}{g}|\nabla^{2}b^{\prime}|\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta} & < & 1\\
+\Leftarrow\frac{K_{b}^{2}\tau}{g} & < & \frac{1}{\Delta t|\nabla^{2}b^{\prime}|\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}}.
+\end{eqnarray*}
+
+\end_inset
+
+The Boussinesq code uses 
+\begin_inset Formula $K_{b}/g$
+\end_inset
+
+ and 
+\begin_inset Formula $\tau g$
+\end_inset
+
+.
+ So we should ensure that
+\begin_inset Formula 
+\[
+\tau g<\frac{g^{2}}{K_{b}^{2}}\frac{1}{\Delta t|\nabla^{2}b^{\prime}|\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}}.
+\]
+
+\end_inset
+
+
 \end_layout
 
 \end_body
