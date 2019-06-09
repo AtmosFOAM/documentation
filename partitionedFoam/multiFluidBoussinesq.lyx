@@ -149,7 +149,7 @@ Multi-fluid
 \begin_inset Formula 
 \begin{eqnarray*}
 \frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
-\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P+\nabla P_{i} & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)\\
 \frac{D_{i}b_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{j}-b_{i}\right)\\
 \sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0
 \end{eqnarray*}
@@ -270,7 +270,7 @@ reference "eq:Pi_divui"
 \begin_inset Formula $P_{i}$
 \end_inset
 
-:
+: 
 \begin_inset Formula 
 \begin{equation}
 P_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}^{\prime}+\gamma\alpha\Delta t\nabla\cdot\nabla P_{i}.\label{eq:Pi_poisson}
@@ -865,7 +865,7 @@ Alternatively if we use the form
 \end_layout
 
 \begin_layout Section
-Buoyancy of the Fluid Transferred
+Buoyancy of the Fluid Transferred - Laplacian
 \end_layout
 
 \begin_layout Standard
@@ -969,6 +969,11 @@ due to kinks in the profiles and the advection taking each fluid in opposite
 \end_inset
 
  still goes negative.
+ Alternatively we could set 
+\begin_inset Formula $b_{10}^{t}=0$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -1118,6 +1123,64 @@ The Boussinesq code uses
 \[
 \tau g<\frac{g^{2}}{K_{b}^{2}}\frac{1}{\Delta t|\nabla^{2}b^{\prime}|\frac{1}{V}\sum_{f}\frac{|\mathbf{S}|}{\delta}}.
 \]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Buoyancy of the Fluid Transferred - Mid-way
+\end_layout
+
+\begin_layout Standard
+Assuming two fluids, the buoyancy equations are:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\left(b_{10}^{t}+b_{1}-b_{0}\right)-S_{01}b_{01}^{t}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}S_{01}\left(b_{01}^{t}+b_{0}-b_{1}\right)-S_{10}b_{10}^{t}.
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $b_{ij}^{T}=b_{i}+b_{ij}^{t}$
+\end_inset
+
+.
+ We want fluid one to be warmer than fluid zero.
+ From 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "TEB19"
+
+\end_inset
+
+ we could deduce: 
+\begin_inset Formula 
+\[
+b_{ij}^{T}=0.5b_{j}+0.5b_{i}
+\]
+
+\end_inset
+
+ although they found that 
+\begin_inset Formula $b_{ij}^{T}=b_{i}$
+\end_inset
+
+ produced better results.
+ However this doesn't work if initially 
+\begin_inset Formula $\sigma_{1}=0$
+\end_inset
+
+ and the entire warm anomaly needs to be transferred into fluid 1.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
 
 \end_inset
 
