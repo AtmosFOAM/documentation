@@ -270,7 +270,7 @@ reference "eq:Pi_divui"
 \begin_inset Formula $P_{i}$
 \end_inset
 
-: 
+:
 \begin_inset Formula 
 \begin{equation}
 P_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}^{\prime}+\gamma\alpha\Delta t\nabla\cdot\nabla P_{i}.\label{eq:Pi_poisson}
@@ -862,6 +862,48 @@ Alternatively if we use the form
 
  before we can find the transfers.
  
+\end_layout
+
+\begin_layout Standard
+For conservation we need to use 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ from before mass transfer.
+ 
+\end_layout
+
+\begin_layout Standard
+If we assume that a value of zero is transferred then the equation for variable
+ 
+\begin_inset Formula $\Psi_{i}^{n+1}$
+\end_inset
+
+ solved implicitly becomes:
+\begin_inset Formula 
+\begin{eqnarray*}
+\Psi_{i}^{n+1} & = & \Psi_{i}^{\prime}+\Delta t\sum_{j\ne i}-\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\Psi_{i}^{n+1}+S_{ij}\Psi_{i}^{n+1}\\
+\implies\Psi_{i}^{n+1} & = & \frac{\Psi_{i}^{\prime}}{1-\Delta t\sum_{j\ne i}S_{ij}-\frac{\sigma_{j}}{\sigma_{i}}S_{ji}}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula $\Psi_{i}$
+\end_inset
+
+ is conserved using this form of transfer since
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i}^{n+1}\Psi_{i}^{n+1} & = & \sum_{i}\frac{\sigma_{i}^{n+1}\Psi_{i}^{\prime}}{1-\Delta t\sum_{j\ne i}S_{ij}-\frac{\sigma_{j}}{\sigma_{i}}S_{ji}}\\
+ & = & \sum_{i}\frac{\sigma_{i}^{n+1}\sigma_{i}\Psi_{i}^{\prime}}{\sigma_{i}-\Delta t\sum_{j\ne i}\sigma_{i}S_{ij}-\sigma_{j}S_{ji}}\\
+ & = & \sum_{i}\frac{\sigma_{i}^{n+1}\sigma_{i}\Psi_{i}^{\prime}}{\sigma_{i}^{n+1}}\\
+ & = & \sum_{i}\sigma_{i}\Psi_{i}^{\prime}
+\end{eqnarray*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
