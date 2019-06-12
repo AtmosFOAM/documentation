@@ -149,7 +149,7 @@ Multi-fluid
 \begin_inset Formula 
 \begin{eqnarray*}
 \frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
-\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P+\nabla P_{i} & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P+\nabla P_{i} & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}-\mathbf{u}_{i}\right)-\mathbf{D}_{ij}\\
 \frac{D_{i}b_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{j}-b_{i}\right)\\
 \sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0
 \end{eqnarray*}
@@ -295,7 +295,28 @@ where
 
 \end_inset
 
+The updates due to each 
+\begin_inset Formula $P_{i}$
+\end_inset
 
+ will inevitably change 
+\begin_inset Formula $\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\mathbf{u}_{i}$
+\end_inset
+
+.
+ To ensure that 
+\begin_inset Formula $\nabla\cdot\overline{\mathbf{u}}=0$
+\end_inset
+
+ we should calculate 
+\begin_inset Formula $P$
+\end_inset
+
+ after calculating 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -435,7 +456,7 @@ Diffusion within and between fluids leads to the flux form equations:
 \begin_inset Formula 
 \begin{eqnarray*}
 \frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
-\frac{\partial\sigma_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right)+\sigma_{i}\nabla P & = & \sigma_{i}b_{i}\mathbf{k}+\sum_{j\ne i}\left(\sigma_{j}S_{ji}\mathbf{u}_{j}-\sigma_{i}S_{ij}\mathbf{u}_{i}\right)+K_{u}\sigma_{i}\nabla^{2}\mathbf{u}_{i}+\mathbf{D}_{ij}\\
+\frac{\partial\sigma_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right)+\sigma_{i}\nabla P & = & \sigma_{i}b_{i}\mathbf{k}+\sum_{j\ne i}\left(\sigma_{j}S_{ji}\mathbf{u}_{j}-\sigma_{i}S_{ij}\mathbf{u}_{i}\right)+K_{u}\sigma_{i}\nabla^{2}\mathbf{u}_{i}+\sigma_{i}\mathbf{D}_{ij}\\
 \frac{\partial\sigma_{i}b_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}b_{i}\mathbf{u}_{i}\right)+N^{2}\sigma_{i}w_{i} & = & \sum_{j\ne i}\left(\sigma_{j}S_{ji}b_{j}-\sigma_{i}S_{ij}b_{i}\right)+K_{b}\sigma_{i}\nabla^{2}b_{i}+H_{ji}
 \end{eqnarray*}
 
@@ -446,7 +467,7 @@ where
 \end_inset
 
 , 
-\begin_inset Formula $\mathbf{D}_{ij}=-\mathbf{D}_{ji}$
+\begin_inset Formula $\sigma_{i}\mathbf{D}_{ij}=-\sigma_{j}\mathbf{D}_{ji}$
 \end_inset
 
  and
@@ -462,7 +483,7 @@ We need for
 \end_inset
 
  and 
-\begin_inset Formula $\mathbf{D}_{ij}/\sigma_{i}$
+\begin_inset Formula $\mathbf{D}_{ij}$
 \end_inset
 
  not to tend to infinity as 
@@ -502,7 +523,7 @@ We need for
  The following formulae might work:
 \begin_inset Formula 
 \begin{eqnarray}
-\mathbf{D}_{ij} & = & \sigma_{i}\sigma_{j}\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right)\\
+\mathbf{D}_{ij} & = & \sigma_{j}\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right)\\
 H_{ij} & = & \sigma_{i}\sigma_{j}\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(b_{i}-b_{j}\right).
 \end{eqnarray}
 
@@ -677,14 +698,26 @@ where
 \end_layout
 
 \begin_layout Section
-Transferring Velocity and Buoyancy Different from the Mean
+Implicit treatment of transfer terms
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\color red
+For conservation we need to use 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ from before mass transfer.
+ 
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
-\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\\
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}-\mathbf{D}_{ij}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})-\mathbf{D}_{ij}\\
 \frac{D_{i}b_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{ji}^{T}-b_{i}\right)-S_{ij}\left(b_{ij}^{T}-b_{i}\right)\\
 \sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0
 \end{eqnarray*}
@@ -864,13 +897,106 @@ Alternatively if we use the form
  
 \end_layout
 
+\begin_layout Subsection
+Implicit treatment of velocity transfers including Drag
+\end_layout
+
 \begin_layout Standard
-For conservation we need to use 
-\begin_inset Formula $\sigma_{i}$
+If the drag terms is represented as
+\begin_inset Formula 
+\begin{equation}
+\mathbf{D}_{ij}=\sigma_{j}D_{c}\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right)
+\end{equation}
+
 \end_inset
 
- from before mass transfer.
- 
+where 
+\begin_inset Formula $D_{c}$
+\end_inset
+
+ is the part common to both fluids, ie:
+\begin_inset Formula 
+\begin{equation}
+D_{c}=\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|
+\end{equation}
+
+\end_inset
+
+then the velocity update due to transfers is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbf{u}_{i}^{n+1} & = & \mathbf{u}_{i}^{\prime}+\Delta t\left(\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{j}^{n+1}+\mathbf{u}_{j}^{t}-\mathbf{u}_{i}^{n+1}\right)-S_{ij}\mathbf{u}_{i}^{t}-\sigma_{j}D_{c}\left(\mathbf{u}_{i}^{n+1}-\mathbf{u}_{j}^{n+1}\right)\right).
+\end{eqnarray*}
+
+\end_inset
+
+This can be written as a 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ matrix equation:
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(\begin{array}{c}
+\mathbf{u}_{0}^{n+1}\\
+\mathbf{u}_{1}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{c}
+\mathbf{u}_{0}^{\prime}\\
+\mathbf{u}_{1}^{\prime}
+\end{array}\right)+\Delta t\left(\begin{array}{cc}
+-\frac{\sigma_{1}}{\sigma_{0}}S_{10}-\sigma_{1}D_{c} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
+\frac{\sigma_{0}}{\sigma_{1}}S_{01} & -\frac{\sigma_{0}}{\sigma_{1}}S_{01}-\sigma_{0}D_{c}
+\end{array}\right)\left(\begin{array}{c}
+\mathbf{u}_{0}^{n+1}\\
+\mathbf{u}_{1}^{n+1}
+\end{array}\right)+\Delta t\left(\begin{array}{cc}
+-S_{01} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
+\frac{\sigma_{0}}{\sigma_{1}}S_{01} & -S_{10}
+\end{array}\right)\left(\begin{array}{c}
+\mathbf{u}_{0}^{t}\\
+\mathbf{u}_{1}^{t}
+\end{array}\right)\\
+\implies\\
+\left(\begin{array}{c}
+\mathbf{u}_{0}^{n+1}\\
+\mathbf{u}_{1}^{n+1}
+\end{array}\right) & = & \left(\begin{array}{cc}
+1+T_{10}+\Delta t\sigma_{1}D_{c} & -T_{10}\\
+-T_{01} & 1+T_{01}+\Delta t\sigma_{0}D_{c}
+\end{array}\right)^{-1}\left(\begin{array}{c}
+\mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\\
+\mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}
+\end{array}\right)\\
+\implies\\
+\left(\begin{array}{c}
+\mathbf{u}_{0}^{n+1}\\
+\mathbf{u}_{1}^{n+1}
+\end{array}\right) & = & \frac{1}{1+T_{01}+T_{10}+\Delta tD_{c}\left(1+\sigma_{1}T_{01}+\sigma_{0}T_{10}\right)+\sigma_{0}\sigma_{1}\Delta t^{2}D_{c}^{2}}\\
+ &  & \left(\begin{array}{cc}
+1+T_{01}+\Delta t\sigma_{0}D_{c} & T_{10}\\
+T_{01} & 1+T_{10}+\Delta t\sigma_{1}D_{c}
+\end{array}\right)\left(\begin{array}{c}
+\mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\\
+\mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}
+\end{array}\right)\\
+\implies\\
+\mathbf{u}_{0}^{n+1} & = & \frac{\left(1+T_{01}+\Delta t\sigma_{0}D_{c}\right)\left(\mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\right)+T_{10}\left(\mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}\right)}{1+T_{01}+T_{10}+\Delta tD_{c}\left(1+\sigma_{1}T_{01}+\sigma_{0}T_{10}+\sigma_{0}\sigma_{1}\Delta tD_{c}\right)}\\
+\mathbf{u}_{1}^{n+1} & = & \frac{\mathbf{u}_{1}^{\prime}+\left(T_{01}+\Delta t\sigma_{0}D_{c}\right)\mathbf{u}_{0}^{n+1}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}}{1+T_{01}+\Delta t\sigma_{0}D_{c}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $\Psi_{ij}^{T}=0$
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -900,6 +1026,42 @@ If we assume that a value of zero is transferred then the equation for variable
  & = & \sum_{i}\frac{\sigma_{i}^{n+1}\sigma_{i}\Psi_{i}^{\prime}}{\sigma_{i}^{n+1}}\\
  & = & \sum_{i}\sigma_{i}\Psi_{i}^{\prime}
 \end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $b_{10}^{T}=0\implies b_{10}^{t}=-b_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{01}^{t}=0\implies b_{01}^{T}=b_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+These assumptions lead to:
+\begin_inset Formula 
+\begin{gather*}
+\Biggl\{\begin{array}{c}
+b_{0}^{n+1}=\\
+b_{1}^{n+1}=
+\end{array}\begin{array}{l}
+b_{0}^{\prime}-\Delta t\frac{\sigma_{1}}{\sigma_{0}}S_{10}b_{0}^{n+1}\\
+b_{1}^{\prime}-\Delta t\frac{\sigma_{0}}{\sigma_{1}}S_{01}b_{1}^{n+1}+\Delta t\frac{\sigma_{0}}{\sigma_{1}}S_{01}b_{0}^{n+1}+\Delta tS_{10}b_{1}^{n+1}
+\end{array}\\
+\implies\Biggl\{\begin{array}{c}
+b_{0}^{n+1}=\\
+b_{1}^{n+1}=
+\end{array}\begin{array}{l}
+\frac{b_{0}^{\prime}}{1+\Delta t\frac{\sigma_{1}}{\sigma_{0}}S_{10}}\\
+\frac{b_{1}^{\prime}+\Delta t\frac{\sigma_{0}}{\sigma_{1}}S_{01}b_{0}^{n+1}}{1+\Delta t\frac{\sigma_{0}}{\sigma_{1}}S_{01}-\Delta tS_{10}}
+\end{array}
+\end{gather*}
 
 \end_inset
 
@@ -1178,10 +1340,10 @@ Buoyancy of the Fluid Transferred - Mid-way
 \begin_layout Standard
 Assuming two fluids, the buoyancy equations are:
 \begin_inset Formula 
-\begin{eqnarray*}
-\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\left(b_{10}^{t}+b_{1}-b_{0}\right)-S_{01}b_{01}^{t}\\
-\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}S_{01}\left(b_{01}^{t}+b_{0}-b_{1}\right)-S_{10}b_{10}^{t}.
-\end{eqnarray*}
+\begin{eqnarray}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\left(b_{10}^{t}+b_{1}-b_{0}\right)-S_{01}b_{01}^{t}\label{eq:b0}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & \frac{\sigma_{0}}{\sigma_{1}}S_{01}\left(b_{01}^{t}+b_{0}-b_{1}\right)-S_{10}b_{10}^{t}.\label{eq:b1}
+\end{eqnarray}
 
 \end_inset
 
@@ -1200,13 +1362,13 @@ key "TEB19"
 
  we could deduce: 
 \begin_inset Formula 
-\[
-b_{ij}^{T}=0.5b_{j}+0.5b_{i}
-\]
+\begin{equation}
+b_{ij}^{T}=\frac{1}{2}\left(b_{j}+b_{i}\right)\label{eq:bThalf}
+\end{equation}
 
 \end_inset
 
- although they found that 
+although they found that 
 \begin_inset Formula $b_{ij}^{T}=b_{i}$
 \end_inset
 
@@ -1216,6 +1378,68 @@ b_{ij}^{T}=0.5b_{j}+0.5b_{i}
 \end_inset
 
  and the entire warm anomaly needs to be transferred into fluid 1.
+\end_layout
+
+\begin_layout Standard
+This technique can lead to unbounded buoyancies.
+ Substituting eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:bThalf"
+
+\end_inset
+
+) into eqns (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:b0"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:b1"
+
+\end_inset
+
+) gives
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{D_{0}b_{0}}{Dt}+N^{2}w_{0} & = & \frac{1}{2}\frac{\sigma_{1}}{\sigma_{0}}\left(S_{10}-S_{01}\right)\left(b_{1}-b_{0}\right)\label{eq:b0-1}\\
+\frac{D_{1}b_{1}}{Dt}+N^{2}w_{1} & = & -\frac{1}{2}\frac{\sigma_{0}}{\sigma_{1}}\left(S_{01}-S_{10}\right)\left(b_{1}-b_{0}\right).\label{eq:b1-1}
+\end{eqnarray}
+
+\end_inset
+
+If 
+\begin_inset Formula $b$
+\end_inset
+
+ ranges between zero and 1 at resolved scales and 
+\begin_inset Formula $b_{0}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{1}=0.5$
+\end_inset
+
+ so that fluid zero is assumed without variance and fluid one contains a
+ range of different buoyancies.
+ Then 
+\begin_inset Formula $b_{1}-b_{0}$
+\end_inset
+
+ is always positive so if 
+\begin_inset Formula $S_{10}-S_{01}<0$
+\end_inset
+
+ then 
+\begin_inset Formula $b_{0}$
+\end_inset
+
+ will decrease, outside the range of original values.
+ 
 \end_layout
 
 \begin_layout Standard
