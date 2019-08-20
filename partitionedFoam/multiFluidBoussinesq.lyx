@@ -870,7 +870,7 @@ For conservation we need to use
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}-\mathbf{D}_{ij}\\
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \frac{D_{i}\sigma_{i}}{Dt}+\sigma_{i}\nabla\cdot\mathbf{u}_{i}=\sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\\
 \frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P & = & b_{i}\mathbf{k}+\sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})-\mathbf{D}_{ij}\\
 \frac{D_{i}b_{i}}{Dt}+N^{2}w_{i} & = & \sum_{j\ne i}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{ji}^{T}-b_{i}\right)-S_{ij}\left(b_{ij}^{T}-b_{i}\right)\\
 \sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0
@@ -1101,8 +1101,8 @@ This can be written as a
 \mathbf{u}_{0}^{\prime}\\
 \mathbf{u}_{1}^{\prime}
 \end{array}\right)+\Delta t\left(\begin{array}{cc}
--\frac{\sigma_{1}}{\sigma_{0}}S_{10}-\sigma_{1}D_{c} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}\\
-\frac{\sigma_{0}}{\sigma_{1}}S_{01} & -\frac{\sigma_{0}}{\sigma_{1}}S_{01}-\sigma_{0}D_{c}
+-\frac{\sigma_{1}}{\sigma_{0}}S_{10}-\sigma_{1}D_{c} & \frac{\sigma_{1}}{\sigma_{0}}S_{10}+\sigma_{1}D_{c}\\
+\frac{\sigma_{0}}{\sigma_{1}}S_{01}+\sigma_{0}D_{c} & -\frac{\sigma_{0}}{\sigma_{1}}S_{01}-\sigma_{0}D_{c}
 \end{array}\right)\left(\begin{array}{c}
 \mathbf{u}_{0}^{n+1}\\
 \mathbf{u}_{1}^{n+1}
@@ -1118,8 +1118,8 @@ This can be written as a
 \mathbf{u}_{0}^{n+1}\\
 \mathbf{u}_{1}^{n+1}
 \end{array}\right) & = & \left(\begin{array}{cc}
-1+T_{10}+\Delta t\sigma_{1}D_{c} & -T_{10}\\
--T_{01} & 1+T_{01}+\Delta t\sigma_{0}D_{c}
+1+T_{10}+\Delta t\sigma_{1}D_{c} & -T_{10}-\Delta t\sigma_{1}D_{c}\\
+-T_{01}-\Delta t\sigma_{0}D_{c} & 1+T_{01}+\Delta t\sigma_{0}D_{c}
 \end{array}\right)^{-1}\left(\begin{array}{c}
 \mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\\
 \mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}
@@ -1128,17 +1128,18 @@ This can be written as a
 \left(\begin{array}{c}
 \mathbf{u}_{0}^{n+1}\\
 \mathbf{u}_{1}^{n+1}
-\end{array}\right) & = & \frac{1}{1+T_{01}+T_{10}+\Delta tD_{c}\left(1+\sigma_{1}T_{01}+\sigma_{0}T_{10}\right)+\sigma_{0}\sigma_{1}\Delta t^{2}D_{c}^{2}}\\
+\end{array}\right) & = & \frac{1}{1+T_{01}+T_{10}+\Delta tD_{c}}\\
  &  & \left(\begin{array}{cc}
-1+T_{01}+\Delta t\sigma_{0}D_{c} & T_{10}\\
-T_{01} & 1+T_{10}+\Delta t\sigma_{1}D_{c}
+1+T_{01}+\Delta t\sigma_{0}D_{c} & T_{10}+\Delta t\sigma_{1}D_{c}\\
+T_{01}+\Delta t\sigma_{0}D_{c} & 1+T_{10}+\Delta t\sigma_{1}D_{c}
 \end{array}\right)\left(\begin{array}{c}
 \mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\\
 \mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}
 \end{array}\right)\\
 \implies\\
-\mathbf{u}_{0}^{n+1} & = & \frac{\left(1+T_{01}+\Delta t\sigma_{0}D_{c}\right)\left(\mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\right)+T_{10}\left(\mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}\right)}{1+T_{01}+T_{10}+\Delta tD_{c}\left(1+\sigma_{1}T_{01}+\sigma_{0}T_{10}+\sigma_{0}\sigma_{1}\Delta tD_{c}\right)}\\
-\mathbf{u}_{1}^{n+1} & = & \frac{\mathbf{u}_{1}^{\prime}+\left(T_{01}+\Delta t\sigma_{0}D_{c}\right)\mathbf{u}_{0}^{n+1}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}}{1+T_{01}+\Delta t\sigma_{0}D_{c}}
+\mathbf{u}_{0}^{n+1} & = & \frac{\left(1+T_{01}+\Delta t\sigma_{0}D_{c}\right)\left(\mathbf{u}_{0}^{\prime}-\Delta tS_{01}\mathbf{u}_{0}^{t}+T_{10}\mathbf{u}_{1}^{t}\right)+\left(T_{10}+\Delta t\sigma_{1}D_{c}\right)\left(\mathbf{u}_{1}^{\prime}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}\right)}{1+T_{01}+T_{10}+\Delta tD_{c}}\\
+\mathbf{u}_{1}^{n+1} & = & \mathbf{u}_{1}^{\prime}+\left(T_{01}+\Delta t\sigma_{0}D_{c}\right)\mathbf{u}_{0}^{n+1}-\left(T_{01}+\Delta t\sigma_{0}D_{c}\right)\mathbf{u}_{1}^{n+1}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}\\
+\implies\mathbf{u}_{1}^{n+1} & = & \frac{\mathbf{u}_{1}^{\prime}+\left(T_{01}+\Delta t\sigma_{0}D_{c}\right)\mathbf{u}_{0}^{n+1}+T_{01}\mathbf{u}_{0}^{t}-\Delta tS_{10}\mathbf{u}_{1}^{t}}{1+T_{01}+\Delta t\sigma_{0}D_{c}}
 \end{eqnarray*}
 
 \end_inset
@@ -1594,16 +1595,6 @@ If
 
  will decrease, outside the range of original values.
  
-\end_layout
-
-\begin_layout Section
-\begin_inset CommandInset citation
-LatexCommand citet
-key "BN86"
-
-\end_inset
-
- Version
 \end_layout
 
 \begin_layout Standard
