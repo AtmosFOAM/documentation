@@ -1,0 +1,552 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Kinetic Energy Conservation of the Incompressible Multi-fluid Equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The incompressible multi-fluid equations without transfer terms are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+(\nabla\times\mathbf{u}_{i})\times\mathbf{u}_{i}+\nabla K_{i} & = & -\nabla P_{i}\label{eq:condMom}\\
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0\label{eq:condCont}\\
+\sum_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0\label{eq:ico}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $K_{i}=\frac{1}{2}|\mathbf{u}_{i}|^{2}$
+\end_inset
+
+ is the kinetic energy per unit volume in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i}=P+p_{i}$
+\end_inset
+
+ is the pressure in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ An equation for 
+\begin_inset Formula $K_{i}$
+\end_inset
+
+ can be derived by taking the dot product of equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) with 
+\begin_inset Formula $\sigma_{i}\mathbf{u}_{i}$
+\end_inset
+
+ to give:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{i}\frac{\partial K_{i}}{\partial t}+\sigma_{i}\mathbf{u}_{i}\cdot\nabla K_{i} & = & -\sigma_{i}\mathbf{u}_{i}\cdot\nabla P_{i}.\label{eq:K1}
+\end{eqnarray}
+
+\end_inset
+
+This can be expressed in flux form using equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condCont"
+
+\end_inset
+
+) to give:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}K_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}K_{i})=-\sigma_{i}\mathbf{u}_{i}\cdot\nabla\left(P+p_{i}\right).\label{eq:Kflux}
+\end{equation}
+
+\end_inset
+
+If we define 
+\begin_inset Formula 
+\begin{equation}
+p_{i}=\gamma\sigma_{i}
+\end{equation}
+
+\end_inset
+
+and we define the total energy in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ to be
+\begin_inset Formula 
+\begin{equation}
+E_{i}=\sigma_{i}K_{i}+\frac{1}{2}\sigma_{i}p_{i}.
+\end{equation}
+
+\end_inset
+
+So we need to derive an equation for 
+\begin_inset Formula $\sigma_{i}p_{i}$
+\end_inset
+
+ which we do by multiplying eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condCont"
+
+\end_inset
+
+) by 
+\begin_inset Formula $\gamma\sigma_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\gamma\sigma_{i}\frac{\partial\sigma_{i}}{\partial t}+\gamma\sigma_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0\\
+\implies\frac{1}{2}\frac{\partial\sigma_{i}p_{i}}{\partial t}+p_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0.\label{eq:piEnergy}
+\end{eqnarray}
+
+\end_inset
+
+We can now add equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Kflux"
+
+\end_inset
+
+) to (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:PEi"
+
+\end_inset
+
+) to get an equation for 
+\begin_inset Formula $E_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial E_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}K_{i}) & = & -\sigma_{i}\mathbf{u}_{i}\cdot\nabla P-\sigma_{i}\mathbf{u}_{i}\cdot\nabla p_{i}-p_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i})\label{eq:Ei1}\\
+\implies\frac{\partial E_{i}}{\partial t}+\nabla\cdot\left(\mathbf{u}_{i}\left(\sigma_{i}K_{i}+\sigma_{i}p_{i}\right)\right) & = & -\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}P\right)+P\nabla\cdot\sigma_{i}\mathbf{u}_{i}\label{eq:Ei_2}\\
+\implies\frac{\partial E_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+P+p_{i}\right)\right) & = & P\nabla\cdot\sigma_{i}\mathbf{u}_{i}.\label{eq:Ei}
+\end{eqnarray}
+
+\end_inset
+
+We can find the rate of change of total energy by summing over all fluids:
+\begin_inset Formula 
+\begin{eqnarray}
+\sum_{i}\frac{\partial E_{i}}{\partial t}+\sum_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+P+p_{i}\right)\right) & = & P\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i}\\
+\implies\frac{\partial E}{\partial t}+\sum_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+P+p_{i}\right)\right) & = & 0.
+\end{eqnarray}
+
+\end_inset
+
+So total energy is conserved (since 
+\begin_inset Formula $P$
+\end_inset
+
+ is uniform across fluids).
+ 
+\end_layout
+
+\begin_layout Standard
+The equivalent for the multi-fluid Euler equations would perhaps be:
+\begin_inset Formula 
+\begin{equation}
+p_{r}\pi_{i}^{\frac{1-\kappa}{\kappa}}=\lambda R\overline{\rho\theta}+\left(1-\lambda\right)R\sigma_{i}\rho_{i}\theta_{i}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is a constant (uniform in space) between zero and one.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Another Try
+\end_layout
+
+\begin_layout Standard
+If instead we define 
+\begin_inset Formula 
+\begin{equation}
+p_{i}=\gamma\frac{\partial\sigma_{i}}{\partial t}=-\gamma\nabla\cdot(\sigma_{i}\mathbf{u}_{i})
+\end{equation}
+
+\end_inset
+
+and we define the total energy in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ to be
+\begin_inset Formula 
+\begin{equation}
+E_{i}=\sigma_{i}K_{i}+\sigma_{i}p_{i}.
+\end{equation}
+
+\end_inset
+
+So we need to derive an equation for 
+\begin_inset Formula $\sigma_{i}p_{i}$
+\end_inset
+
+ which we do by multiplying eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condCont"
+
+\end_inset
+
+) by 
+\begin_inset Formula $\gamma\frac{\partial\sigma_{i}}{\partial t}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\gamma\frac{\partial\sigma_{i}}{\partial t}\frac{\partial\sigma_{i}}{\partial t}+\gamma\frac{\partial\sigma_{i}}{\partial t}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0\\
+\implies\frac{\partial\sigma_{i}p_{i}}{\partial t}-\sigma_{i}\gamma\frac{\partial^{2}\sigma_{i}}{\partial t^{2}}+p_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0.\label{eq:piEnergy-1}
+\end{eqnarray}
+
+\end_inset
+
+We can now add equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Kflux"
+
+\end_inset
+
+) to (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:piEnergy-1"
+
+\end_inset
+
+) to get an equation for 
+\begin_inset Formula $E_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial E_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}K_{i})-\sigma_{i}\gamma\frac{\partial^{2}\sigma_{i}}{\partial t^{2}} & = & -\sigma_{i}\mathbf{u}_{i}\cdot\nabla P-\sigma_{i}\mathbf{u}_{i}\cdot\nabla p_{i}-p_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i})\label{eq:Ei1-1}\\
+\implies\frac{\partial E_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+p_{i}+P\right)\right) & = & \frac{\gamma}{2}\frac{\partial^{2}\sigma_{i}^{2}}{\partial t^{2}}+P\nabla\cdot\sigma_{i}\mathbf{u}_{i}
+\end{eqnarray}
+
+\end_inset
+
+We can find the rate of change of total energy by summing over all fluids:
+\begin_inset Formula 
+\begin{eqnarray}
+\sum_{i}\frac{\partial E_{i}}{\partial t}+\sum_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+P+p_{i}\right)\right) & = & \gamma\sum_{i}\frac{\partial^{2}\sigma_{i}^{2}}{\partial t^{2}}+P\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i}\\
+\implies\frac{\partial E}{\partial t}+\sum_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+P+p_{i}\right)\right) & = & 0
+\end{eqnarray}
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsection*
+Nonesense
+\end_layout
+
+\begin_layout Standard
+For conservation of kinetic energy over all fluids we need to be able to
+ express the pressure gradient term as the divergence of a flux.
+ We have
+\begin_inset Formula 
+\begin{eqnarray}
+\sum_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla P_{i} & = & \sum_{i}\left\{ \nabla\cdot\left(P_{i}\sigma_{i}\mathbf{u}_{i}\right)-P_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)\right\} .
+\end{eqnarray}
+
+\end_inset
+
+If we can find 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ such that 
+\begin_inset Formula $\sum_{i}P_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)=0$
+\end_inset
+
+ (such as 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ being uniform across fluids) then we have conservation of kinetic energy.
+ If we consider just two fluids, 
+\begin_inset Formula $i=0,1$
+\end_inset
+
+, then we know that 
+\begin_inset Formula $\nabla\cdot\left(\sigma_{0}\mathbf{u}_{0}\right)=-\nabla\cdot\left(\sigma_{1}\mathbf{u}_{1}\right)$
+\end_inset
+
+ so need 
+\begin_inset Formula $P_{0}=P_{1}$
+\end_inset
+
+.
+ So we need the less strict condition
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}P_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right) & = & \sum_{i}\nabla\cdot\bm{\chi}_{i}=\nabla\cdot\bm{\chi}.
+\end{eqnarray*}
+
+\end_inset
+
+Again let us consider two fluids and write 
+\begin_inset Formula $\nabla\cdot\left(\sigma_{0}\mathbf{u}_{0}\right)=-\nabla\cdot\left(\sigma_{1}\mathbf{u}_{1}\right)=D$
+\end_inset
+
+.
+ Then:
+\begin_inset Formula 
+\begin{eqnarray*}
+D(P_{0}-P_{1}) & = & \nabla\cdot\bm{\chi}.
+\end{eqnarray*}
+
+\end_inset
+
+How about
+\begin_inset Formula 
+\begin{eqnarray*}
+P_{0}-P_{1} & = & \frac{-\gamma\left(\nabla\cdot\mathbf{u}_{0}-\nabla\cdot\mathbf{u}_{1}\right)}{\nabla\cdot\left(\sigma_{0}\mathbf{u}_{0}\right)-\nabla\cdot\left(\sigma_{1}\mathbf{u}_{1}\right)}
+\end{eqnarray*}
+
+\end_inset
+
+so that we could use
+\begin_inset Formula 
+\begin{equation}
+P_{i}=P-\frac{\gamma\nabla\cdot\mathbf{u}_{i}}{\nabla\cdot\left(\sigma_{0}\mathbf{u}_{0}\right)-\nabla\cdot\left(\sigma_{1}\mathbf{u}_{1}\right)}.\label{eq:Pi_divu}
+\end{equation}
+
+\end_inset
+
+Then
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}P_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right) & = & P\sum_{i}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)-\gamma\sum_{i}\frac{\nabla\cdot\mathbf{u}_{i}}{\nabla\cdot\left(\sigma_{0}\mathbf{u}_{0}\right)-\nabla\cdot\left(\sigma_{1}\mathbf{u}_{1}\right)}\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)\\
+ & = & 0-\frac{\gamma\sum_{i}\left(\nabla\cdot\mathbf{u}_{i}\right)\left(\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)\right)}{\nabla\cdot\left(\sigma_{0}\mathbf{u}_{0}\right)-\nabla\cdot\left(\sigma_{1}\mathbf{u}_{1}\right)}\\
+ & = & -\frac{\gamma}{2}\left\{ \nabla\cdot\mathbf{u}_{0}-\nabla\cdot\mathbf{u}_{1}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+as required.
+ But there is an arbitrary sign choice.
+ This will dictate which fluid gains energy and which fluid loses energy.
+ 
+\end_layout
+
+\begin_layout Subsection*
+An Alternative Local Pressure
+\end_layout
+
+\begin_layout Standard
+How about instead of (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Pi_divu"
+
+\end_inset
+
+) we solve a conservation equation for 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}P_{i}}{\partial t}+\nabla\cdot P_{i}\sigma_{i}\mathbf{u}_{i}=0.\label{eq:P_flux}
+\end{equation}
+
+\end_inset
+
+If we also have 
+\begin_inset Formula $\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i}=P+p_{i}$
+\end_inset
+
+ then:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial P_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla P_{i}=0.
+\end{equation}
+
+\end_inset
+
+Potential energy can be defined as 
+\begin_inset Formula $E_{pi}=\frac{P_{i}^{2}}{2}$
+\end_inset
+
+ and the equation for 
+\begin_inset Formula $E_{pi}$
+\end_inset
+
+ can be derived by multiplying (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:P_flux"
+
+\end_inset
+
+) by 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray}
+P_{i}\frac{\partial\sigma_{i}P_{i}}{\partial t}+P_{i}\nabla\cdot P_{i}\sigma_{i}\mathbf{u}_{i} & = & 0\label{eq:PEi}\\
+\implies\frac{\partial\sigma_{i}P_{i}^{2}}{\partial t}-\sigma_{i}P_{i}\frac{\partial P_{i}}{\partial t}+\nabla\cdot P_{i}^{2}\sigma_{i}\mathbf{u}_{i}-P_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla P_{i} & = & 0\\
+\implies\frac{\partial\sigma_{i}P_{i}^{2}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}P_{i}^{2} & = & 0.
+\end{eqnarray}
+
+\end_inset
+
+If the total energy of fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ is defined as 
+\begin_inset Formula $E_{i}=K_{i}+\alpha P_{i}$
+\end_inset
+
+ we get the conservation equation
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}E_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}K_{i})+\nabla\cdot\alpha P_{i}\sigma_{i}\mathbf{u}_{i} & = & -\sigma_{i}\mathbf{u}_{i}\cdot\nabla P_{i}\label{eq:E}\\
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

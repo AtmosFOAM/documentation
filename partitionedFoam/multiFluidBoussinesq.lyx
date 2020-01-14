@@ -234,7 +234,7 @@ We need a separate pressure for each fluid to control each
 
 \end_inset
 
-We assume that 
+We want 
 \begin_inset Formula $\sum_{i}\sigma_{i}P_{i}=0$
 \end_inset
 
@@ -243,11 +243,15 @@ We assume that
 \end_inset
 
  is not changed.
- We could set the single fluid pressure to be inversely proportional to
- the local divergence:
+ We know that 
+\begin_inset Formula $\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i}=0$
+\end_inset
+
+ so we could set the single fluid pressure to be inversely proportional
+ to the local divergence:
 \begin_inset Formula 
 \begin{equation}
-P_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}.\label{eq:Pi_divui}
+\sigma_{i}P_{i}=-\gamma\nabla\cdot\sigma_{i}\mathbf{u}_{i}.\label{eq:Pi_divui}
 \end{equation}
 
 \end_inset
@@ -273,7 +277,7 @@ reference "eq:Pi_divui"
 :
 \begin_inset Formula 
 \begin{equation}
-P_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}^{\prime}+\gamma\alpha\Delta t\nabla\cdot\nabla P_{i}.\label{eq:Pi_poisson}
+\sigma_{i}P_{i}=-\gamma\nabla\cdot\sigma_{i}\mathbf{u}_{i}^{\prime}+\gamma\alpha\Delta t\nabla\cdot\sigma_{i}\nabla P_{i}+\gamma\alpha\Delta t\nabla\cdot\sigma_{i}\nabla P-\gamma\alpha\Delta t\nabla\cdot(\sigma_{i}b_{k}\mathbf{k})\label{eq:Pi_poisson}
 \end{equation}
 
 \end_inset
@@ -286,37 +290,24 @@ where
 \begin_inset Formula $\mathbf{u}_{i}^{\prime}$
 \end_inset
 
- is the velocity after the global pressure solve and back substitution.
- The back-substitution is:
+ contains the other parts of the momentum equation.
+ The next back-substitution is:
 \begin_inset Formula 
 \begin{equation}
-\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime}-\alpha\Delta t\nabla P_{i}.
+\mathbf{u}_{i}^{\prime\prime}=\mathbf{u}_{i}^{\prime}-\alpha\Delta t\nabla P_{i}.
 \end{equation}
 
 \end_inset
 
-The updates due to each 
-\begin_inset Formula $P_{i}$
+The pressure equation must be solved last and then the final back substitution:
+\begin_inset Formula 
+\[
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime\prime}-\alpha\Delta t\nabla P+\alpha\Delta tb_{i}\mathbf{k}
+\]
+
 \end_inset
 
- will inevitably change 
-\begin_inset Formula $\overline{\mathbf{u}}=\sum_{i}\sigma_{i}\mathbf{u}_{i}$
-\end_inset
 
-.
- To ensure that 
-\begin_inset Formula $\nabla\cdot\overline{\mathbf{u}}=0$
-\end_inset
-
- we should calculate 
-\begin_inset Formula $P$
-\end_inset
-
- after calculating 
-\begin_inset Formula $P_{i}$
-\end_inset
-
-.
 \end_layout
 
 \begin_layout Section
