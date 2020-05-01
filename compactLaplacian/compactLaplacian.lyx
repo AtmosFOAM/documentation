@@ -1,0 +1,452 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Compact C-grid Discretistaion of the Laplacian
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+For C-grid discretisation on a unstructured grid we need to discretise 
+\begin_inset Formula $\nabla^{2}\mathbf{u}$
+\end_inset
+
+ from fluxes over faces and get a solution on a face, normal to the face.
+ 
+\begin_inset Formula $\mathbf{u}_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{u}_{R}$
+\end_inset
+
+ to be the velocities in the cells to the left and right of face 
+\begin_inset Formula $f$
+\end_inset
+
+ as shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cell"
+
+\end_inset
+
+ so that 
+\begin_inset Formula 
+\begin{equation}
+\mathbf{u}_{f}=\frac{1}{2}\left(\mathbf{u}_{L}+\mathbf{u}_{R}\right)
+\end{equation}
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\begin{equation}
+\nabla_{f}\mathbf{u}=\frac{\mathbf{u}_{R}-\mathbf{u}_{L}}{\Delta x}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\Delta x$
+\end_inset
+
+ is the distance between the cell centres and 
+\begin_inset Formula $\nabla_{f}$
+\end_inset
+
+ is the gradient in the direction 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+.
+ The vectors 
+\begin_inset Formula $\mathbf{u}_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{u}_{R}$
+\end_inset
+
+ are reconstructed from surrounding fluxes.
+ The fluxes around cell 
+\begin_inset Formula $L$
+\end_inset
+
+ are 
+\begin_inset Formula $u_{\ell}=\mathbf{u}\cdot\mathbf{S}_{\ell}$
+\end_inset
+
+and the fluxes around cell 
+\begin_inset Formula $R$
+\end_inset
+
+ are 
+\begin_inset Formula $u_{r}=\mathbf{u}\cdot\mathbf{S}_{r}$
+\end_inset
+
+ so that the divergence at each cell is
+\begin_inset Formula 
+\begin{eqnarray*}
+\nabla\cdot\mathbf{u}_{R}=\frac{1}{V}\sum_{r}u_{r} & , & \nabla\cdot\mathbf{u}_{L}=\frac{1}{V}\sum_{\ell}u_{\ell}.
+\end{eqnarray*}
+
+\end_inset
+
+The reconstructions are
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbf{u}_{R}=\left(\sum_{r}\mathbf{S}_{r}\mathbf{S}_{r}^{T}\right)^{-1}\sum_{r}u_{r}\mathbf{S}_{r} & , & \mathbf{u}_{L}=\left(\sum_{\ell}\mathbf{S}_{\ell}\mathbf{S}_{\ell}^{T}\right)^{-1}\sum_{\ell}u_{\ell}\mathbf{S}_{\ell}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset External
+	template XFig
+	filename fluxes.fig
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Cells, fluxes and velocity
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cell"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The non-compact discretisation of the Laplacian at the central face is
+\begin_inset Formula 
+\begin{eqnarray}
+\text{\mathcal{L}}_{1}=\left(\nabla^{2}\mathbf{u}\right)_{f}\cdot\mathbf{S} & = & \left(\nabla\cdot\nabla_{f}\mathbf{u}\right)_{f}\cdot\mathbf{S}=\left(\frac{1}{V}\sum_{\text{faces}}\left(\nabla_{f}\mathbf{u}\right)|\mathbf{S}_{f}|\right)_{f}\cdot\mathbf{S}\\
+ & = & \frac{1}{2}\left(\frac{1}{V_{L}}\sum_{\ell}\left(\frac{\mathbf{u}_{LL}-\mathbf{u}_{L}}{\Delta x_{L}}\right)|\mathbf{S}_{\ell}|+\frac{1}{V_{R}}\sum_{r}\left(\frac{\mathbf{u}_{RR}-\mathbf{u}_{R}}{\Delta x_{R}}\right)|\mathbf{S}_{r}|\right)\cdot\mathbf{S}
+\end{eqnarray}
+
+\end_inset
+
+using all reconstructed cell centre velocities, 
+\begin_inset Formula $\mathbf{u}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+A compact discretisation with variable diffusion coefficient is:
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{ccllccc}
+\nabla\cdot K\nabla\mathbf{u} & = & \left(\nabla\cdot K\nabla\mathbf{u}\right)_{f}\cdot\mathbf{S} & + & \left(\nabla_{f}K\nabla\cdot u\right)|\mathbf{S}| & - & \left(\nabla_{f}K\nabla\cdot\mathbf{u}\right)|\mathbf{S}|\end{array}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A compact discretisation for 
+\begin_inset Formula $\left(\nabla\nabla\cdot\mathbf{u}\right)_{f}\cdot\mathbf{S}$
+\end_inset
+
+ is
+\begin_inset Formula 
+\begin{equation}
+\Gamma_{0}=\left(\nabla\nabla\cdot\mathbf{u}\right)_{f}\cdot\mathbf{S}=\frac{\nabla\cdot u_{r}-\nabla\cdot u_{\ell}}{\Delta x}|\mathbf{S}|.
+\end{equation}
+
+\end_inset
+
+A discretisation for
+\begin_inset Formula $\left(\nabla\nabla\cdot\mathbf{u}\right)_{f}\cdot\mathbf{S}$
+\end_inset
+
+ using only cell centre velocities is
+\begin_inset Formula 
+\[
+\Gamma_{1}=\left(\nabla\nabla\cdot\mathbf{u}\right)_{f}\cdot\mathbf{S}=\frac{\nabla\cdot\mathbf{u}_{R}-\nabla\cdot\mathbf{u}_{L}}{\Delta x}|\mathbf{S}|.
+\]
+
+\end_inset
+
+We will assume that 
+\begin_inset Formula $V=V_{R}=V_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $|\mathbf{S}_{\ell}|=|\mathbf{S}_{r}|=|\mathbf{S}|$
+\end_inset
+
+ for all 
+\begin_inset Formula $r,\ell$
+\end_inset
+
+ and all 
+\begin_inset Formula $\Delta x$
+\end_inset
+
+ are equal and that the number of faces around each cell is 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ The discretisation that we are using for the Laplacian on the face in direction
+ 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\begin{equation}
+\begin{array}{ccllccc}
+\mathcal{L} & = & \mathcal{L}_{1} & + & \Gamma_{0} & - & \Gamma_{1}\\
+ & = & \left(\nabla^{2}\mathbf{u}\right)_{f}\cdot\mathbf{S} & + & \left(\nabla_{f}\nabla\cdot u\right)|\mathbf{S}| & - & \left(\nabla_{f}\nabla\cdot\mathbf{u}\right)|\mathbf{S}|
+\end{array}
+\end{equation}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}_{1} & = & \left(\nabla^{2}\mathbf{u}\right)_{f}\cdot\mathbf{S}=\left(\nabla\cdot\nabla\mathbf{u}\right)_{f}\cdot\mathbf{S}=\frac{|\mathbf{S}|\mathbf{S}}{2V}\cdot\left(\sum_{\ell}\left(\frac{\mathbf{u}_{LL}-\mathbf{u}_{L}}{\Delta x}\right)+\sum_{r}\left(\frac{\mathbf{u}_{RR}-\mathbf{u}_{R}}{\Delta x}\right)\right)\\
+ & = & \frac{|\mathbf{S}|\mathbf{S}}{2V\Delta x}\cdot\left(\sum_{\ell}\mathbf{u}_{LL}+\sum_{r}\mathbf{u}_{RR}-n\left(\mathbf{u}_{L}+\mathbf{u}_{R}\right)\right)\\
+\Gamma_{0} & = & \left(\nabla_{f}\nabla\cdot u\right)|\mathbf{S}|=\frac{\nabla\cdot u_{R}-\nabla\cdot u_{L}}{\Delta x}|\mathbf{S}|\\
+ & = & \frac{|\mathbf{S}|}{V\Delta x}\left(\sum_{r}u_{r}-\sum_{\ell}u_{\ell}\right)\\
+\Gamma_{1} & = & \left(\nabla_{f}\nabla\cdot\mathbf{u}\right)|\mathbf{S}|=\frac{\nabla\cdot\mathbf{u}_{R}-\nabla\cdot\mathbf{u}_{L}}{\Delta x}|\mathbf{S}|\\
+ & = & \frac{|\mathbf{S}|}{2V\Delta x}\left(\sum_{r}\left(\mathbf{u}_{R}+\mathbf{u}_{RR}\right)\cdot\mathbf{S}_{r}-\sum_{\ell}\left(\mathbf{u}_{L}+\mathbf{u}_{LL}\right)\cdot\mathbf{S}_{\ell}\right)\\
+ & = & \frac{|\mathbf{S}|}{2V\Delta x}\left(\mathbf{u}_{R}\cdot\cancelto{0}{\sum_{r}\mathbf{S}_{r}}+\sum_{r}\mathbf{u}_{RR}\cdot\mathbf{S}_{r}-\mathbf{u}_{L}\cdot\cancelto{0}{\sum_{\ell}\mathbf{S}_{\ell}}-\sum_{\ell}\mathbf{u}_{LL}\cdot\mathbf{S}_{\ell}\right)\\
+ & = & \frac{|\mathbf{S}|}{2V\Delta x}\left(\sum_{r}\mathbf{u}_{RR}\cdot\mathbf{S}_{r}-\sum_{\ell}\mathbf{u}_{LL}\cdot\mathbf{S}_{\ell}\right)
+\end{eqnarray*}
+
+\end_inset
+
+If 
+\begin_inset Formula $\Delta x=1$
+\end_inset
+
+, 
+\begin_inset Formula $V=1,$
+\end_inset
+
+
+\begin_inset Formula $n=4$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{S}=\mathbf{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{S}_{\ell}=\pm\mathbf{i},\pm\mathbf{j}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{S}_{r}=\pm\mathbf{i},\pm\mathbf{j}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{u}=\left(\begin{array}{c}
+u\\
+v
+\end{array}\right)$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbf{u}_{L} & = & \mathbf{u}_{i,j}\\
+\mathbf{u}_{R} & = & \mathbf{u}_{i+1,j}\\
+\mathbf{u}_{LL} & = & \mathbf{u}_{i-1,j},\ \mathbf{u}_{i+1,j},\ \mathbf{u}_{i,j+1},\ \mathbf{u}_{i,j-1}\\
+\mathbf{u}_{RR} & = & \mathbf{u}_{i+2,j},\ \mathbf{u}_{i,j},\ \mathbf{u}_{i+1,j+1},\ \mathbf{u}_{i+1,j-1}\\
+u_{\ell} & = & -u_{i-1/2,j},\ u_{i+1/2,j},\ v_{i,j+1/2},\ -v_{i,j-1/2}\\
+u_{r} & = & u_{i+3/2,j},\ -u_{i-1/2,j},\ v_{i+1,j+1/2},\ -v_{i+1,j-1/2}
+\end{eqnarray*}
+
+\end_inset
+
+then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}_{1} & = & \frac{1}{2}\left(u_{i-1,j}+u_{i+1,j}+u_{i,j+1}+u_{i,j-1}+u_{i+2,j}+u_{i,j}+u_{i+1,j+1}+u_{i+1,j-1}-4\left(u_{i,j}+u_{i+1,j}\right)\right)\\
+ & = & \frac{1}{2}\left(\left(u_{i-1,j}+u_{i+1,j}-2u_{i,j}\right)+\left(u_{i+2,j}+u_{i,j}-2u_{i+1,j}\right)+\left(u_{i,j+1}+u_{i,j-1}-2u_{i,j}\right)+\left(u_{i+1,j+1}+u_{i+1,j-1}-2u_{i+1,j}\right)\right)\\
+\Gamma_{1} & = & \frac{1}{2}\left(u_{i+2,j}-u_{i,j}+v_{i+1,j+1}-v_{i+1,j-1}+u_{i-1,j}-u_{i+1,j}-v_{i,j+1}+v_{i,j-1}\right)\\
+ & = & \frac{1}{2}\left(\left(u_{i-1,j}+u_{i+1,j}-2u_{i,j}\right)+\left(u_{i+2,j}+u_{i,j}-2u_{i+1,j}\right)+v_{i+1,j+1}-v_{i+1,j-1}-v_{i,j+1}+v_{i,j-1}\right)\\
+\Gamma_{0} & = & \sum_{r}u_{r}-\sum_{\ell}u_{\ell}\\
+ & = & u_{i+3/2,j}+u_{i-1/2,j}-2u_{i+1/2,j}+v_{i+1,j+1/2}-v_{i+1,j-1/2}+v_{i,j-1/2}-v_{i,j+1/2}.
+\end{eqnarray*}
+
+\end_inset
+
+For a structured grid, the perfect discretisation of the Laplacian would
+ be 
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}_{0} & = & u_{i+3/2,j}+u_{i-1/2,j}-2u_{i+1/2,j}\\
+ & + & \frac{1}{2}\left\{ \left(u_{i,j+1}+u_{i,j-1}-2u_{i,j}\right)+\left(u_{i-1,j+1}+u_{i-1,j-1}-2u_{i-1,j}\right)\right\} .
+\end{eqnarray*}
+
+\end_inset
+
+We have the additional terms
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}-\mathcal{L}_{0} & = & v_{i+1,j+1/2}-v_{i+1,j-1/2}+v_{i,j-1/2}-v_{i,j+1/2}\\
+ & - & \left(v_{i+1,j+1}-v_{i+1,j-1}-v_{i,j+1}+v_{i,j-1}\right)
+\end{eqnarray*}
+
+\end_inset
+
+However 
+\begin_inset Formula $v_{i,j}=\frac{1}{2}\left(v_{i,j-1/2}+v_{i,j+1/2}\right)$
+\end_inset
+
+, so:
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}-\mathcal{L}_{0} & = & v_{i+1,j+1/2}-v_{i+1,j-1/2}+v_{i,j-1/2}-v_{i,j+1/2}\\
+ & - & \frac{1}{2}\left(v_{i+1,j+1/2}+v_{i+1,j+3/2}-v_{i+1,j-3/2}-v_{i+1,j-1/2}-v_{i,j+1/2}-v_{i,j+3/2}+v_{i,j-3/2}+v_{i,j-1/2}\right)\\
+ & = & \frac{1}{2}\biggl(-v_{i+1,j+3/2}+v_{i+1,j+1/2}-v_{i+1,j-1/2}+v_{i+1,j-3/2}\\
+ & + & v_{i,j+3/2}-v_{i,j+1/2}+v_{i,j-1/2}-v_{i,j-3/2}\biggl)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset External
+	template XFig
+	filename grid.fig
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

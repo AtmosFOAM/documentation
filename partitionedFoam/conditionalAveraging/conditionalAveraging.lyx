@@ -1,0 +1,391 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Approximate Conditional Averaging
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+Will was having difficulties with noise in the conditionally averaged, single
+ fluid, resolved rising bubble test case.
+ This was because we were setting 
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{0} & = & \begin{cases}
+1 & \text{if }w_{c}\le0\\
+0 & \text{otherwise}
+\end{cases}\\
+\sigma_{1} & = & 1-\sigma_{0}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $w_{c}$
+\end_inset
+
+ is the cell centre vertical velocity.
+ So the rising fluid volume fraction was jumping by the whole cell volume
+ when a cell centre switched from rising to falling.
+ Instead we need to estimate the volume fraction of a cell that is rising
+ and falling based on 
+\begin_inset Formula $w_{c}$
+\end_inset
+
+, and 
+\begin_inset Formula $\nabla w$
+\end_inset
+
+ at the cell centre.
+ We will assume that we have a cell with centre 
+\begin_inset Formula $\mathbf{x}_{c}$
+\end_inset
+
+ and vertices 
+\begin_inset Formula $\mathbf{x}_{v}$
+\end_inset
+
+ as shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:cell"
+
+\end_inset
+
+ where 
+\begin_inset Formula $V_{0}$
+\end_inset
+
+ is the volume of the cell where 
+\begin_inset Formula $w\le0$
+\end_inset
+
+ and 
+\begin_inset Formula $V_{1}$
+\end_inset
+
+ is the volume where 
+\begin_inset Formula $w>0$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset External
+	template XFig
+	filename cell_v.fig
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+A cell and a surface 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+ of 
+\begin_inset Formula $w=0$
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:cell"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ The surface 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+ is where 
+\begin_inset Formula $w=0$
+\end_inset
+
+ and if this surface intersects with the cuboid cell then 
+\begin_inset Formula $\sigma_{i}\in(0,1)$
+\end_inset
+
+.
+ The surface 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+ satisfies:
+\begin_inset Formula 
+\begin{equation}
+w_{c}=\nabla w\cdot\left(\mathbf{x}_{c}-\mathbf{x}_{w}\right)
+\end{equation}
+
+\end_inset
+
+for all points 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+ on the surface.
+ The surface intersects with the cell if
+\begin_inset Formula 
+\begin{eqnarray}
+\left(\mathbf{x}_{v_{0}}-\mathbf{x^{\prime}}_{w}\right)\cdot\nabla w & < & 0\\
+\left(\mathbf{x}_{v_{1}}-\mathbf{x}_{w}^{\prime}\right)\cdot\nabla w & > & 0
+\end{eqnarray}
+
+\end_inset
+
+for any two vertices 
+\begin_inset Formula $\mathbf{x}_{v_{0}}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{x}_{v_{1}}$
+\end_inset
+
+ and for any point 
+\begin_inset Formula $\mathbf{x}_{w}^{\prime}$
+\end_inset
+
+ on 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+.
+ We will approximate the volume either side of the surface.
+ Create a set 
+\begin_inset Formula $n_{0}$
+\end_inset
+
+ vertices, 
+\begin_inset Formula $\mathbf{x}_{v_{0}}$
+\end_inset
+
+, of the cell satisfying
+\begin_inset Formula 
+\begin{equation}
+\left(\mathbf{x}_{v_{0}}-\mathbf{x}_{w}^{\prime}\right)\cdot\nabla w<0
+\end{equation}
+
+\end_inset
+
+ and a set of 
+\begin_inset Formula $n_{1}$
+\end_inset
+
+ vertices 
+\begin_inset Formula $\mathbf{x}_{v_{1}}$
+\end_inset
+
+, satisfying
+\begin_inset Formula 
+\begin{equation}
+\left(\mathbf{x}_{v_{1}}-\mathbf{x}_{c}^{\prime}\right)\cdot\nabla w>0.
+\end{equation}
+
+\end_inset
+
+We can define the average distance of a vertex to the line 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+d_{0} & =- & \frac{1}{n_{0}}\sum_{v\in v_{0}}\left(\mathbf{x}_{v}-\mathbf{x}_{w}^{\prime}\right)\cdot\frac{\nabla w}{\left|\nabla w\right|}\\
+d_{1} & = & \frac{1}{n_{1}}\sum_{v\in v_{1}}\left(\mathbf{x}_{v}-\mathbf{x}_{w}^{\prime}\right)\cdot\frac{\nabla w}{\left|\nabla w\right|}.
+\end{eqnarray}
+
+\end_inset
+
+We can approximate:
+\begin_inset Formula 
+\begin{equation}
+\sigma_{i}=\frac{d_{i}}{\sum_{i}d_{i}}.
+\end{equation}
+
+\end_inset
+
+This approximation might work for arbitrary shaped cells.
+\end_layout
+
+\begin_layout Standard
+To find a point on the surface, 
+\begin_inset Formula $\mathbf{x}_{w}^{\prime}$
+\end_inset
+
+, we can use the projection of 
+\begin_inset Formula $\mathbf{x}_{c}$
+\end_inset
+
+ onto 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{x}_{w}^{\prime}=\mathbf{x}_{c}-\frac{w_{c}\nabla w}{\left|\nabla w\right|^{2}}.
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+To conditionally average other variables
+\end_layout
+
+\begin_layout Standard
+What about finding 
+\begin_inset Formula $\psi_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\psi_{1}$
+\end_inset
+
+ in a cell which contains the 
+\begin_inset Formula $\mathbf{x}_{w}$
+\end_inset
+
+ surface given the cell centre value, 
+\begin_inset Formula $\psi_{c}$
+\end_inset
+
+, and gradient, 
+\begin_inset Formula $\nabla\psi$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\psi_{i} & = & \psi_{c}+\left(\mathbf{x}_{i}-\mathbf{x}_{c}\right)\cdot\nabla\psi\\
+\text{where }\mathbf{x}_{i} & = & \mathbf{x}_{w}^{\prime}+\frac{d_{i}}{2}\frac{\nabla w}{\left|\nabla w\right|}\\
+\implies\psi_{i} & = & \psi_{c}+\left(\mathbf{x}_{w}^{\prime}+\frac{d_{i}}{2}\frac{\nabla w}{\left|\nabla w\right|}-\mathbf{x}_{c}\right)\cdot\nabla\psi\\
+\implies\psi_{i} & = & \psi_{c}+\left(\frac{d_{i}}{2}-\frac{w_{c}}{\left|\nabla w\right|}\right)\frac{\nabla w}{\left|\nabla w\right|}\cdot\nabla\psi
+\end{eqnarray*}
+
+\end_inset
+
+Then summing over all fluids:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i}\Psi_{i} & = & \sum_{i}\frac{d_{i}}{\sum_{i}d_{i}}\left\{ \psi_{c}+\left(\frac{d_{i}}{2}-\frac{w_{c}}{\left|\nabla w\right|}\right)\frac{\nabla w}{\left|\nabla w\right|}\cdot\nabla\psi\right\} \\
+ & = & \frac{1}{\sum_{i}d_{i}}\left\{ \sum_{i}d_{i}\psi_{c}+\left(\sum_{i}d_{i}\frac{d_{i}}{2}-\sum_{i}d_{i}\frac{w_{c}}{\left|\nabla w\right|}\right)\frac{\nabla w}{\left|\nabla w\right|}\cdot\nabla\psi\right\} \\
+ & = & \psi_{c}+\left(\frac{1}{2\sum_{i}d_{i}}\sum_{i}d_{i}^{2}-\frac{w_{c}}{\left|\nabla w\right|}\right)\frac{\nabla w}{\left|\nabla w\right|}\cdot\nabla\psi\\
+ & \ne & \psi_{c}
+\end{eqnarray*}
+
+\end_inset
+
+which it should be.
+ 
+\end_layout
+
+\end_body
+\end_document

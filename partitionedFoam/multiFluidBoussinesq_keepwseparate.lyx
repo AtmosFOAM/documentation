@@ -1,0 +1,920 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Multi-fluid Boussinesq Equations
+\begin_inset Newline newline
+\end_inset
+
+How to keep 
+\begin_inset Formula $w_{0}\le0$
+\end_inset
+
+ and 
+\begin_inset Formula $w_{1}>0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The multi-fluid Boussinesq equations without background stratification are
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ \sigma_{j}S_{ji}-\sigma_{i}S_{ij}\right\} \label{eq:sigma}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & b_{i}\mathbf{k}+\nu\nabla^{2}\mathbf{u}_{i}+\sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{ji}^{T}-b_{i}\right)-S_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
+\sum_{i}\sigma_{i} & = & 1\label{eq:sumOne}
+\end{eqnarray}
+
+\end_inset
+
+with variables defined in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:defns"
+
+\end_inset
+
+.
+ We will use
+\begin_inset Formula 
+\begin{eqnarray}
+P_{i} & = & P+p_{i}\\
+p_{i} & = & -\gamma\nabla\cdot(\sigma_{i}\mathbf{u}_{i}).
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement h
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="15" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="left" valignment="top" width="85text%">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Volume fraction of fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ so that 
+\begin_inset Formula $\sum_{i}\sigma_{i}=1$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Velocity of fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ (
+\begin_inset Formula $\text{m}\text{s}^{-1}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $w_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Vertical component of 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ (
+\begin_inset Formula $\text{m}\text{s}^{-1}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Transfer from fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ (
+\begin_inset Formula $\text{s}^{-1}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $P_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Non-hydrostatic pressure of fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ 
+\begin_inset Formula $=p^{\prime}/\rho_{r}$
+\end_inset
+
+ (
+\begin_inset Formula $\text{m}^{2}\text{s}^{-2}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\psi_{ij}^{T}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Value of variable 
+\begin_inset Formula $\psi$
+\end_inset
+
+ transferred from fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $b$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Buoyancy defined as -
+\begin_inset Formula $g\rho^{\prime}/\text{\rho}_{r}$
+\end_inset
+
+ where 
+\begin_inset Formula $\rho^{\prime}$
+\end_inset
+
+ are departures in density from a horizontally uniform reference, 
+\begin_inset Formula $\rho_{r}$
+\end_inset
+
+ (
+\begin_inset Formula $\text{m}\text{s}^{-2}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $b_{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Buoyancy of fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ (
+\begin_inset Formula $\text{m}\text{s}^{-2}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $D_{i}\big/Dt$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Total derivative with respect to fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ 
+\begin_inset Formula $=\partial/\partial t+\mathbf{u}_{i}\cdot\nabla$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\mathbf{D}_{ij}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Drag on fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ from fluid 
+\begin_inset Formula $j$
+\end_inset
+
+ (
+\begin_inset Formula $\text{m}\text{s}^{-2}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\gamma$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Coefficient for setting the pressure local for each fluid (
+\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $C_{D}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Drag coefficient 
+\begin_inset Formula $=0$
+\end_inset
+
+ or 1
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $r_{c}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Plume radius used for defining the drag between fluids (m)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\alpha$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Diffusivity of buoyancy (
+\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\nu$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Viscosity (
+\begin_inset Formula $\text{m}^{2}\text{s}^{-1}$
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Definitions of variables for the multi-fluid Boussinesq equations.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:defns"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We need to keep 
+\begin_inset Formula $w_{0}\le0$
+\end_inset
+
+ and 
+\begin_inset Formula $w_{1}>0$
+\end_inset
+
+ by adjusting transfer terms as needed.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Consider an ODE
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{dy}{dt} & = & F(y)\\
+y(0) & = & y_{0}.
+\end{eqnarray*}
+
+\end_inset
+
+If we want to keep 
+\begin_inset Formula $y\le y_{\max}$
+\end_inset
+
+ then we need 
+\begin_inset Formula 
+\begin{equation}
+F\le\frac{y_{\max}-y}{\tau}
+\end{equation}
+
+\end_inset
+
+and if we want 
+\begin_inset Formula $y>y_{\min}$
+\end_inset
+
+ then we need
+\begin_inset Formula 
+\begin{equation}
+F>\frac{y_{\min}-y}{\tau}.
+\end{equation}
+
+\end_inset
+
+If 
+\begin_inset Formula $\frac{dy}{dt}=\frac{y_{\max}-y}{\tau}$
+\end_inset
+
+ then 
+\begin_inset Formula $\int_{y_{0}}^{y}\frac{dy}{y-y_{\max}}=-\int_{0}^{t}\frac{dt}{\tau}\implies y=y_{\max}-\left(y_{\max}-y_{0}\right)\exp\left(-t/\tau\right)$
+\end_inset
+
+ as required.
+\end_layout
+
+\begin_layout Subsubsection*
+Applied to Multi-fluid Boussinesq
+\end_layout
+
+\begin_layout Standard
+We want to ensure that 
+\begin_inset Formula $w_{0}\le0$
+\end_inset
+
+ by modifying 
+\begin_inset Formula $b_{0}$
+\end_inset
+
+.
+ We assume that 
+\begin_inset Formula $S_{01}>0$
+\end_inset
+
+, 
+\begin_inset Formula $S_{10}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $w_{01}^{T}=0$
+\end_inset
+
+ so 
+\begin_inset Formula $w_{0}$
+\end_inset
+
+ is controlled by
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial w_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla w_{0}+\frac{\partial P_{0}}{\partial z}=b_{0}+\nu\nabla^{2}w_{0}+S_{01}w_{0}
+\end{equation}
+
+\end_inset
+
+So we need 
+\begin_inset Formula 
+\begin{eqnarray}
+ & b_{0} & -\mathbf{u}_{0}\cdot\nabla w_{0}-\frac{\partial P_{0}}{\partial z}+\nu\nabla^{2}w_{0}+S_{01}w_{0}\le-\frac{w_{0}}{\tau_{w}}\\
+\implies & b_{0} & \le b_{0}^{\max}=-\frac{w_{0}}{\tau_{w}}+\mathbf{u}_{0}\cdot\nabla w_{0}+\frac{\partial P_{0}}{\partial z}-\nu\nabla^{2}w_{0}-S_{01}w_{0}\\
+\implies & b_{0}^{\max}= & b_{0}-\frac{w_{0}}{\tau_{w}}-\frac{\partial w_{0}}{\partial t}\bigg|_{d}-S_{01}w_{0}
+\end{eqnarray}
+
+\end_inset
+
+for some timescale 
+\begin_inset Formula $\tau_{w}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $b_{0}$
+\end_inset
+
+ is controlled by
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial b_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla b_{0}=\alpha\nabla^{2}b_{0}+\frac{\sigma_{1}}{\sigma_{0}}S_{10}\left(b_{10}^{T}-b_{0}\right)-S_{01}\left(b_{01}^{T}-b_{0}\right).
+\end{equation}
+
+\end_inset
+
+We are not considering 
+\begin_inset Formula $S_{10}$
+\end_inset
+
+ so we need:
+\begin_inset Formula 
+\begin{eqnarray}
+-\mathbf{u}_{0}\cdot\nabla b_{0}+\alpha\nabla^{2}b_{0}-S_{01}\left(b_{01}^{T}-b_{0}\right) & \le & \frac{b_{0}^{\max}-b_{0}}{\tau_{b}}\\
+\implies S_{01}\left(b_{01}^{T}-b_{0}\right) & \ge & -\frac{b_{0}^{\max}-b_{0}}{\tau_{b}}+\frac{\partial b_{0}}{\partial t}\bigg|_{d}
+\end{eqnarray}
+
+\end_inset
+
+for another timescale 
+\begin_inset Formula $\tau_{b}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Similarly to keep 
+\begin_inset Formula $w_{1}>0$
+\end_inset
+
+ where 
+\begin_inset Formula $w_{1}$
+\end_inset
+
+ is controlled by
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial w_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla w_{1}+\frac{\partial P_{1}}{\partial z}=b_{1}+\nu\nabla^{2}w_{1}+S_{01}w_{1}
+\end{equation}
+
+\end_inset
+
+we need 
+\begin_inset Formula $b_{1}$
+\end_inset
+
+ to satisfy 
+\begin_inset Formula 
+\begin{eqnarray}
+b_{1} & > & \mathbf{u}_{1}\cdot\nabla w_{1}+\frac{\partial P_{1}}{\partial z}-\nu\nabla^{2}w_{1}-S_{10}w_{1}-\frac{w_{1}}{\tau_{w}}=b_{1}^{\min}.\\
+\implies b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t}\bigg|_{d}-S_{10}w_{1}
+\end{eqnarray}
+
+\end_inset
+
+Ignoring 
+\begin_inset Formula $S_{01}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{1}$
+\end_inset
+
+ is controlled by
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial b_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla b_{1}=\alpha\nabla^{2}b_{1}-S_{10}\left(b_{10}^{T}-b_{1}\right).
+\end{equation}
+
+\end_inset
+
+So we need:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial b_{1}}{\partial t}\bigg|_{d}-S_{10}\left(b_{10}^{T}-b_{1}\right) & > & \frac{b_{1}^{\min}-b_{1}}{\tau_{b}}\\
+\implies-S_{10}\left(b_{10}^{T}-b_{1}\right) & > & \frac{b_{1}^{\min}-b_{1}}{\tau_{b}}-\frac{\partial b_{1}}{\partial t}\bigg|_{d}\\
+\implies S_{10} & > & \left(-\frac{b_{1}^{\min}-b_{1}}{\tau_{b}}+\frac{\partial b_{1}}{\partial t}\bigg|_{d}\right)\bigg/\left(b_{10}^{T}-b_{1}\right).
+\end{eqnarray}
+
+\end_inset
+
+If 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ is big enough this will be easy but if 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ is small or zero, how to we increase 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ enough? If we find that 
+\begin_inset Formula $b_{0}>b_{0}^{\max}$
+\end_inset
+
+ or 
+\begin_inset Formula $b_{1}<b_{1}^{\min}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsection*
+Summary of constraints:
+\begin_inset Formula 
+\begin{eqnarray*}
+S_{01}\left(b_{01}^{T}-b_{0}\right) & \ge & -\frac{b_{0}^{\max}-b_{0}}{\tau_{b}}+\frac{\partial b_{0}}{\partial t}\bigg|_{d}\\
+-S_{10}\left(b_{10}^{T}-b_{1}\right) & > & \frac{b_{1}^{\min}-b_{1}}{\tau_{b}}-\frac{\partial b_{1}}{\partial t}\bigg|_{d}\\
+b_{0}^{\max} & = & b_{0}-\frac{w_{0}}{\tau_{w}}-\frac{\partial w_{0}}{\partial t}\bigg|_{d}-S_{01}w_{0}\\
+b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t}\bigg|_{d}-S_{10}w_{1}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\bigg|_{d}$
+\end_inset
+
+ means the rate of change due to dynamics rather than due to the transfer
+ terms.
+ 
+\end_layout
+
+\begin_layout Standard
+The solution should obey the following:
+\begin_inset Formula 
+\begin{eqnarray*}
+w_{0} & \le & 0\\
+w_{1} & < & 0\\
+b_{0}^{\max}-b_{0} & \ge & 0\\
+b_{1}^{\min}-b_{1} & \le & 0\\
+b_{01}^{T}-b_{0} & > & 0\\
+b_{10}^{T}-b_{1} & < & 0
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
