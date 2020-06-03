@@ -41,16 +41,16 @@
 \use_hyperref false
 \papersize a4paper
 \use_geometry true
-\use_package amsmath 1
-\use_package amssymb 1
-\use_package cancel 1
-\use_package esint 1
-\use_package mathdots 1
-\use_package mathtools 1
-\use_package mhchem 1
-\use_package stackrel 1
-\use_package stmaryrd 1
-\use_package undertilde 1
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 2
+\use_package esint 2
+\use_package mathdots 2
+\use_package mathtools 2
+\use_package mhchem 2
+\use_package stackrel 2
+\use_package stmaryrd 2
+\use_package undertilde 0
 \cite_engine natbib
 \cite_engine_type authoryear
 \biblio_style plainnat
@@ -88,16 +88,16 @@
 \begin_body
 
 \begin_layout Title
-Multi-fluid Boussinesq Equations
+Two-fluid Boussinesq Equations
 \begin_inset Newline newline
 \end_inset
 
 How to keep 
-\begin_inset Formula $w_{0}\le0$
+\begin_inset Formula $\sigma_{0}w_{0}\le0$
 \end_inset
 
  and 
-\begin_inset Formula $w_{1}>0$
+\begin_inset Formula $\sigma_{1}w_{1}\ge0$
 \end_inset
 
 
@@ -108,12 +108,102 @@ Hilary Weller
 \end_layout
 
 \begin_layout Standard
-The multi-fluid Boussinesq equations without background stratification are
+Dan's equation for the indicator function with transfer terms is
+\begin_inset Formula 
+\begin{equation}
+\frac{DI_{i}}{Dt}=\delta\left(\varphi_{i}\right)\frac{D\varphi_{i}}{Dt}=\delta\left(\varphi_{i}\right)\left[\frac{D\varphi_{i}}{Dt}\right]_{\varphi_{i}=0}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is the Dirac delta function and 
+\begin_inset Formula $\varphi_{i}>0$
+\end_inset
+
+ defines the region where 
+\begin_inset Formula $I_{i}=1$
+\end_inset
+
+.
+ Conditional averaging based on 
+\begin_inset Formula $w$
+\end_inset
+
+ implies
+\begin_inset Formula 
+\begin{equation}
+\varphi_{0}=-w,\ \varphi_{1}=w.
+\end{equation}
+
+\end_inset
+
+Assuming two fluids, the transfer terms of the conditionally averaged equations
+ must satisfy
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{1}S_{10}-\sigma_{0}S_{01} & =- & \overline{\delta\left(-w\right)\frac{Dw}{Dt}}\\
+\sigma_{0}S_{01}-\sigma_{1}S_{10} & = & \overline{\delta\left(w\right)\frac{Dw}{Dt}}.
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Important constraint on 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We cannot use this to calculate 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ as the term to be conditionally averaged is non-linear and includes a delta
+ function.
+ However if we simulate a test case with both the two-fluid equations and
+ the single-fluid equations at the same resolution, starting from the same
+ initial conditions for buoyancy and velocity in all fluids and starting
+ from 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ diagnosed from 
+\begin_inset Formula $w$
+\end_inset
+
+, then the form that we use for 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ should maintain 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ to be identical to 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ diagnosed from the single-fluid solution.
+ 
+\end_layout
+
+\begin_layout Standard
+The inviscid multi-fluid Boussinesq equations without background stratification
+ are
 \begin_inset Formula 
 \begin{eqnarray}
 \frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ \sigma_{j}S_{ji}-\sigma_{i}S_{ij}\right\} \label{eq:sigma}\\
-\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & b_{i}\mathbf{k}+\nu\nabla^{2}\mathbf{u}_{i}+\sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})-\mathbf{D}_{ij}\right\} \label{eq:mom}\\
-\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{ji}^{T}-b_{i}\right)-S_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & b_{i}\mathbf{k}+\sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(b_{ji}^{T}-b_{i}\right)-S_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b}\\
 \sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
 \sum_{i}\sigma_{i} & = & 1\label{eq:sumOne}
 \end{eqnarray}
@@ -132,7 +222,7 @@ reference "tab:defns"
 \begin_inset Formula 
 \begin{eqnarray}
 P_{i} & = & P+p_{i}\\
-p_{i} & = & -\gamma\nabla\cdot(\sigma_{i}\mathbf{u}_{i}).
+p_{i} & = & -\gamma\nabla\cdot\mathbf{u}_{i}+\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{j}.
 \end{eqnarray}
 
 \end_inset
@@ -649,8 +739,161 @@ name "tab:defns"
 
 \end_layout
 
+\begin_layout Section
+Mass Transfer to ensure 
+\begin_inset Formula $\sigma_{0}=0$
+\end_inset
+
+ wherever 
+\begin_inset Formula $w_{0}>0$
+\end_inset
+
+ 
+\end_layout
+
 \begin_layout Standard
-We need to keep 
+In the absence of sub-filter-scale variability we need 
+\begin_inset Formula 
+\[
+\sigma_{0}S_{01}=\delta\left(-w_{0}\right)\frac{D_{0}w_{0}}{Dt}\bigg|_{d}
+\]
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}w_{i}}{Dt}\bigg|_{d}=-\frac{\partial P_{i}}{\partial z}+b_{i}
+\end{equation}
+
+\end_inset
+
+and a smoother profile with 
+\begin_inset Formula $S_{01}$
+\end_inset
+
+ increasing as 
+\begin_inset Formula $w_{0}$
+\end_inset
+
+ approaches zero from below.
+ If sub-filter-scale variability is represented by 
+\begin_inset Formula $w^{\prime}$
+\end_inset
+
+ then the following formulation may have the right properties:
+\begin_inset Formula 
+\begin{equation}
+S_{01}=\frac{1}{w^{\prime}}\exp\left(\frac{w_{0}}{w^{\prime}}\right)\frac{D_{0}w_{0}}{Dt}
+\end{equation}
+
+\end_inset
+
+This has the correct limiting behaviour as 
+\begin_inset Formula $w^{\prime}\rightarrow0$
+\end_inset
+
+ if we make certain assumptions about 
+\begin_inset Formula $\sigma_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\frac{D_{0}w_{0}}{Dt}$
+\end_inset
+
+.
+ The delta function has the property that its integral is one.
+ If we assume, for example, that 
+\begin_inset Formula $\frac{D_{0}w_{0}}{Dt}=1$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{0}=1$
+\end_inset
+
+ for 
+\begin_inset Formula $w_{0}<1$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{0}=0$
+\end_inset
+
+ elsewhere then
+\begin_inset Formula 
+\begin{eqnarray*}
+\int_{-\infty}^{\infty}\sigma_{0}S_{01}dw_{0} & = & \int_{-\infty}^{0}\frac{1}{w^{\prime}}\exp\left(\frac{w_{0}}{w^{\prime}}\right)dw_{0}\\
+ & = & \exp\left(0\right)=1.
+\end{eqnarray*}
+
+\end_inset
+
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:S01"
+
+\end_inset
+
+ shows how 
+\begin_inset Formula $\frac{1}{w^{\prime}}\exp\left(\frac{w_{0}}{w^{\prime}}\right)$
+\end_inset
+
+ behaves for different values of 
+\begin_inset Formula $w^{\prime}$
+\end_inset
+
+.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename S01_as_exp.pdf
+	width 75text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Behaviour or 
+\begin_inset Formula $\frac{1}{w^{\prime}}\exp\left(\frac{w_{0}}{w^{\prime}}\right)$
+\end_inset
+
+ for different values of 
+\begin_inset Formula $w^{\prime}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:S01"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Ensuring 
 \begin_inset Formula $w_{0}\le0$
 \end_inset
 
@@ -658,8 +901,7 @@ We need to keep
 \begin_inset Formula $w_{1}>0$
 \end_inset
 
- by adjusting transfer terms as needed.
- 
+
 \end_layout
 
 \begin_layout Subsubsection*
@@ -710,7 +952,7 @@ If
  as required.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Subsection
 Applied to Multi-fluid Boussinesq
 \end_layout
 
@@ -874,8 +1116,11 @@ If
  
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 Summary of constraints:
+\end_layout
+
+\begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
 S_{01}\left(b_{01}^{T}-b_{0}\right) & \ge & -\frac{b_{0}^{\max}-b_{0}}{\tau_{b}}+\frac{\partial b_{0}}{\partial t}\bigg|_{d}\\
@@ -886,10 +1131,6 @@ b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 where 
 \begin_inset Formula $\bigg|_{d}$
 \end_inset

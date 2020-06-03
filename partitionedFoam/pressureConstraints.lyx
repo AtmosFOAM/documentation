@@ -154,10 +154,10 @@ reference "eq:sumOne"
 
 ) where needed then we get:
 \begin_inset Formula 
-\begin{eqnarray*}
-\frac{\partial\mathbf{u}}{\partial t}+\sum_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla.\mathbf{u}_{i}+\nabla P & = & b\mathbf{k}+\nu\nabla^{2}\mathbf{u}\\
-\implies\nabla^{2}P & = & \nabla\cdot\left\{ -\sum_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla.\mathbf{u}_{i}+b\mathbf{k}+\nu\nabla^{2}\mathbf{u}\right\} .
-\end{eqnarray*}
+\begin{eqnarray}
+\frac{\partial\mathbf{u}}{\partial t}+\sum_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla.\mathbf{u}_{i}+\nabla P & = & b\mathbf{k}+\nu\nabla^{2}\mathbf{u}\nonumber \\
+\implies\nabla^{2}P & = & \nabla\cdot\left\{ -\sum_{i}\sigma_{i}\mathbf{u}_{i}\cdot\nabla.\mathbf{u}_{i}+b\mathbf{k}+\nu\nabla^{2}\mathbf{u}\right\} .\label{eq:Peqn}
+\end{eqnarray}
 
 \end_inset
 
@@ -281,7 +281,7 @@ reference "enu:sumZero"
  gives us
 \begin_inset Formula 
 \begin{eqnarray*}
-\tilde{P} & = & \gamma\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}\\
+\tilde{P} & = & -\sum\sigma_{i}p_{i}=\gamma\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}\\
  & = & \gamma\sum_{i}\left(\nabla\cdot\sigma_{i}\mathbf{u}_{i}-\mathbf{u}_{i}\cdot\nabla\sigma_{i}\right)\\
  & = & -\gamma\sum_{i}\mathbf{u}_{i}\cdot\nabla\sigma_{i}.
 \end{eqnarray*}
@@ -333,6 +333,104 @@ reference "enu:pi_finite"
 
  are also satisfied.
  
+\end_layout
+
+\begin_layout Subsection*
+Relationship with Baer and Nunziato
+\end_layout
+
+\begin_layout Standard
+Saurel and Abgrall (1999) wrote the 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ equation as
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{V}\cdot\nabla\sigma_{i}=\mu\left(p_{i}-p_{j}\right)\label{eq:BN86sigma}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mathbf{V}$
+\end_inset
+
+ is the interface velocity and 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is the compaction velocity.
+ Ignoring transfers between fluids implies
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}=0\label{eq:sigmaNoS}
+\end{equation}
+
+\end_inset
+
+combining these gives
+\begin_inset Formula 
+\begin{eqnarray*}
+-\nabla\cdot\sigma_{i}\mathbf{u}_{i}+\mathbf{V}\cdot\nabla\sigma_{i} & = & \mu\left(p_{i}-p_{j}\right)
+\end{eqnarray*}
+
+\end_inset
+
+which shows that the pressure differences between fluids are related to
+ divergence.
+\end_layout
+
+\begin_layout Subsection*
+Numerical Solution
+\end_layout
+
+\begin_layout Standard
+Equation(
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Peqn"
+
+\end_inset
+
+) is solved to find 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ Equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+) is solved to find 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ using an old version of 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ but simultaneously with 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ We need simultaneous solutions of the following equations to find 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{1}{\gamma}p_{i}^{n+1}+\nabla\cdot\mathbf{u}_{i}^{\ell}+\alpha\Delta t\nabla^{2}p_{i}^{\ell}-\alpha\Delta t\nabla^{2}p_{i}^{n+1} & = & 0
+\end{eqnarray}
+
+\end_inset
+
+
 \end_layout
 
 \end_body
