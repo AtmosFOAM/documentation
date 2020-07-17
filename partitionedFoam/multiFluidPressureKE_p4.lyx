@@ -1,0 +1,235 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Kinetic Energy Conservation of the Incompressible Multi-fluid Equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+If the incompressible multi-fluid equations without transfer terms are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\mathbf{u}_{i}}{\partial t}+(\nabla\times\mathbf{u}_{i})\times\mathbf{u}_{i}+\nabla K_{i} & = & -\nabla P-\frac{1}{\sigma_{i}}\nabla\sigma_{i}p_{i}\label{eq:condMom}\\
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0\label{eq:condCont}\\
+\sum_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}) & = & 0\label{eq:ico}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $K_{i}=\frac{1}{2}|\mathbf{u}_{i}|^{2}$
+\end_inset
+
+ is the kinetic energy per unit volume in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i}=P+p_{i}$
+\end_inset
+
+ is the pressure in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ An equation for 
+\begin_inset Formula $K_{i}$
+\end_inset
+
+ can be derived by taking the dot product of equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condMom"
+
+\end_inset
+
+) with 
+\begin_inset Formula $\sigma_{i}\mathbf{u}_{i}$
+\end_inset
+
+ to give:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{i}\frac{\partial K_{i}}{\partial t}+\sigma_{i}\mathbf{u}_{i}\cdot\nabla K_{i} & = & -\sigma_{i}\mathbf{u}_{i}\cdot\nabla P-\mathbf{u}_{i}\cdot\nabla(\sigma_{i}p_{i}).\label{eq:K1}
+\end{eqnarray}
+
+\end_inset
+
+This can be expressed in flux form using equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:condCont"
+
+\end_inset
+
+) to give:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}K_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}K_{i})=-\sigma_{i}\mathbf{u}_{i}\cdot\nabla P-\mathbf{u}_{i}\cdot\nabla(\sigma_{i}p_{i}).\label{eq:Kflux}
+\end{equation}
+
+\end_inset
+
+To show energy conservation we need to put as much inside a divergence as
+ possible:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}K_{i}}{\partial t}+\nabla\cdot(\sigma_{i}\mathbf{u}_{i}K_{i})=-\nabla\cdot\left(P\sigma_{i}\mathbf{u}_{i}\right)+P\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)-\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}p_{i}\right)+\sigma_{i}p_{i}\nabla\cdot\mathbf{u}_{i}.\label{eq:Kflux-1}
+\end{equation}
+
+\end_inset
+
+If we sum over all fluids we get:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\frac{\partial\sigma_{i}K_{i}}{\partial t}+\sum_{i}\nabla\cdot(\sigma_{i}\mathbf{u}_{i}\left(K_{i}+P+p_{i}\right)) & = & \cancelto{0}{P\sum\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\right)_{i}}+\sum_{i}\sigma_{i}p_{i}\nabla\cdot\mathbf{u}_{i}
+\end{eqnarray*}
+
+\end_inset
+
+The final term is not zero so kinetic energy is not conserved.
+ However if we set
+\begin_inset Formula 
+\begin{equation}
+p_{i}=\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{j}-\gamma\nabla\cdot\mathbf{u}_{i}
+\end{equation}
+
+\end_inset
+
+then we get
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i}p_{i}\nabla\cdot\mathbf{u}_{i} & = & \gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{j}\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}-\sum_{i}\sigma_{i}\gamma\nabla\cdot\mathbf{u}_{i}\nabla\cdot\mathbf{u}_{i}\\
+ & = & \gamma\left(\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}\right)^{2}-\gamma\sum_{i}\sigma_{i}\left(\nabla\cdot\mathbf{u}_{i}\right)^{2}\le0.
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Problem
+\end_layout
+
+\begin_layout Standard
+If all variables are identical between fluids apart from 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ then the fluids should remain identical.
+ If we use the form of the momentum equation
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P+\frac{1}{\sigma_{i}}\nabla\cdot\left(\sigma_{i}p_{i}\right)=+\sum_{j\ne i}\left\{ \frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\right\} 
+\end{equation}
+
+\end_inset
+
+and we require
+\begin_inset Formula 
+\begin{eqnarray}
+-\nabla p_{i} & = & -\frac{1}{\sigma_{i}}\nabla\left(\sigma_{i}p_{i}\right)+\frac{\sigma_{j}}{\sigma_{i}}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\\
+\implies p_{i}\nabla\sigma_{i} & = & \sigma_{j}S_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-\sigma_{i}S_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\\
+ & = & \mathbf{u}_{i}\left(\sigma_{i}S_{ij}-\sigma_{j}S_{ji}\right)+\sigma_{j}S_{ji}\mathbf{u}_{ji}^{T}-\sigma_{i}S_{ij}\mathbf{u}_{ij}^{T}
+\end{eqnarray}
+
+\end_inset
+
+This is a vector equation with more unknowns that constraints but this doesn't
+ mean that it will be easy to satisfy.
+\end_layout
+
+\end_body
+\end_document

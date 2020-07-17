@@ -783,9 +783,10 @@ and a smoother profile with
 
  then the following formulation may have the right properties:
 \begin_inset Formula 
-\begin{equation}
-S_{01}=\frac{1}{w^{\prime}}\exp\left(\frac{w_{0}}{w^{\prime}}\right)\frac{D_{0}w_{0}}{Dt}
-\end{equation}
+\begin{eqnarray}
+S_{01} & = & \frac{1}{w^{\prime}}\exp\left(\frac{w_{0}}{w^{\prime}}\right)\frac{D_{0}w_{0}}{Dt}\\
+S_{10} & = & -\frac{1}{w^{\prime}}\exp\left(\frac{-w_{1}}{w^{\prime}}\right)\frac{D_{1}w_{1}}{Dt}
+\end{eqnarray}
 
 \end_inset
 
@@ -970,12 +971,8 @@ We want to ensure that
 \begin_inset Formula $S_{01}>0$
 \end_inset
 
-, 
-\begin_inset Formula $S_{10}=0$
-\end_inset
-
  and 
-\begin_inset Formula $w_{01}^{T}=0$
+\begin_inset Formula $S_{10}=0$
 \end_inset
 
  so 
@@ -985,7 +982,7 @@ We want to ensure that
  is controlled by
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial w_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla w_{0}+\frac{\partial P_{0}}{\partial z}=b_{0}+\nu\nabla^{2}w_{0}+S_{01}w_{0}
+\frac{\partial w_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla w_{0}+\frac{\partial P_{0}}{\partial z}=b_{0}+\nu\nabla^{2}w_{0}-S_{01}\left(w_{01}^{T}-w_{0}\right)
 \end{equation}
 
 \end_inset
@@ -993,9 +990,9 @@ We want to ensure that
 So we need 
 \begin_inset Formula 
 \begin{eqnarray}
- & b_{0} & -\mathbf{u}_{0}\cdot\nabla w_{0}-\frac{\partial P_{0}}{\partial z}+\nu\nabla^{2}w_{0}+S_{01}w_{0}\le-\frac{w_{0}}{\tau_{w}}\\
-\implies & b_{0} & \le b_{0}^{\max}=-\frac{w_{0}}{\tau_{w}}+\mathbf{u}_{0}\cdot\nabla w_{0}+\frac{\partial P_{0}}{\partial z}-\nu\nabla^{2}w_{0}-S_{01}w_{0}\\
-\implies & b_{0}^{\max}= & b_{0}-\frac{w_{0}}{\tau_{w}}-\frac{\partial w_{0}}{\partial t}\bigg|_{d}-S_{01}w_{0}
+ & b_{0} & -\mathbf{u}_{0}\cdot\nabla w_{0}-\frac{\partial P_{0}}{\partial z}+\nu\nabla^{2}w_{0}-S_{01}\left(w_{01}^{T}-w_{0}\right)\le-\frac{w_{0}}{\tau_{w}}\\
+\implies & b_{0} & \le b_{0}^{\max}=-\frac{w_{0}}{\tau_{w}}+\mathbf{u}_{0}\cdot\nabla w_{0}+\frac{\partial P_{0}}{\partial z}-\nu\nabla^{2}w_{0}+S_{01}\left(w_{01}^{T}-w_{0}\right)\\
+\implies & b_{0}^{\max}= & b_{0}-\frac{w_{0}}{\tau_{w}}-\frac{\partial w_{0}}{\partial t}\bigg|_{d}+S_{01}\left(w_{01}^{T}-w_{0}\right)
 \end{eqnarray}
 
 \end_inset
@@ -1049,7 +1046,7 @@ Similarly to keep
  is controlled by
 \begin_inset Formula 
 \begin{equation}
-\frac{\partial w_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla w_{1}+\frac{\partial P_{1}}{\partial z}=b_{1}+\nu\nabla^{2}w_{1}+S_{01}w_{1}
+\frac{\partial w_{1}}{\partial t}+\mathbf{u}_{1}\cdot\nabla w_{1}+\frac{\partial P_{1}}{\partial z}=b_{1}+\nu\nabla^{2}w_{1}-S_{01}\left(w_{10}^{T}-w_{1}\right)
 \end{equation}
 
 \end_inset
@@ -1061,8 +1058,8 @@ we need
  to satisfy 
 \begin_inset Formula 
 \begin{eqnarray}
-b_{1} & > & \mathbf{u}_{1}\cdot\nabla w_{1}+\frac{\partial P_{1}}{\partial z}-\nu\nabla^{2}w_{1}-S_{10}w_{1}-\frac{w_{1}}{\tau_{w}}=b_{1}^{\min}.\\
-\implies b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t}\bigg|_{d}-S_{10}w_{1}
+b_{1} & > & \mathbf{u}_{1}\cdot\nabla w_{1}+\frac{\partial P_{1}}{\partial z}-\nu\nabla^{2}w_{1}+S_{10}\left(w_{10}^{T}-w_{1}\right)-\frac{w_{1}}{\tau_{w}}=b_{1}^{\min}.\\
+\implies b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t}\bigg|_{d}+S_{10}\left(w_{10}^{T}-w_{1}\right)
 \end{eqnarray}
 
 \end_inset
@@ -1125,8 +1122,8 @@ Summary of constraints:
 \begin{eqnarray*}
 S_{01}\left(b_{01}^{T}-b_{0}\right) & \ge & -\frac{b_{0}^{\max}-b_{0}}{\tau_{b}}+\frac{\partial b_{0}}{\partial t}\bigg|_{d}\\
 -S_{10}\left(b_{10}^{T}-b_{1}\right) & > & \frac{b_{1}^{\min}-b_{1}}{\tau_{b}}-\frac{\partial b_{1}}{\partial t}\bigg|_{d}\\
-b_{0}^{\max} & = & b_{0}-\frac{w_{0}}{\tau_{w}}-\frac{\partial w_{0}}{\partial t}\bigg|_{d}-S_{01}w_{0}\\
-b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t}\bigg|_{d}-S_{10}w_{1}
+b_{0}^{\max} & = & b_{0}-\frac{w_{0}}{\tau_{w}}-\frac{\partial w_{0}}{\partial t}\bigg|_{d}+S_{01}\left(w_{01}^{T}-w_{0}\right)\\
+b_{1}^{\min} & = & b_{1}-\frac{w_{1}}{\tau_{w}}-\frac{\partial w_{1}}{\partial t}\bigg|_{d}+S_{10}\left(w_{10}^{T}-w_{1}\right)
 \end{eqnarray*}
 
 \end_inset

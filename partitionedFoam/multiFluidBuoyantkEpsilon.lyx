@@ -563,7 +563,11 @@ where
 \begin_inset Formula $j$
 \end_inset
 
-.
+ and 
+\begin_inset Formula $\overline{D_{k_{i}}}$
+\end_inset
+
+ is dissipation.
  We need an equivalent transfer term for 
 \begin_inset Formula $\varepsilon$
 \end_inset
