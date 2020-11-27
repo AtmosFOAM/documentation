@@ -1,0 +1,263 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 2
+\use_package esint 2
+\use_package mathdots 2
+\use_package mathtools 2
+\use_package mhchem 2
+\use_package stackrel 2
+\use_package stmaryrd 2
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Two-fluid Boussinesq Equations
+\begin_inset Newline newline
+\end_inset
+
+Treatment of Diffusion
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The multi-fluid Boussinesq equations with constant diffusion of 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ weighted variables and without background stratification are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigma}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & \frac{\nu}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}\mathbf{u}_{i}\right)+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{j}+\mathbf{u}_{ji}^{t}-\mathbf{u}_{i}\right)-M_{ij}\mathbf{u}_{ij}^{t}\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(b_{j}+b_{ji}^{t}-b_{i}\right)-M_{ij}b_{ij}^{t}\right\} \label{eq:b}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
+\sum_{i}\sigma_{i} & = & 1.\label{eq:sumOne}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ is the mass transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{u}_{ij}^{T}=\mathbf{u}_{i}+\mathbf{u}_{ij}^{t}$
+\end_inset
+
+ is the velocity of fluid transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{ij}^{T}=b_{i}+b_{ij}^{t}$
+\end_inset
+
+ is the buoyancy of fluid transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Find transfer terms so that if the initial conditions of 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ start the same, they stay the same for any distribution of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
+ So we assume 
+\begin_inset Formula $\mathbf{u}_{i}=\mathbf{u}$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{i}=b$
+\end_inset
+
+.
+ We also need to ensure that if 
+\begin_inset Formula $b$
+\end_inset
+
+ is uniform then it stays uniform, despite the 
+\begin_inset Formula $\nabla^{2}(\sigma b)$
+\end_inset
+
+ term.
+ Considering just two fluids, 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+, the buoyancy equation gives:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b\right)+\frac{1}{\sigma_{i}}M_{ji}b_{ji}^{t}-\frac{1}{\sigma_{i}}M_{ij}b_{ij}^{t} & = & \frac{\alpha}{\sigma_{j}}\nabla^{2}\left(\sigma_{j}b\right)+\frac{1}{\sigma_{j}}M_{ij}b_{ij}^{t}-\frac{1}{\sigma_{j}}M_{ji}b_{ji}^{t}\\
+\implies\sigma_{j}\alpha\nabla^{2}\left(\sigma_{i}b\right)-\sigma_{i}\alpha\nabla^{2}\left(\sigma_{j}b\right) & = & \sigma_{i}M_{ij}b_{ij}^{t}+\sigma_{j}M_{ij}b_{ij}^{t}-\sigma_{i}M_{ji}b_{ji}^{t}-\sigma_{j}M_{ji}b_{ji}^{t}\\
+\implies\alpha\left(\sigma_{j}\left\{ \sigma_{i}\nabla^{2}\left(b\right)+b\nabla^{2}\left(\sigma_{i}\right)\right\} -\sigma_{i}\left\{ \sigma_{j}\nabla^{2}\left(b\right)+b\nabla^{2}\left(\sigma_{j}\right)\right\} \right) & = & M_{ij}b_{ij}^{t}-M_{ji}b_{ji}^{t}\\
+\implies\alpha\left(\sigma_{j}b\nabla^{2}\left(\sigma_{i}\right)+\sigma_{i}b\nabla^{2}\left(\sigma_{i}\right)\right) & = & M_{ij}b_{ij}^{t}-M_{ji}b_{ji}^{t}\\
+\implies\alpha b\nabla^{2}\sigma_{i} & = & M_{ij}b_{ij}^{t}-M_{ji}b_{ji}^{t}.\\
+\alpha b\nabla^{2}\sigma_{j} & = & M_{ji}b_{ji}^{t}-M_{ij}b_{ij}^{t}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If we define
+\begin_inset Formula 
+\begin{eqnarray}
+M_{ij} & = & \begin{cases}
+-K\nabla^{2}\sigma_{i} & \nabla^{2}\sigma_{i}<0\\
+0 & \text{otherwise}
+\end{cases}=-K\min\left(\nabla^{2}\sigma_{i},\ 0\right)\\
+\implies M_{ji}-M_{ij} & = & -K\left(\min\left(\nabla^{2}\sigma_{j},\ 0\right)-\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right)\\
+ & = & K\left(\max\left(\nabla^{2}\sigma_{i},\ 0\right)+\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right)\\
+ & = & K\nabla^{2}\sigma_{i}=-K\nabla^{2}\sigma_{j}
+\end{eqnarray}
+
+\end_inset
+
+and
+\begin_inset Formula 
+\begin{eqnarray*}
+\alpha b\nabla^{2}\sigma_{i} & = & -K\min\left(\nabla^{2}\sigma_{i},\ 0\right)b_{ij}^{t}+K\min\left(\nabla^{2}\sigma_{j},\ 0\right)b_{ji}^{t}\\
+ & = & -K\min\left(\nabla^{2}\sigma_{i},\ 0\right)b_{ij}^{t}+K\min\left(-\nabla^{2}\sigma_{i},\ 0\right)b_{ji}^{t}\\
+\implies\alpha b_{i} & = & -Kb_{ij}^{t}\text{ if }\nabla^{2}\sigma_{i}<0\\
+\alpha b_{j} & = & -Kb_{ji}^{t}\text{ if }\nabla^{2}\sigma_{i}>0
+\end{eqnarray*}
+
+\end_inset
+
+So define
+\begin_inset Formula 
+\begin{eqnarray*}
+b_{ij}^{t} & = & -\frac{\alpha b_{i}}{K}.
+\end{eqnarray*}
+
+\end_inset
+
+
+\series bold
+Check:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{i}b_{i}}{Dt} & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\left\{ M_{ji}\left(b_{j}+b_{ji}^{t}-b_{i}\right)-M_{ij}b_{ij}^{t}\right\} \\
+ & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\left\{ -K\min\left(\nabla^{2}\sigma_{j},\ 0\right)\left(b_{j}-\frac{\alpha b_{j}}{K}-b_{i}\right)-K\min\left(\nabla^{2}\sigma_{i},\ 0\right)\frac{\alpha b_{i}}{K}\right\} \\
+ & = & \alpha\nabla^{2}b_{i}+\frac{\alpha}{\sigma_{i}}b_{i}\nabla^{2}\sigma_{i}+\frac{1}{\sigma_{i}}\left\{ \left(b_{i}-b_{j}\right)K\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\alpha b_{j}\min\left(\nabla^{2}\sigma_{j},\ 0\right)-\alpha b_{i}\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right\} \\
+ & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{j}-b_{i}\right)\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)\\
+ & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
