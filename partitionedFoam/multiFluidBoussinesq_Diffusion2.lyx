@@ -251,7 +251,7 @@ Check:
  & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\left\{ -K\min\left(\nabla^{2}\sigma_{j},\ 0\right)\left(b_{j}-\frac{\alpha b_{j}}{K}-b_{i}\right)-K\min\left(\nabla^{2}\sigma_{i},\ 0\right)\frac{\alpha b_{i}}{K}\right\} \\
  & = & \alpha\nabla^{2}b_{i}+\frac{\alpha}{\sigma_{i}}b_{i}\nabla^{2}\sigma_{i}+\frac{1}{\sigma_{i}}\left\{ \left(b_{i}-b_{j}\right)K\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\alpha b_{j}\min\left(\nabla^{2}\sigma_{j},\ 0\right)-\alpha b_{i}\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right\} \\
  & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{j}-b_{i}\right)\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)\\
- & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)
+ & = & \alpha\nabla^{2}b_{i}+\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)
 \end{eqnarray*}
 
 \end_inset
