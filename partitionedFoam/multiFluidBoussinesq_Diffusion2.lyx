@@ -244,19 +244,273 @@ b_{ij}^{t} & = & -\frac{\alpha b_{i}}{K}.
 
 
 \series bold
-Check:
+Check
+\series default
+, the buoyancy equation for any combination of values of 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+:
 \begin_inset Formula 
 \begin{eqnarray*}
 \frac{D_{i}b_{i}}{Dt} & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\left\{ M_{ji}\left(b_{j}+b_{ji}^{t}-b_{i}\right)-M_{ij}b_{ij}^{t}\right\} \\
  & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\left\{ -K\min\left(\nabla^{2}\sigma_{j},\ 0\right)\left(b_{j}-\frac{\alpha b_{j}}{K}-b_{i}\right)-K\min\left(\nabla^{2}\sigma_{i},\ 0\right)\frac{\alpha b_{i}}{K}\right\} \\
  & = & \alpha\nabla^{2}b_{i}+\frac{\alpha}{\sigma_{i}}b_{i}\nabla^{2}\sigma_{i}+\frac{1}{\sigma_{i}}\left\{ \left(b_{i}-b_{j}\right)K\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\alpha b_{j}\min\left(\nabla^{2}\sigma_{j},\ 0\right)-\alpha b_{i}\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right\} \\
+ & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{j}-b_{i}\right)\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left\{ b_{i}\left(\nabla^{2}\sigma_{i}-\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right)+b_{j}\min\left(\nabla^{2}\sigma_{j},\ 0\right)\right\} \\
  & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{j}-b_{i}\right)\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)\\
- & = & \alpha\nabla^{2}b_{i}+\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)
+ & = & \alpha\nabla^{2}b_{i}+\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right).
 \end{eqnarray*}
 
 \end_inset
 
+Therefore if 
+\begin_inset Formula $\alpha=K$
+\end_inset
 
+, no mass transfer terms should be added to the buoyancy equation to compensate
+ diffusion and the diffusion term is 
+\begin_inset Formula $\alpha\nabla^{2}b_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For a simple implementation, can 
+\begin_inset Formula $\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)$
+\end_inset
+
+ be written as 
+\begin_inset Formula $\frac{1}{\sigma_{i}}\left\{ M_{ji}\left(b_{j}+b_{ji}^{b}-b_{i}\right)-M_{ij}b_{ij}^{b}\right\} $
+\end_inset
+
+? Ie, can we find 
+\begin_inset Formula $b_{ij}^{b}$
+\end_inset
+
+ to make these equal for any 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+?
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right) & = & \frac{1}{\sigma_{i}}\left\{ M_{ji}\left(b_{j}+b_{ji}^{b}-b_{i}\right)-M_{ij}b_{ij}^{b}\right\} \\
+\iff M_{ji}b_{ji}^{b}-M_{ij}b_{ij}^{b} & = & \left(\alpha-K\right)\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)-M_{ji}\left(b_{j}-b_{i}\right)\\
+\text{and }M_{ij}b_{ij}^{b}-M_{ji}b_{ji}^{b} & = & \left(\alpha-K\right)\left(b_{j}-b_{i}\right)\max\left(\nabla^{2}\sigma_{j},\ 0\right)-M_{ij}\left(b_{i}-b_{j}\right)
+\end{eqnarray*}
+
+\end_inset
+
+which is one equation for two unknowns.
+ It doesn't work.
+\end_layout
+
+\begin_layout Subsection*
+What are the Implications of Setting 
+\begin_inset Formula $w_{ij}^{T}=0$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $w_{ij}^{T}=w_{i}+w_{ij}^{t}=0\implies w_{ij}^{t}=-w_{i}\implies\nu=K$
+\end_inset
+
+ as long as the only mass transfers are due to diffusion with coefficient
+ 
+\begin_inset Formula $K$
+\end_inset
+
+.
+ However if we have another type of 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ then there could be problems with 
+\begin_inset Formula $w_{ij}^{T}=0$
+\end_inset
+
+.
+ The 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+ equation is:
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}w_{i}}{Dt}+\frac{\partial P_{i}}{\partial z}=\frac{\nu}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}w_{i}\right)+b_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(w_{ji}^{T}-w_{i}\right)-M_{ij}\left(w_{ij}^{T}-w_{i}\right)\right\} .
+\end{equation}
+
+\end_inset
+
+If 
+\begin_inset Formula $M_{ij}=\sigma_{i}S_{ij}>0$
+\end_inset
+
+ and ignoring 
+\begin_inset Formula $M_{ji}$
+\end_inset
+
+, the pressure gradient, diffusion and buoyancy terms we have
+\begin_inset Formula 
+\begin{equation}
+\frac{dw}{dt}=S_{ij}\left(w_{i}-w_{ij}^{T}\right).
+\end{equation}
+
+\end_inset
+
+For 
+\begin_inset Formula $w_{ij}^{T}=0$
+\end_inset
+
+ this is unstable, exponential growth.
+ We must assume that, if there is very little left (ie 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ is small) then the mean will be transferred out.
+ Ie 
+\begin_inset Formula $w_{ij}^{t}\approx0$
+\end_inset
+
+.
+ This could be achieved by setting non-diffusive transfers to be
+\begin_inset Formula 
+\begin{equation}
+w_{ij}^{t}=-\sigma_{i}w_{i}
+\end{equation}
+
+\end_inset
+
+ The the equation for 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+ then reduces to
+\begin_inset Formula 
+\begin{equation}
+\frac{dw_{i}}{dt}=S_{ij}\left(-w_{ij}^{t}\right)=\sigma_{i}w_{i}S_{ij}
+\end{equation}
+
+\end_inset
+
+which might behave better.
+ If this is coupled with
+\begin_inset Formula 
+\begin{equation}
+\frac{d\sigma_{i}}{dt}=-\sigma_{i}S_{ij}
+\end{equation}
+
+\end_inset
+
+then 
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i} & = & \sigma_{0}\exp\left(-tS\right)\implies\frac{dw}{dt}=\sigma_{0}wS\exp\left(-tS\right)\\
+\implies\int\frac{dw}{w} & = & \sigma_{o}S\int\exp\left(-tS\right)\ dt\\
+\implies\ln w & = & -\sigma_{o}\exp\left(-tS\right)\\
+\implies\frac{w}{w_{0}} & = & e^{\sigma_{0}}\exp\left\{ 1-\exp\left(-tS\right)\right\} .
+\end{eqnarray*}
+
+\end_inset
+
+For constant 
+\begin_inset Formula $S$
+\end_inset
+
+, this is stable.
+\end_layout
+
+\begin_layout Subsection*
+What about the Pressure Gradient Term?
+\end_layout
+
+\begin_layout Standard
+The momentum equation is
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i}=\frac{\nu}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}\mathbf{u}_{i}\right)+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{j}+\mathbf{u}_{ji}^{t}-\mathbf{u}_{i}\right)-M_{ij}\mathbf{u}_{ij}^{t}\right\} \label{eq:mom-1}
+\end{equation}
+
+\end_inset
+
+which has the additional complication of the pressure gradient with
+\begin_inset Formula 
+\begin{equation}
+P_{i}=P+p_{i},\ p_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}+\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{j}\label{eq:Pi_divu}
+\end{equation}
+
+\end_inset
+
+so that 
+\begin_inset Formula $\sum_{i}\sigma_{i}P_{i}=P-\gamma\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}+\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{j}=P$
+\end_inset
+
+.
+ This form dissipates kinetic energy but we also need 
+\begin_inset Formula $\nabla P=\nabla P_{i}$
+\end_inset
+
+ if all 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ are identical between fluids.
+ In (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom-1"
+
+\end_inset
+
+), if we assume 
+\begin_inset Formula $\nu=0$
+\end_inset
+
+ and consider only the effect of 
+\begin_inset Formula $\nabla P$
+\end_inset
+
+, substitute in (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:Pi_divu"
+
+\end_inset
+
+) and set the terms for 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ to be identical we get:
+\begin_inset Formula 
+\begin{eqnarray*}
+\nabla\gamma\nabla\cdot\mathbf{u}+\frac{1}{\sigma_{i}}\left\{ M_{ji}\mathbf{u}_{ji}^{t}-M_{ij}\mathbf{u}_{ij}^{t}\right\}  & = & \nabla\gamma\nabla\cdot\mathbf{u}+\frac{1}{\sigma_{j}}\left\{ M_{ij}\mathbf{u}_{ij}^{t}-M_{ji}\mathbf{u}_{ji}^{t}\right\} \\
+\implies M_{ji}\mathbf{u}_{ji}^{t}-M_{ij}\mathbf{u}_{ij}^{t} & = & 0.
+\end{eqnarray*}
+
+\end_inset
+
+So the pressure gradient will not force the fluids apart.
+ It woudn't because it does not depend on gradients of 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+.
 \end_layout
 
 \end_body
