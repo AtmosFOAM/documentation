@@ -262,7 +262,7 @@ Check
  & = & \alpha\nabla^{2}b_{i}+\frac{\alpha}{\sigma_{i}}b_{i}\nabla^{2}\sigma_{i}+\frac{1}{\sigma_{i}}\left\{ \left(b_{i}-b_{j}\right)K\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\alpha b_{j}\min\left(\nabla^{2}\sigma_{j},\ 0\right)-\alpha b_{i}\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right\} \\
  & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{j}-b_{i}\right)\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left\{ b_{i}\left(\nabla^{2}\sigma_{i}-\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right)+b_{j}\min\left(\nabla^{2}\sigma_{j},\ 0\right)\right\} \\
  & = & \alpha\nabla^{2}b_{i}-\frac{K}{\sigma_{i}}\left(b_{j}-b_{i}\right)\min\left(\nabla^{2}\sigma_{j},\ 0\right)+\frac{\alpha}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)\\
- & = & \alpha\nabla^{2}b_{i}+\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right).
+ & = & \alpha\nabla^{2}b_{i}+\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\max\left(\nabla^{2}\sigma_{i},\ 0\right)=\alpha\nabla^{2}b_{i}-\frac{\alpha-K}{K}\left(b_{i}-b_{j}\right)\frac{D_{ji}}{\sigma_{i}}.
 \end{eqnarray*}
 
 \end_inset
@@ -308,6 +308,132 @@ For a simple implementation, can
 
 which is one equation for two unknowns.
  It doesn't work.
+\end_layout
+
+\begin_layout Subsection*
+Applying Mass Transfers for Diffusion or Other
+\end_layout
+
+\begin_layout Standard
+If mass transfers are due to diffusion and due to other processes, let us
+ define:
+\begin_inset Formula 
+\begin{equation}
+\frac{D_{i}b_{i}}{Dt}=\frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\left\{ D_{ji}\left(b_{j}+b_{ji}^{d}-b_{i}\right)-D_{ij}b_{ij}^{d}\right\} +\frac{1}{\sigma_{i}}\left\{ M_{ji}\left(b_{ji}^{T}-b_{i}\right)-M_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b_D_M}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+, 
+\begin_inset Formula $b_{ij}^{t}$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{ij}^{T}=b_{i}+b_{ij}^{t}$
+\end_inset
+
+ are due to other processes and
+\begin_inset Formula 
+\begin{eqnarray*}
+D_{ij} & = & -K\min\left(\nabla^{2}\sigma_{i},\ 0\right)\\
+b_{ij}^{d} & = & -\frac{\alpha b_{i}}{K}
+\end{eqnarray*}
+
+\end_inset
+
+then eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:b_D_M"
+
+\end_inset
+
+) becomes:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\frac{\alpha b_{i}}{\sigma_{i}}\nabla^{2}\sigma_{i}+\frac{1}{\sigma_{i}}\left\{ -K\min\left(\nabla^{2}\sigma_{j},\ 0\right)\left(b_{j}-\frac{\alpha b_{j}}{K}-b_{i}\right)-K\min\left(\nabla^{2}\sigma_{i},\ 0\right)\frac{\alpha b_{i}}{K}\right\} +M\\
+\text{where }M & = & \frac{1}{\sigma_{i}}\left\{ M_{ji}\left(b_{ji}^{T}-b_{i}\right)-M_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \\
+\implies\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\frac{1}{\sigma_{i}}\left\{ \alpha b_{i}\left(\min\left(\nabla^{2}\sigma_{i},0\right)+\max\left(\nabla^{2}\sigma_{i},0\right)\right)-K\min\left(\nabla^{2}\sigma_{j},\ 0\right)\left(b_{j}\left(1-\frac{\alpha}{K}\right)-b_{i}\right)-\alpha b_{i}\min\left(\nabla^{2}\sigma_{i},\ 0\right)\right\} +M\\
+ & = & \alpha\nabla^{2}b_{i}-\frac{1}{\sigma_{i}}\min\left(\nabla^{2}\sigma_{j},0\right)\left\{ \alpha b_{i}+\left(K-\alpha\right)b_{j}-Kb_{i}\right\} +M\\
+ & = & \alpha\nabla^{2}b_{i}-\frac{\alpha-K}{\sigma_{i}}\left(b_{i}-b_{j}\right)\min\left(\nabla^{2}\sigma_{j},0\right)+M\\
+ & = & \alpha\nabla^{2}b_{i}+\frac{\alpha-K}{\sigma_{i}K}\left(b_{i}-b_{j}\right)D_{ji}+M.
+\end{eqnarray*}
+
+\end_inset
+
+Apply explicitly to retain consistency and conservation?
+\end_layout
+
+\begin_layout Standard
+Set 
+\begin_inset Formula $b_{i}^{b}$
+\end_inset
+
+ to be 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ before the application of the 
+\begin_inset Formula $\frac{\alpha-K}{\sigma_{i}K}\left(b_{i}-b_{j}\right)D_{ji}$
+\end_inset
+
+ term and 
+\begin_inset Formula $b_{i}^{a}$
+\end_inset
+
+ after.
+ For an implicit transfer:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{0}b_{0}^{a}-\sigma_{0}b_{0}^{b} & = & A_{0}\left(b_{0}^{a}-b_{1}^{a}\right)\\
+\sigma_{1}b_{1}^{a}-\sigma_{1}b_{1}^{b} & = & A_{1}\left(b_{1}^{a}-b_{0}^{b}\right)\\
+\text{where }A_{i} & = & \Delta t\frac{\alpha-K}{K}D_{ji}.
+\end{eqnarray*}
+
+\end_inset
+
+Only one out of 
+\begin_inset Formula $A_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $A_{1}$
+\end_inset
+
+ are non-zero at any location so only one out of 
+\begin_inset Formula $b_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{1}$
+\end_inset
+
+ change at any location.
+ So we do not need a simultaneous implicit solution:
+\begin_inset Formula 
+\begin{eqnarray}
+b_{0}^{a} & = & \frac{\sigma_{0}b_{0}^{b}-A_{0}b_{1}^{a}}{\sigma_{0}-A_{0}}\\
+b_{1}^{a} & = & \frac{\sigma_{1}b_{1}^{b}-A_{1}b_{0}^{b}}{\sigma_{1}-A_{1}}
+\end{eqnarray}
+
+\end_inset
+
+How do these transfers affect conservation?
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i}b_{i}^{a} & = & \sum_{i}\left\{ \sigma_{i}b_{i}^{b}+A_{i}\left(b_{i}^{a}-b_{j}^{a}\right)\right\} \\
+ & = & \sum_{i}\sigma_{i}b_{i}^{b}+\Delta t\frac{\alpha-K}{K}\sum_{i}D_{ji}\left(b_{i}^{a}-b_{j}^{a}\right)\\
+ & = & \sum_{i}\sigma_{i}b_{i}^{b}+\Delta t\frac{\alpha-K}{K}\left\{ D_{ji}\left(b_{i}^{a}-b_{j}^{a}\right)+D_{ij}\left(b_{j}^{a}-b_{i}^{a}\right)\right\} \\
+ & = & \sum_{i}\sigma_{i}b_{i}^{b}+\Delta t\frac{\alpha-K}{K}\left\{ b_{i}^{a}\left(D_{ji}-D_{ij}\right)+b_{j}^{a}\left(D_{ij}-D_{ji}\right)\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection*
