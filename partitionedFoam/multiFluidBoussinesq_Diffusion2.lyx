@@ -99,6 +99,54 @@ Treatment of Diffusion
 Hilary Weller
 \end_layout
 
+\begin_layout Section*
+Summary
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}=\sum_{j\ne i}\left\{ D_{ji}-D{}_{ij}\right\} 
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $D_{ij}$
+\end_inset
+
+ is the transfer due to diffusion:
+\begin_inset Formula 
+\begin{equation}
+D_{ij}=-K\min\left(\nabla^{2}\sigma_{i},0\right)
+\end{equation}
+
+\end_inset
+
+then the buoyancy equation goes from being:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{i}b_{i}}{Dt} & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ D_{ji}\left(b_{j}+b_{ji}^{d}-b_{i}\right)-D_{ij}b_{ij}^{d}\right\} \\
+\text{where }b_{ij}^{d} & = & -\frac{\alpha b_{i}}{K}
+\end{eqnarray*}
+
+\end_inset
+
+ to
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\frac{K-\alpha}{K}\left(b_{j}-b_{i}\right)\frac{D_{ji}}{\sigma_{i}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Derivation
+\end_layout
+
 \begin_layout Standard
 The multi-fluid Boussinesq equations with constant diffusion of 
 \begin_inset Formula $\sigma$
@@ -491,9 +539,7 @@ How do these transfers affect conservation?
 \begin_inset Formula 
 \begin{eqnarray*}
 \sum_{i}\sigma_{i}^{n+1}b_{i}^{n+1} & = & \sum_{i}\left\{ \sigma_{i}^{n}+\Delta t\left(D_{ji}-D_{ij}\right)\right\} \left\{ \frac{b_{i}^{n}-\Delta t\frac{\alpha-K}{\sigma_{i}^{?}K}D_{ji}b_{j}^{n+1}}{1-\Delta t\frac{\alpha-K}{\sigma_{i}^{?}K}D_{ji}}\right\} \\
- & = & \sum_{i}\left\{ \sigma_{i}^{n}+\Delta t\left(D_{ji}-D_{ij}\right)\right\} \left\{ \frac{\sigma_{i}^{?}b_{i}^{n}-A_{i}b_{j}^{n+1}}{\sigma_{i}^{?}-A_{i}}\right\} \\
- & =\\
- & =
+ & = & \sum_{i}\left\{ \sigma_{i}^{n}+\Delta t\left(D_{ji}-D_{ij}\right)\right\} \left\{ \frac{\sigma_{i}^{?}b_{i}^{n}-A_{i}b_{j}^{n+1}}{\sigma_{i}^{?}-A_{i}}\right\} 
 \end{eqnarray*}
 
 \end_inset
@@ -697,7 +743,7 @@ reference "eq:Pi_divu"
 \end_inset
 
 So the pressure gradient will not force the fluids apart.
- It woudn't because it does not depend on gradients of 
+ It wouldn't because it does not depend on gradients of 
 \begin_inset Formula $\sigma_{i}$
 \end_inset
 

@@ -1,0 +1,304 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 2
+\use_package esint 2
+\use_package mathdots 2
+\use_package mathtools 2
+\use_package mhchem 2
+\use_package stackrel 2
+\use_package stmaryrd 2
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Two-fluid Boussinesq Equations
+\begin_inset Newline newline
+\end_inset
+
+Explicit Transfers
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The multi-fluid Boussinesq equations with constant diffusion of 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ weighted variables and without background stratification are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigma}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & \frac{\nu}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}\mathbf{u}_{i}\right)+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{j}+\mathbf{u}_{ji}^{t}-\mathbf{u}_{i}\right)-M_{ij}\mathbf{u}_{ij}^{t}\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \frac{\alpha}{\sigma_{i}}\nabla^{2}\left(\sigma_{i}b_{i}\right)+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(b_{j}+b_{ji}^{t}-b_{i}\right)-M_{ij}b_{ij}^{t}\right\} \label{eq:b}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
+\sum_{i}\sigma_{i} & = & 1.\label{eq:sumOne}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ is the mass transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{u}_{ij}^{T}=\mathbf{u}_{i}+\mathbf{u}_{ij}^{t}$
+\end_inset
+
+ is the velocity of fluid transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{ij}^{T}=b_{i}+b_{ij}^{t}$
+\end_inset
+
+ is the buoyancy of fluid transferred from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The application of the transfer terms needs to be conservative.
+ Ie we need
+\begin_inset Formula 
+\begin{eqnarray*}
+\sum_{i}\sigma_{i}^{n+1}b_{i}^{n+1} & = & \sum_{i}\sigma_{i}^{n}b_{i}^{n}\\
+\text{If }\sigma_{i}^{n+1}b_{i}^{n+1} & = & \sigma_{i}^{n}b_{i}^{n}+\sum_{j\ne i}\left\{ M_{ji}\left(b_{j}^{n}+b_{ji}^{t}-b_{i}^{n}\right)-M_{ij}b_{ij}^{t}\right\} \\
+\text{then }\sum_{i}\sigma_{i}^{n+1}b_{i}^{n+1} & = & \sum_{i}\sigma_{i}^{n}b_{i}^{n}+\sum_{i}\sum_{j\ne i}\left\{ M_{ji}\left(b_{j}^{n}+b_{ji}^{t}-b_{i}^{n}\right)-M_{ij}b_{ij}^{t}\right\} \\
+ & = & \sum_{i}\sigma_{i}^{n}b_{i}^{n}+\cancelto{0}{\sum_{i}\sum_{j\ne i}M_{ji}\left(b_{j}^{n}-b_{i}^{n}\right)}
+\end{eqnarray*}
+
+\end_inset
+
+as required.
+\end_layout
+
+\begin_layout Standard
+Flux form equations without diffusion are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigma-1}\\
+\frac{\partial\sigma_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}\mathbf{u}_{i}\right)+\sigma_{i}\nabla P_{i} & = & \sigma_{i}b_{i}\mathbf{k}+\sum_{j\ne i}\left\{ M_{ji}\mathbf{u}_{ji}^{T}-M_{ij}\mathbf{u}_{ij}^{T}\right\} \label{eq:mom-1}\\
+\frac{\partial\sigma_{i}b_{i}}{\partial t}+\nabla\cdot\left(\sigma_{i}\mathbf{u}_{i}b_{i}\right) & = & \sum_{j\ne i}\left\{ M_{ji}b_{ji}^{T}-M_{ij}b_{ij}^{T}\right\} \label{eq:b-1}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree-1}\\
+\sum_{i}\sigma_{i} & = & 1.\label{eq:sumOne-1}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Explicit Calculation of Drag
+\end_layout
+
+\begin_layout Standard
+The drag part of the momentum equation is 
+\begin_inset Formula 
+\[
+\frac{D_{i}\mathbf{u}_{i}}{Dt}=-D_{ij}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\[
+D_{ij}=\frac{\sigma_{j}C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(\mathbf{u}_{i}-\mathbf{u}_{j}\right).
+\]
+
+\end_inset
+
+For stability, if 
+\begin_inset Formula $u_{i}^{n}>u_{j}^{n}$
+\end_inset
+
+ where 
+\begin_inset Formula $u$
+\end_inset
+
+ is the component of 
+\begin_inset Formula $\mathbf{u}_{i}$
+\end_inset
+
+ in the direction normal to each face and time level 
+\begin_inset Formula $n$
+\end_inset
+
+ is before drag and time level 
+\begin_inset Formula $n+1$
+\end_inset
+
+ is after drag then we require 
+\begin_inset Formula $u_{i}^{n+1}>u_{j}^{n+1}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+u_{i}^{n+1}-u_{i}^{n} & = & -\Delta t\frac{\sigma_{j}C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\left(u_{i}^{n}-u_{j}^{n}\right)\\
+\implies u_{i}^{n+1} & = & u_{i}^{n}\left\{ 1-\Delta t\frac{\sigma_{j}C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|\right\} +\Delta t\frac{\sigma_{j}C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|u_{j}^{n}\\
+\implies u_{i}^{n+1} & = & \left(1-\alpha\sigma_{j}\right)u_{i}^{n}+\alpha\sigma_{j}u_{j}^{n}\\
+\text{and }u_{j}^{n+1} & = & \left(1-\alpha\sigma_{i}\right)u_{j}^{n}+\alpha\sigma_{i}u_{i}^{n}\\
+\text{where }\alpha & = & \Delta t\frac{C_{D}}{r_{c}}|\mathbf{u}_{i}-\mathbf{u}_{j}|.
+\end{eqnarray*}
+
+\end_inset
+
+We want to limit 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ so that 
+\begin_inset Formula $u_{i}^{n+1}=u_{j}^{n+1}=\sigma_{i}u_{i}^{n}+\sigma_{j}u_{j}^{n}$
+\end_inset
+
+ for the maximum 
+\begin_inset Formula $\alpha$
+\end_inset
+
+.
+ Define 
+\begin_inset Formula $\sigma=\sigma_{i}=1-\sigma_{j}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(1-\alpha\sigma_{j}\right)u_{i}^{n}+\alpha\sigma_{j}u_{j}^{n} & = & \sigma_{i}u_{i}^{n}+\sigma_{j}u_{j}^{n}\\
+\left(1-\alpha\sigma_{i}\right)u_{j}^{n}+\alpha\sigma_{i}u_{i}^{n} & = & \sigma_{i}u_{i}^{n}+\sigma_{j}u_{j}^{n}\\
+\implies\left(1-\alpha(1-\sigma\right)u_{i}^{n}+\alpha(1-\sigma)u_{j}^{n} & = & \sigma u_{i}^{n}+(1-\sigma)u_{j}^{n}\\
+\left(1-\alpha\sigma\right)u_{j}^{n}+\alpha\sigma u_{i}^{n} & = & \sigma u_{i}^{n}+(1-\sigma)u_{j}^{n}
+\end{eqnarray*}
+
+\end_inset
+
+This should hold for 
+\begin_inset Formula $\sigma=0$
+\end_inset
+
+ and 
+\begin_inset Formula $u_{j}^{n}=0$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(1-\alpha\right)u_{i}^{n}=0 & \implies & \alpha=1.
+\end{eqnarray*}
+
+\end_inset
+
+Substitute back in:
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(1-\sigma\right)u_{j}^{n}+\sigma u_{i}^{n} & = & \sigma u_{i}^{n}+(1-\sigma)u_{j}^{n}
+\end{eqnarray*}
+
+\end_inset
+
+as required.
+\end_layout
+
+\end_body
+\end_document

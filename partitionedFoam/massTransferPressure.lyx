@@ -1,0 +1,848 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Pressure for Each Fluid
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The multi-fluid Boussinesq equations with constant diffusion of 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ weighted variables and without background stratification are:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigma}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & \nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(b_{ji}^{T}-b_{i}\right)-M_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
+\sum_{i}\sigma_{i} & = & 1.\label{eq:sumOne}\\
+P_{i} & = & P+p_{i}-\tilde{P}.
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+April 2021
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "BN86"
+
+\end_inset
+
+ model for 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ is something like:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \frac{1}{\gamma}\sigma_{i}p_{i}+\sum_{j\ne i}\left\{ S_{ji}-S_{ij}\right\} \label{eq:BNsigma}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\frac{1}{\gamma}$
+\end_inset
+
+ is a compaction viscosity and 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ are some different transfer terms.
+ If we assume 
+\begin_inset Formula $S_{ij}=0$
+\end_inset
+
+ then subtracting (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:BNsigma"
+
+\end_inset
+
+) from (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigma"
+
+\end_inset
+
+) gives
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & -\frac{1}{\gamma}\sigma_{i}p_{i}+\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigmaCombine}
+\end{eqnarray}
+
+\end_inset
+
+or if we assume that 
+\begin_inset Formula $M_{ij}=S_{ij}$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\begin{eqnarray}
+\gamma\nabla\cdot\mathbf{u}_{i} & = & -p_{i}\label{eq:sigmaCombine-1}
+\end{eqnarray}
+
+\end_inset
+
+Taking the divergence of (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+) and substituting in to (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigmaCombine"
+
+\end_inset
+
+) gives:
+\begin_inset Formula 
+\begin{eqnarray}
+\nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}P_{i} & = & -\frac{1}{\gamma}p_{i}+\left\langle \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \right\rangle \label{eq:PoissonPi}\\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left[-\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right]\\
+\text{and }\mathbf{u}_{i}^{n+1} & = & \mathbf{u}_{i}^{\prime}-\Delta t\nabla P_{i}.\\
+\text{Define }P_{i}\text{ so that} &  & \sum_{i}\sigma_{i}P_{i}=P\\
+\implies\sum_{i}\sigma_{i}\left\{ P+p_{i}-\tilde{P}\right\}  & = & P+\sum_{i}\sigma_{i}p_{i}-\sum_{i}\sigma_{i}\tilde{P}=P\\
+\implies\tilde{P} & = & \sum_{i}\sigma_{i}p_{i}\\
+\implies P_{i} & = & P+p_{i}-\sum_{i}\sigma_{i}p_{i}
+\end{eqnarray}
+
+\end_inset
+
+so (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:PoissonPi"
+
+\end_inset
+
+) becomes
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{1}{\gamma}p_{i}+\nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}P-\Delta t\nabla^{2}p_{i}-\Delta t\nabla^{2}\tilde{P} & = & \left\langle \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \right\rangle .\\
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime} & - & \Delta t\nabla^{2}\left\{ P+p_{i}-\sum_{i}\sigma_{i}p_{i}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+If instead we define
+\begin_inset Formula 
+\begin{eqnarray*}
+P_{i}=P+q_{i} & = & P-\gamma\nabla\cdot\mathbf{u}_{i}+\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{i}\\
+\implies\frac{q_{i}}{\gamma} & = & -\nabla\cdot\mathbf{u}_{i}+\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{i}\\
+\implies\frac{q_{i}}{\gamma}+\nabla\cdot\mathbf{u}_{i}^{\prime} & = & \Delta t\nabla^{2}q_{i}+\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{i}\\
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime} & - & \Delta t\nabla^{2}q_{i}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+March 2021
+\end_layout
+
+\begin_layout Standard
+If we have another equation to predict 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+, we can take 
+\begin_inset Formula $\nabla\cdot\sigma_{i}$
+\end_inset
+
+ of the momentum equation (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+) and substitute into (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigma"
+
+\end_inset
+
+) to give a Poisson equation for 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\nabla\cdot\sigma_{i}\mathbf{u}_{i}^{n+1} & = & \nabla\cdot\sigma_{i}\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ \sigma_{i}b_{i}\mathbf{k}-\sigma_{i}\nabla P_{i}\right\} \\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left\{ -\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nu\nabla^{2}\mathbf{u}_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right\} \\
+\implies\frac{\partial\sigma_{i}}{\partial t} & + & \nabla\cdot\sigma_{i}\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ \sigma_{i}b_{i}\mathbf{k}-\sigma_{i}\nabla P_{i}\right\} =\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} .
+\end{eqnarray*}
+
+\end_inset
+
+The boundary conditions on 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ should be 
+\begin_inset Formula $b_{i}\mathbf{k}\cdot\mathbf{n}=\nabla_{n}P_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i}=0$
+\end_inset
+
+ at the top boundary? We need a Lagrangian conservation equation for 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ in order to close the system
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \sum_{j\ne i}\left\{ S_{ji}-S{}_{ij}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+We need expressions for 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ that involve 
+\begin_inset Formula $\nabla\cdot\mathbf{u}_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+? For a steady state with uniform 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ we need this exact balance based on (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigma"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \\
+\text{\text{Define }}D_{i}^{+} & = & \max\left\{ \nabla\cdot\mathbf{u}_{i},0\right\} \\
+D_{i}^{-} & = & -\min\left\{ \nabla\cdot\mathbf{u}_{i},0\right\} \\
+\text{so that }\nabla\cdot\mathbf{u}_{i} & = & D_{i}^{+}-D_{i}^{-}.
+\end{eqnarray*}
+
+\end_inset
+
+Consider three fluids, 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $j$
+\end_inset
+
+, 
+\begin_inset Formula $k$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}D_{i}^{+}-\sigma_{i}D_{i}^{-} & = & M_{ji}-M{}_{ij}+M_{ki}-M_{ik}\\
+\sigma_{j}D_{j}^{+}-\sigma_{j}D_{j}^{-} & = & M_{ij}-M{}_{ji}+M_{kj}-M_{jk}\\
+\sigma_{k}D_{k}^{+}-\sigma_{k}D_{k}^{-} & = & M_{ik}-M{}_{ki}+M_{jk}-M_{kj}
+\end{eqnarray*}
+
+\end_inset
+
+with all variables positive.
+ Considering two fluids it is clear that solutions may not exist.
+ We could find close solutions by setting
+\begin_inset Formula 
+\begin{eqnarray*}
+M_{ij} & = & \frac{1}{2}\left(\sigma_{i}D_{i}^{-}+\sigma_{j}D_{j}^{+}\right)\\
+ & = & \frac{1}{2}\left(\sigma_{i}\max\left\{ -\nabla\cdot\mathbf{u}_{i},0\right\} +\sigma_{j}\max\left\{ \nabla\cdot\mathbf{u}_{j},0\right\} \right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Method that doesn't work
+\end_layout
+
+\begin_layout Standard
+If we assume that 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ satisfies Lagrangian conservation then the 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+ equation can be split up into two constraints in two different ways.
+ Firstly
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & 0\\
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:divu}
+\end{eqnarray}
+
+\end_inset
+
+and secondly
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \\
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & 0\label{eq:divu-1}
+\end{eqnarray}
+
+\end_inset
+
+In reality, the transfer terms may need to be in both places.
+ If we consider statistically steady RB convection with conditional averaging
+ based on 
+\begin_inset Formula $w$
+\end_inset
+
+, then 
+\begin_inset Formula $\nabla\sigma\approx0$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial\sigma/\partial t=0$
+\end_inset
+
+ so the first set of constraints must hold.
+ For (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:divu"
+
+\end_inset
+
+) to hold we can either set 
+\begin_inset Formula $M_{ij}=\sigma_{i}\max\left(-\nabla\cdot\mathbf{u}_{i}\right)$
+\end_inset
+
+ for two fluids or set 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ to ensure that the velocity field satisfies (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:divu"
+
+\end_inset
+
+).
+ To find 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ we use a projection method.
+ The divergence of the temporally discretised momentum equation is
+\begin_inset Formula 
+\begin{eqnarray*}
+\nabla\cdot\mathbf{u}_{i}^{n+1} & = & \nabla\cdot\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ b_{i}\mathbf{k}-\nabla P_{i}\right\} \\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left\{ -\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nu\nabla^{2}\mathbf{u}_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right\} 
+\end{eqnarray*}
+
+\end_inset
+
+which can be substituted into (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:divu"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i}^{\prime}+\Delta t\sigma_{i}\nabla\cdot\left\{ b_{i}\mathbf{k}-\nabla P_{i}\right\}  & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+which is a Poisson equation for 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Orifices
+\end_layout
+
+\begin_layout Standard
+It should be possible to parameterise 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ from 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{j}$
+\end_inset
+
+ considering the flow rate through an orifice with pressure difference 
+\begin_inset Formula $P_{i}-P_{j}$
+\end_inset
+
+.
+ This is not really directly applicable.
+ Instead we could just say that
+\begin_inset Formula 
+\begin{eqnarray}
+M_{ij} & = & \sigma_{i}\frac{\max\left\{ P_{i}-P_{j},0\right\} }{\gamma}\label{eq:orifice}\\
+\implies\gamma\left(M_{ji}-M_{ij}\right) & = & \sigma_{j}\max\left\{ P_{j}-P_{i},0\right\} -\sigma_{i}\max\left\{ P_{i}-P_{j},0\right\} \nonumber 
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is a diffusivity.
+ This doesn't work because 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ is not a conserved variable.
+ It is just a Lagrange multiplier that is only defined up to a constant.
+ Instead should we have a conservation equation for 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+So the set of equations that we have for 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ are the above and:
+\begin_inset Formula 
+\begin{eqnarray}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \\
+\nabla\cdot\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ b_{i}\mathbf{k}-\nabla P_{i}\right\}  & = & \frac{\Delta t}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} .\label{eq:PoissonP}
+\end{eqnarray}
+
+\end_inset
+
+This looks difficult to solve since it is non-linear and coupled.
+ If we sum (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sigma"
+
+\end_inset
+
+) over all fluids and substitute in (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+) we must also satisfy:
+\begin_inset Formula 
+\begin{equation}
+\nabla\cdot\sum_{i}\sigma_{i}\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla\cdot\sum_{i}\sigma_{i}\nabla P_{i}=\nabla\cdot\sum_{i}\sigma_{i}\left\{ \nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\right\} .\label{eq:PoissonPsum}
+\end{equation}
+
+\end_inset
+
+It could now be even harder to find 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ to satisfy all equations.
+ However the 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ do not have to exactly satisfy (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:orifice"
+
+\end_inset
+
+).
+ Instead we should solve (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:PoissonP"
+
+\end_inset
+
+) exactly for each 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ based on 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ from a previous iterations.
+ Then (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:PoissonPsum"
+
+\end_inset
+
+) should automatically be solved.
+\end_layout
+
+\begin_layout Section*
+Older stuff
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\tilde{P}+p_{i}$
+\end_inset
+
+ must satisfy the following constraints:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:sumZero"
+
+\end_inset
+
+
+\begin_inset Formula $\tilde{P}+\sum_{i}\sigma_{i}p_{i}=0$
+\end_inset
+
+ to ensure that 
+\begin_inset Formula $\sum_{i}P_{i}=P$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:p0_forMean"
+
+\end_inset
+
+ 
+\begin_inset Formula $\tilde{P}+p_{i}=0$
+\end_inset
+
+ whenever 
+\begin_inset Formula $\mathbf{u}_{i}=\mathbf{u}$
+\end_inset
+
+ so that pressure anomalies do not force individual velocities away from
+ the mean.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:pi_notZero"
+
+\end_inset
+
+As 
+\begin_inset Formula $\sigma_{i}\rightarrow0$
+\end_inset
+
+ we do not want 
+\begin_inset Formula $\tilde{P}+p_{i}\rightarrow0$
+\end_inset
+
+ because we need 
+\begin_inset Formula $\tilde{P}+p_{i}$
+\end_inset
+
+ to control divergence in vanishing fluids.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset CommandInset label
+LatexCommand label
+name "enu:pi_finite"
+
+\end_inset
+
+We do not want 
+\begin_inset Formula $\tilde{P}+p_{i}\rightarrow\infty$
+\end_inset
+
+ as 
+\begin_inset Formula $\sigma_{j}\rightarrow0$
+\end_inset
+
+ for any 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $j$
+\end_inset
+
+ combination for stability.
+ 
+\end_layout
+
+\begin_layout Standard
+If we use
+\begin_inset Formula 
+\begin{equation}
+p_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}\label{eq:pi}
+\end{equation}
+
+\end_inset
+
+then constraint 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:sumZero"
+
+\end_inset
+
+ gives us
+\begin_inset Formula 
+\begin{eqnarray*}
+\tilde{P} & = & -\sum\sigma_{i}p_{i}=\gamma\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}\\
+ & = & \gamma\sum_{i}\left(\nabla\cdot\sigma_{i}\mathbf{u}_{i}-\mathbf{u}_{i}\cdot\nabla\sigma_{i}\right)\\
+ & = & -\gamma\sum_{i}\mathbf{u}_{i}\cdot\nabla\sigma_{i}.
+\end{eqnarray*}
+
+\end_inset
+
+Considering constraint 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:p0_forMean"
+
+\end_inset
+
+, if we set 
+\begin_inset Formula $\mathbf{u}_{i}=\mathbf{u}$
+\end_inset
+
+ then we get 
+\begin_inset Formula $p_{i}=0$
+\end_inset
+
+ but 
+\begin_inset Formula $\tilde{P}=0$
+\end_inset
+
+ only if 
+\begin_inset Formula $\mathbf{u}_{i}=\mathbf{u}$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Is this ok? Constraints 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:pi_notZero"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "enu:pi_finite"
+
+\end_inset
+
+ are also satisfied.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Numerical Solution
+\end_layout
+
+\begin_layout Standard
+To find 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+, substitute the divergence of (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mom"
+
+\end_inset
+
+) into (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pi"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{eqnarray}
+\nabla\cdot\mathbf{u}_{i}^{n+1} & = & \nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}p_{i}\\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left\{ -\nabla\left(P+\tilde{P}\right)+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right\} \\
+\implies-\frac{p_{i}}{\gamma} & = & \nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}p_{i}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "plainnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

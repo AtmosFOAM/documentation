@@ -29,7 +29,7 @@ tend      = 100.
 dt        = 0.05
 a         = 1.
 init      = 'gaussian' # Possible values:  sin, gaussian, heavy
-scheme    = 'MPDATA'  # Possible values:  upstream,LW,MPDATA
+scheme    = 'default'  # Possible values:  upstream,LW,MPDATA
 output_file = 'out'
 final_plot   = True
 write_output = True
@@ -107,7 +107,7 @@ def upstream_flux( q_m, q_p , u):
     """
     Upwind flux function
     """
-    return 0.5*( flux(q_m,u) + flux(q_p,u) ) - 0.5*abs(u)*(q_p - q_m)
+    return 0.5*( flux(q_m,u) + flux(q_p,u) ) - 0.5*abs(u)*(q_p-q_m)
 
 # ------------------------------------------------------------------------------------
 
