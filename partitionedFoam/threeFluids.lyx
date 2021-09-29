@@ -14,6 +14,8 @@
 \renewcommand{\textfraction}{0}
 \renewcommand{\topfraction}{1}
 \renewcommand{\bottomfraction}{1}
+
+\usepackage{pdflscape}
 \end_preamble
 \use_default_options false
 \maintain_unincluded_children false
@@ -152,8 +154,32 @@ where
  
 \end_layout
 
+\begin_layout Standard
+We will use the notation
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\mathbf{u}_{i}}{\partial t} & = & \mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}-\nabla P_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\\
+\frac{\partial b_{i}}{\partial t} & = & \mathbf{u}_{i}\cdot\nabla b_{i}+\alpha\nabla^{2}b_{i}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}\bigg|_{d} & = & -\nabla P_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\\
+\frac{D_{i}b_{i}}{Dt}\bigg|_{d} & = & \alpha\nabla^{2}b_{i}
+\end{eqnarray*}
+
+\end_inset
+
+to denote the rate of change without the transfers.
+ We will also use
+\begin_inset Formula 
+\begin{equation}
+\left\{ X\right\} =\max\left\{ X,0\right\} 
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection*
-Mass Transfers
+Mass Transfers based on Buoyancy
 \end_layout
 
 \begin_layout Standard
@@ -161,8 +187,9 @@ We want to choose transfer terms so that:
 \begin_inset Formula 
 \begin{eqnarray}
 \frac{\partial b_{0}}{\partial z} & \ge & 0\label{eq:dbdz0}\\
-w_{1} & > & 0\label{eq:w1}\\
-w_{2} & < & 0.\label{eq:w2}
+\frac{\partial b_{1}}{\partial z} & \le & 0\label{eq:w1}\\
+\frac{\partial b_{2}}{\partial z} & \le & 0\label{eq:w2}\\
+b_{2} & \le & b_{0}\le b_{1}\label{eq:orderb}
 \end{eqnarray}
 
 \end_inset
@@ -179,7 +206,7 @@ We need to transfer mass out of fluid zero to ensure
  equation we set:
 \begin_inset Formula 
 \begin{equation}
-M_{0j}=\sigma_{0}\sqrt{\max\left\{ -\frac{\partial b_{0}}{\partial z},0\right\} }.
+M_{0j}=C_{M}\sigma_{0}\sqrt{\left\{ -\frac{\partial b_{0}}{\partial z}\right\} }.
 \end{equation}
 
 \end_inset
@@ -193,7 +220,7 @@ Fluid should be transferred to
 \end_inset
 
  if it is cooling.
- Advection is not included as 
+ Perhaps advection should not be included as 
 \begin_inset Formula $\sigma$
 \end_inset
 
@@ -201,35 +228,34 @@ Fluid should be transferred to
 \begin_inset Formula 
 \begin{eqnarray}
 j & = & \begin{cases}
-1 & \text{if }\frac{Db_{0}}{Dt}\bigg|_{d}>0\\
-2 & \text{otherwise}
-\end{cases}\\
-\text{where }\frac{Db_{i}}{Dt}\bigg|_{d} & = & \alpha\nabla^{2}b_{i}
+1 & \text{if }\frac{\partial b_{0}}{\partial t}>0\text{ or if }\frac{D_{0}b_{0}}{Dt}\bigg|_{d}\\
+2 & \text{otherwise.}
+\end{cases}
 \end{eqnarray}
 
 \end_inset
 
-i.e.
- the sources of change of 
-\begin_inset Formula $b_{i}$
+however these should not be very different because 
+\begin_inset Formula $w_{0}$
 \end_inset
 
- (following air parcels) that do not come from fluid transfers.
-\end_layout
-
-\begin_layout Standard
-Fluid should transfer from 
-\begin_inset Formula $j=1,2$
+ should be small.
+ If fluids 1 or 2 are unstable (
+\begin_inset Formula $\partial b_{i}/\partial z<0$
 \end_inset
 
- back to fluid 
-\begin_inset Formula $i=0$
+) but do not comply with (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:orderb"
+
 \end_inset
 
- as they slow down, in order to maintain continuity:
+) then additional transfers are needed:
 \begin_inset Formula 
 \begin{eqnarray*}
-M_{j0} & = & \sigma_{j}\max\left\{ -\frac{\partial w_{j}}{\partial z},0\right\} .
+M_{12} & = & C_{M}\sigma_{1}\sqrt{\left\{ -\frac{\partial b_{1}}{\partial z}\right\} }\text{ if }b_{1}<b_{0}\\
+M_{21} & = & C_{M}\sigma_{2}\sqrt{\left\{ -\frac{\partial b_{2}}{\partial z}\right\} }\text{ if }b_{2}>b_{0}
 \end{eqnarray*}
 
 \end_inset
@@ -237,10 +263,24 @@ M_{j0} & = & \sigma_{j}\max\left\{ -\frac{\partial w_{j}}{\partial z},0\right\} 
 
 \end_layout
 
+\begin_layout Subsection*
+Entrainment and Detrainment
+\end_layout
+
 \begin_layout Standard
-As a plume accelerates it entrains air.
- This must be included in the plume so that the pressure variations are
- accounted for.
+As fluids 
+\begin_inset Formula $j=1,2$
+\end_inset
+
+ slow down, the detrain:
+\begin_inset Formula 
+\begin{eqnarray*}
+M_{j0} & = & C_{d}\sigma_{j}\max\left\{ -\frac{\partial w_{j}}{\partial z},0\right\} .
+\end{eqnarray*}
+
+\end_inset
+
+As a plume accelerates it entrains.
  If we assume that 
 \begin_inset Formula $\sigma_{j}$
 \end_inset
@@ -255,7 +295,7 @@ reference "eq:sigma"
 ) implies:
 \begin_inset Formula 
 \begin{eqnarray*}
-M_{0j} & = & \sigma_{0}\sqrt{\max\left\{ -\frac{\partial b_{0}}{\partial z},0\right\} }+\sigma_{j}\max\left\{ \nabla\cdot\mathbf{u}_{j},0\right\} .
+M_{0j} & = & \sigma_{j}\max\left\{ \nabla\cdot\mathbf{u}_{j},0\right\} .
 \end{eqnarray*}
 
 \end_inset
@@ -277,20 +317,13 @@ This is a problem.
  So we could try:
 \begin_inset Formula 
 \begin{eqnarray*}
-M_{0j} & = & \sigma_{0}\sqrt{\max\left\{ -\frac{\partial b_{0}}{\partial z},0\right\} }+\min\left\{ \sigma_{0},\sigma_{j}\right\} \max\left\{ \nabla\cdot\mathbf{u}_{j},0\right\} .
+M_{0j} & = & C_{e}\min\left\{ \sigma_{0},\sigma_{j}\right\} \max\left\{ \frac{\partial w_{j}}{\partial z},0\right\} 
 \end{eqnarray*}
 
 \end_inset
 
-Also we only want it to depend on vertical acceleration:
-\begin_inset Formula 
-\begin{eqnarray*}
-M_{0j} & = & \sigma_{0}\sqrt{\max\left\{ -\frac{\partial b_{0}}{\partial z},0\right\} }+\min\left\{ \sigma_{0},\sigma_{j}\right\} \max\left\{ \frac{\partial w_{j}}{\partial z},0\right\} .
-\end{eqnarray*}
-
-\end_inset
-
-
+in additional to the buoyancy transfers.
+ 
 \end_layout
 
 \begin_layout Subsection*
@@ -298,48 +331,12 @@ Buoyancy Transfers
 \end_layout
 
 \begin_layout Standard
-Enough buoyancy should be transferred out of fluid 
-\begin_inset Formula $0$
-\end_inset
-
- so that it maintains a uniform temperature (following fluid parcels?),
- with warm anomalies transferred to fluid 
-\begin_inset Formula $1$
-\end_inset
-
- and cold anomalies to fluid 
-\begin_inset Formula $1$
-\end_inset
-
-:
 \begin_inset Formula 
 \begin{eqnarray*}
-\cancelto{0}{\frac{\partial b_{0}}{\partial t}}+\mathbf{u}_{0}\cdot\nabla b_{0} & = & \alpha\nabla^{2}b_{0}+\frac{1}{\sigma_{0}}\sum_{j=1,2}\left\{ M_{ji}\left(b_{ji}^{T}-b_{i}\right)-M_{0j}\left(b_{0j}^{T}-b_{0}\right)\right\} \\
-\implies M_{01}\left(b_{01}^{T}-b_{0}\right) & = & \max\left\{ \sum_{j=1,2}M_{j0}\left(b_{j0}^{T}-b_{0}\right)+\sigma_{0}\frac{\partial b_{0}}{\partial t}\bigg|_{d},\ 0\right\} \\
-M_{02}\left(b_{02}^{T}-b_{0}\right) & = & \min\left\{ \sum_{j=1,2}M_{j0}\left(b_{j0}^{T}-b_{0}\right)+\sigma_{0}\frac{\partial b_{0}}{\partial t}\bigg|_{d},\ 0\right\} .
-\end{eqnarray*}
-
-\end_inset
-
-Enough buoyancy should be transferred out of fluids 
-\begin_inset Formula $j=1,2$
-\end_inset
-
- so that fluid 1 does not cool and fluid 0 does not warm.
- We assume that 
-\begin_inset Formula $M_{12}=M_{21}=0$
-\end_inset
-
- and we do not consider 
-\begin_inset Formula $M_{0j}$
-\end_inset
-
-:
-\begin_inset Formula 
-\begin{eqnarray*}
-\frac{\partial b_{j}}{\partial t}+\mathbf{u}_{j}\cdot\nabla b_{j} & = & \alpha\nabla^{2}b_{j}+\frac{1}{\sigma_{j}}\left\{ -M_{j0}\left(b_{j0}^{T}-b_{j}\right)\right\} \\
-\implies M_{10}\left(b_{10}^{T}-b_{1}\right) & = & \min\left\{ \sigma_{1}\frac{\partial b_{1}}{\partial t}\bigg|_{d},\ 0\right\} \\
-M_{20}\left(b_{20}^{T}-b_{2}\right) & = & \max\left\{ \sigma_{2}\frac{\partial b_{2}}{\partial t}\bigg|_{d},\ 0\right\} 
+b_{01}^{T} & = & \max_{\text{neighbours}}b_{0}\\
+b_{02}^{T} & = & \min_{\text{neighbours}}b_{0}\\
+b_{1j}^{T} & = & \min_{\text{neighbours}}b_{1}\\
+b_{2j}^{T} & = & \max_{\text{neighbours}}b_{2}
 \end{eqnarray*}
 
 \end_inset
@@ -352,43 +349,20 @@ Momentum Transfers
 \end_layout
 
 \begin_layout Standard
-Enough momentum should be transferred out of fluid 0 so that it neither
- rises nor falls, with rising air transferred to fluid 1 and falling air
- to fluid 2:
-\begin_inset Formula 
-\begin{eqnarray*}
-\frac{\partial w_{0}}{\partial t}+\mathbf{u}_{0}\cdot\nabla w_{0}+\nabla P_{0} & = & \nu\nabla^{2}w_{0}+b_{0}+\frac{1}{\sigma_{0}}\sum_{j=1,2}\left\{ M_{j0}\left(w_{j0}^{T}-w_{0}\right)-M_{0j}\left(w_{0j}^{T}-w_{0}\right)\right\} \\
-\implies M_{01}\left(w_{01}^{T}-w_{0}\right) & = & \max\left\{ \sum_{j=1,2}M_{j0}\left(w_{j0}^{T}-w_{0}\right)+\sigma_{0}\frac{\partial w_{0}}{\partial t}\bigg|_{d},0\right\} \\
-M_{02}\left(w_{02}^{T}-w_{0}\right) & = & \min\left\{ \sum_{j=1,2}M_{j0}\left(w_{j0}^{T}-w_{0}\right)+\sigma_{0}\frac{\partial w_{0}}{\partial t}\bigg|_{d},0\right\} .
-\end{eqnarray*}
-
-\end_inset
-
 Fluid with 
 \begin_inset Formula $w=0$
 \end_inset
 
- should be transferred out of fluid 
-\begin_inset Formula $1$
-\end_inset
-
- and 
-\begin_inset Formula $2$
-\end_inset
-
-, as long as there is sufficient fluid left in 
-\begin_inset Formula $1$
-\end_inset
-
- and 
-\begin_inset Formula $2$
-\end_inset
-
- to allow non-mean values to leave:
+ should be transferred as long as there is sufficient fluid left to allow
+ non-mean values to leave:
 \begin_inset Formula 
 \begin{eqnarray*}
+w_{01}^{T} & = & w_{0}-\sigma_{0}\min\left\{ w_{0},0\right\} \\
+w_{02}^{T} & = & w_{0}-\sigma_{0}\max\left\{ w_{0},0\right\} \\
 w_{10}^{T} & = & w_{1}-\sigma_{1}\max\left\{ w_{1},0\right\} \\
-w_{20}^{T} & = & w_{2}-\sigma_{2}\min\left\{ w_{2},0\right\} .
+w_{12}^{T} & = & w_{1}-\sigma_{1}\max\left\{ w_{1},0\right\} \\
+w_{20}^{T} & = & w_{2}-\sigma_{2}\min\left\{ w_{2},0\right\} \\
+w_{21}^{T} & = & w_{2}-\sigma_{2}\min\left\{ w_{2},0\right\} 
 \end{eqnarray*}
 
 \end_inset
@@ -410,6 +384,93 @@ w_{i}>0 & \iff & \mathbf{u}_{i}\cdot\mathbf{k}>0\\
 \implies f_{10}^{T} & = & f_{1}-\sigma_{1}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right)\max\left\{ f_{1}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right),\ 0\right\} \\
 f_{20}^{T} & = & f_{2}-\sigma_{2}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right)\min\left\{ f_{2}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right),\ 0\right\} 
 \end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{landscape}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Conditionally averaged, resolved, 
+\begin_inset Formula $Ra=10^{8}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-7/run/hilary/RayleighBenard/Boussinesq/Ra1e8/resolved_1fluid/500000/results.pdf
+	width 115theight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Single column, three fluids, 
+\begin_inset Formula $C_{M}=0.1$
+\end_inset
+
+, 
+\begin_inset Formula $C_{e}=1$
+\end_inset
+
+, 
+\begin_inset Formula $C_{d}=1$
+\end_inset
+
+, 
+\begin_inset Formula $\gamma=243.8$
+\end_inset
+
+ (
+\begin_inset Formula $\hat{\gamma}=1$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-7/run/hilary/RayleighBenard/Boussinesq/Ra1e8/singleColumn_3fluid/200000/results.pdf
+	width 140text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{landscape}
+\end_layout
 
 \end_inset
 

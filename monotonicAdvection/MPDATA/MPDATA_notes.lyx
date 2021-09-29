@@ -7,7 +7,7 @@
 \textclass article
 \use_default_options true
 \maintain_unincluded_children false
-\language english
+\language british
 \language_package default
 \inputencoding auto
 \fontencoding global
@@ -846,6 +846,22 @@ asterisk now indicating the first-order estimate of the n + 1 solution from
  is that the face.
 \end_layout
 
+\begin_layout Standard
+Use the diffusively advected 
+\begin_inset Formula $\Psi$
+\end_inset
+
+ to calculate 
+\begin_inset Formula $\tilde{v}_{j}^{\perp}$
+\end_inset
+
+ and the flux from 
+\begin_inset Formula $\tilde{v}_{j}^{\perp}$
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection*
 OpenFOAM Implementation
 \end_layout
@@ -874,6 +890,56 @@ so each anti-diffusive flux,
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsubsection*
+Correction because
+\begin_inset Formula $\theta$
+\end_inset
+
+ varies in space
+\end_layout
+
+\begin_layout Standard
+An error is introduced because 
+\begin_inset Formula $\theta$
+\end_inset
+
+ varies in space:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\Psi}{\partial t} & = & -\left(1-\theta\right)\nabla\cdot\left(\mathbf{u}\Psi^{n}\right)-\theta\nabla\cdot\left(\mathbf{u}\Psi^{n+1}\right)\\
+ & = & -\nabla\cdot\left(\left(1-\theta\right)\mathbf{u}\Psi^{n}\right)-\nabla\cdot\left(\theta\mathbf{u}\Psi^{n+1}\right)+\Psi^{n}\mathbf{u}\cdot\nabla\left(1-\theta\right)+\Psi^{n+1}\mathbf{u}\cdot\nabla\theta\\
+ & = & -\nabla\cdot\left(\left(1-\theta\right)\mathbf{u}\Psi^{n}\right)-\nabla\cdot\left(\theta\mathbf{u}\Psi^{n+1}\right)+\left(\Psi^{n+1}\mathbf{u}-\Psi^{n}\mathbf{u}\right)\cdot\nabla\theta\\
+ & = & -\nabla\cdot\left(\left(1-\theta\right)\mathbf{u}\Psi^{n}\right)-\nabla\cdot\left(\theta\mathbf{u}\Psi^{n+1}\right)+\frac{\partial\Psi}{\partial t}\Delta t\mathbf{u}\cdot\nabla\theta\\
+\implies\frac{\partial\Psi}{\partial t} & = & \frac{-\nabla\cdot\left(\left(1-\theta\right)\mathbf{u}\Psi^{n}\right)-\nabla\cdot\left(\theta\mathbf{u}\Psi^{n+1}\right)}{1-\Delta t\mathbf{u}\cdot\nabla\theta}
+\end{eqnarray*}
+
+\end_inset
+
+Not helpful.
+ How about considering how the departure point varies when 
+\begin_inset Formula $\theta$
+\end_inset
+
+ varies in space.
+ For uniform 
+\begin_inset Formula $\theta$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\mathbf{x}_{d}=\mathbf{x}_{f}-\frac{1-2\theta}{2}\Delta t\mathbf{u}.
+\]
+
+\end_inset
+
+Given 
+\begin_inset Formula $\nabla_{f}\theta$
+\end_inset
+
+ at the face, 
 \end_layout
 
 \begin_layout Standard

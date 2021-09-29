@@ -1,0 +1,237 @@
+%% LyX 2.2.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,british]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\pagestyle{plain}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\usepackage{amsmath}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{Pressure for Each Fluid}
+
+\author{Hilary Weller}
+
+\maketitle
+The multi-fluid Boussinesq equations with constant diffusion of $\sigma$
+weighted variables and without background stratification are:
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigma}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & \nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \alpha\nabla^{2}b_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(b_{ji}^{T}-b_{i}\right)-M_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
+\sum_{i}\sigma_{i} & = & 1.\label{eq:sumOne}\\
+P_{i} & = & P+p_{i}-\tilde{P}.
+\end{eqnarray}
+
+
+\section*{April 2021}
+
+The \citet{BN86} model for $\sigma_{i}$ is something like:
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \frac{1}{\gamma}\sigma_{i}p_{i}+\sum_{j\ne i}\left\{ S_{ji}-S_{ij}\right\} \label{eq:BNsigma}
+\end{eqnarray}
+where $\frac{1}{\gamma}$ is a compaction viscosity and $S_{ij}$
+are some different transfer terms. If we assume $S_{ij}=0$ then subtracting
+(\ref{eq:BNsigma}) from (\ref{eq:sigma}) gives
+\begin{eqnarray}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & -\frac{1}{\gamma}\sigma_{i}p_{i}+\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:sigmaCombine}
+\end{eqnarray}
+or if we assume that $M_{ij}=S_{ij}$ then 
+\begin{eqnarray}
+\gamma\nabla\cdot\mathbf{u}_{i} & = & -p_{i}\label{eq:sigmaCombine-1}
+\end{eqnarray}
+Taking the divergence of (\ref{eq:mom}) and substituting in to (\ref{eq:sigmaCombine})
+gives:
+\begin{eqnarray}
+\nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}P_{i} & = & -\frac{1}{\gamma}p_{i}+\left\langle \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \right\rangle \label{eq:PoissonPi}\\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left[-\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right]\\
+\text{and }\mathbf{u}_{i}^{n+1} & = & \mathbf{u}_{i}^{\prime}-\Delta t\nabla P_{i}.\\
+\text{Define }P_{i}\text{ so that} &  & \sum_{i}\sigma_{i}P_{i}=P\\
+\implies\sum_{i}\sigma_{i}\left\{ P+p_{i}-\tilde{P}\right\}  & = & P+\sum_{i}\sigma_{i}p_{i}-\sum_{i}\sigma_{i}\tilde{P}=P\\
+\implies\tilde{P} & = & \sum_{i}\sigma_{i}p_{i}\\
+\implies P_{i} & = & P+p_{i}-\sum_{i}\sigma_{i}p_{i}
+\end{eqnarray}
+so (\ref{eq:PoissonPi}) becomes
+\begin{eqnarray*}
+\frac{1}{\gamma}p_{i}+\nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}P-\Delta t\nabla^{2}p_{i}-\Delta t\nabla^{2}\tilde{P} & = & \left\langle \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \right\rangle .\\
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime} & - & \Delta t\nabla^{2}\left\{ P+p_{i}-\sum_{i}\sigma_{i}p_{i}\right\} 
+\end{eqnarray*}
+If instead we define
+\begin{eqnarray*}
+P_{i}=P+q_{i} & = & P-\gamma\nabla\cdot\mathbf{u}_{i}+\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{i}\\
+\implies\frac{q_{i}}{\gamma} & = & -\nabla\cdot\mathbf{u}_{i}+\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{i}\\
+\implies\frac{q_{i}}{\gamma}+\nabla\cdot\mathbf{u}_{i}^{\prime} & = & \Delta t\nabla^{2}q_{i}+\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{i}\\
+\mathbf{u}_{i}^{n+1}=\mathbf{u}_{i}^{\prime} & - & \Delta t\nabla^{2}q_{i}
+\end{eqnarray*}
+
+
+\section*{March 2021}
+
+If we have another equation to predict $\sigma_{i}$, we can take
+$\nabla\cdot\sigma_{i}$ of the momentum equation (\ref{eq:mom})
+and substitute into (\ref{eq:sigma}) to give a Poisson equation for
+$P_{i}$:
+\begin{eqnarray*}
+\nabla\cdot\sigma_{i}\mathbf{u}_{i}^{n+1} & = & \nabla\cdot\sigma_{i}\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ \sigma_{i}b_{i}\mathbf{k}-\sigma_{i}\nabla P_{i}\right\} \\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left\{ -\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nu\nabla^{2}\mathbf{u}_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right\} \\
+\implies\frac{\partial\sigma_{i}}{\partial t} & + & \nabla\cdot\sigma_{i}\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ \sigma_{i}b_{i}\mathbf{k}-\sigma_{i}\nabla P_{i}\right\} =\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} .
+\end{eqnarray*}
+The boundary conditions on $P_{i}$ should be $b_{i}\mathbf{k}\cdot\mathbf{n}=\nabla_{n}P_{i}$
+and $P_{i}=0$ at the top boundary? We need a Lagrangian conservation
+equation for $\sigma_{i}$ in order to close the system
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \sum_{j\ne i}\left\{ S_{ji}-S{}_{ij}\right\} 
+\end{eqnarray*}
+We need expressions for $M_{ij}$ and $S_{ij}$ that involve $\nabla\cdot\mathbf{u}_{i}$
+and $\gamma$ and $P_{i}$? For a steady state with uniform $\sigma_{i}$
+we need this exact balance based on (\ref{eq:sigma}):
+\begin{eqnarray*}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \\
+\text{\text{Define }}D_{i}^{+} & = & \max\left\{ \nabla\cdot\mathbf{u}_{i},0\right\} \\
+D_{i}^{-} & = & -\min\left\{ \nabla\cdot\mathbf{u}_{i},0\right\} \\
+\text{so that }\nabla\cdot\mathbf{u}_{i} & = & D_{i}^{+}-D_{i}^{-}.
+\end{eqnarray*}
+Consider three fluids, $i$, $j$, $k$:
+\begin{eqnarray*}
+\sigma_{i}D_{i}^{+}-\sigma_{i}D_{i}^{-} & = & M_{ji}-M{}_{ij}+M_{ki}-M_{ik}\\
+\sigma_{j}D_{j}^{+}-\sigma_{j}D_{j}^{-} & = & M_{ij}-M{}_{ji}+M_{kj}-M_{jk}\\
+\sigma_{k}D_{k}^{+}-\sigma_{k}D_{k}^{-} & = & M_{ik}-M{}_{ki}+M_{jk}-M_{kj}
+\end{eqnarray*}
+with all variables positive. Considering two fluids it is clear that
+solutions may not exist. We could find close solutions by setting
+\begin{eqnarray*}
+M_{ij} & = & \frac{1}{2}\left(\sigma_{i}D_{i}^{-}+\sigma_{j}D_{j}^{+}\right)\\
+ & = & \frac{1}{2}\left(\sigma_{i}\max\left\{ -\nabla\cdot\mathbf{u}_{i},0\right\} +\sigma_{j}\max\left\{ \nabla\cdot\mathbf{u}_{j},0\right\} \right)
+\end{eqnarray*}
+
+
+\subsection*{Method that doesn't work}
+
+If we assume that $\sigma_{i}$ satisfies Lagrangian conservation
+then the $\sigma_{i}$ equation can be split up into two constraints
+in two different ways. Firstly
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & 0\\
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \label{eq:divu}
+\end{eqnarray}
+and secondly
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\mathbf{u}_{i}\cdot\nabla\sigma_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \\
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & 0\label{eq:divu-1}
+\end{eqnarray}
+In reality, the transfer terms may need to be in both places. If we
+consider statistically steady RB convection with conditional averaging
+based on $w$, then $\nabla\sigma\approx0$ and $\partial\sigma/\partial t=0$
+so the first set of constraints must hold. For (\ref{eq:divu}) to
+hold we can either set $M_{ij}=\sigma_{i}\max\left(-\nabla\cdot\mathbf{u}_{i}\right)$
+for two fluids or set $P_{i}$ to ensure that the velocity field satisfies
+(\ref{eq:divu}). To find $P_{i}$ we use a projection method. The
+divergence of the temporally discretised momentum equation is
+\begin{eqnarray*}
+\nabla\cdot\mathbf{u}_{i}^{n+1} & = & \nabla\cdot\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ b_{i}\mathbf{k}-\nabla P_{i}\right\} \\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left\{ -\mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}+\nu\nabla^{2}\mathbf{u}_{i}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right\} 
+\end{eqnarray*}
+which can be substituted into (\ref{eq:divu}):
+\begin{eqnarray*}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i}^{\prime}+\Delta t\sigma_{i}\nabla\cdot\left\{ b_{i}\mathbf{k}-\nabla P_{i}\right\}  & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} 
+\end{eqnarray*}
+which is a Poisson equation for $P_{i}$.
+
+\subsection*{Orifices}
+
+It should be possible to parameterise $M_{ij}$ from $P_{i}$ and
+$P_{j}$ considering the flow rate through an orifice with pressure
+difference $P_{i}-P_{j}$. This is not really directly applicable.
+Instead we could just say that
+\begin{eqnarray}
+M_{ij} & = & \sigma_{i}\frac{\max\left\{ P_{i}-P_{j},0\right\} }{\gamma}\label{eq:orifice}\\
+\implies\gamma\left(M_{ji}-M_{ij}\right) & = & \sigma_{j}\max\left\{ P_{j}-P_{i},0\right\} -\sigma_{i}\max\left\{ P_{i}-P_{j},0\right\} \nonumber 
+\end{eqnarray}
+where $\gamma$ is a diffusivity. This doesn't work because $P_{i}$
+is not a conserved variable. It is just a Lagrange multiplier that
+is only defined up to a constant. Instead should we have a conservation
+equation for $P_{i}$?
+
+So the set of equations that we have for $P_{i}$ and $M_{ij}$ are
+the above and:
+\begin{eqnarray}
+\sigma_{i}\nabla\cdot\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} \\
+\nabla\cdot\mathbf{u}_{i}^{\prime}+\Delta t\nabla\cdot\left\{ b_{i}\mathbf{k}-\nabla P_{i}\right\}  & = & \frac{\Delta t}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}-M{}_{ij}\right\} .\label{eq:PoissonP}
+\end{eqnarray}
+This looks difficult to solve since it is non-linear and coupled.
+If we sum (\ref{eq:sigma}) over all fluids and substitute in (\ref{eq:mom})
+we must also satisfy:
+\begin{equation}
+\nabla\cdot\sum_{i}\sigma_{i}\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla\cdot\sum_{i}\sigma_{i}\nabla P_{i}=\nabla\cdot\sum_{i}\sigma_{i}\left\{ \nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\right\} .\label{eq:PoissonPsum}
+\end{equation}
+It could now be even harder to find $P_{i}$ to satisfy all equations.
+However the $M_{ij}$ do not have to exactly satisfy (\ref{eq:orifice}).
+Instead we should solve (\ref{eq:PoissonP}) exactly for each $P_{i}$
+based on $M_{ij}$ from a previous iterations. Then (\ref{eq:PoissonPsum})
+should automatically be solved.
+
+\section*{Older stuff}
+
+$\tilde{P}+p_{i}$ must satisfy the following constraints:
+\begin{enumerate}
+\item \label{enu:sumZero}$\tilde{P}+\sum_{i}\sigma_{i}p_{i}=0$ to ensure
+that $\sum_{i}P_{i}=P$.
+\item \label{enu:p0_forMean} $\tilde{P}+p_{i}=0$ whenever $\mathbf{u}_{i}=\mathbf{u}$
+so that pressure anomalies do not force individual velocities away
+from the mean.
+\item \label{enu:pi_notZero}As $\sigma_{i}\rightarrow0$ we do not want
+$\tilde{P}+p_{i}\rightarrow0$ because we need $\tilde{P}+p_{i}$
+to control divergence in vanishing fluids.
+\item \label{enu:pi_finite}We do not want $\tilde{P}+p_{i}\rightarrow\infty$
+as $\sigma_{j}\rightarrow0$ for any $i$, $j$ combination for stability. 
+\end{enumerate}
+If we use
+\begin{equation}
+p_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}\label{eq:pi}
+\end{equation}
+then constraint \ref{enu:sumZero} gives us
+\begin{eqnarray*}
+\tilde{P} & = & -\sum\sigma_{i}p_{i}=\gamma\sum_{i}\sigma_{i}\nabla\cdot\mathbf{u}_{i}\\
+ & = & \gamma\sum_{i}\left(\nabla\cdot\sigma_{i}\mathbf{u}_{i}-\mathbf{u}_{i}\cdot\nabla\sigma_{i}\right)\\
+ & = & -\gamma\sum_{i}\mathbf{u}_{i}\cdot\nabla\sigma_{i}.
+\end{eqnarray*}
+Considering constraint \ref{enu:p0_forMean}, if we set $\mathbf{u}_{i}=\mathbf{u}$
+then we get $p_{i}=0$ but $\tilde{P}=0$ only if $\mathbf{u}_{i}=\mathbf{u}$
+for all $i$. Is this ok? Constraints \ref{enu:pi_notZero} and \ref{enu:pi_finite}
+are also satisfied. 
+
+\subsection*{Numerical Solution}
+
+To find $p_{i}$, substitute the divergence of (\ref{eq:mom}) into
+(\ref{eq:pi}):
+\begin{eqnarray}
+\nabla\cdot\mathbf{u}_{i}^{n+1} & = & \nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}p_{i}\\
+\text{where }\mathbf{u}_{i}^{\prime} & = & \mathbf{u}_{i}^{n}+\Delta t\left\{ -\nabla\left(P+\tilde{P}\right)+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}\left(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\right)\right\} \right\} \\
+\implies-\frac{p_{i}}{\gamma} & = & \nabla\cdot\mathbf{u}_{i}^{\prime}-\Delta t\nabla^{2}p_{i}
+\end{eqnarray}
+
+\bibliographystyle{plainnat}
+\bibliography{numerics}
+
+\end{document}
