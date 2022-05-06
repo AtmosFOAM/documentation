@@ -158,8 +158,8 @@ where
 We will use the notation
 \begin_inset Formula 
 \begin{eqnarray*}
-\frac{\partial\mathbf{u}_{i}}{\partial t} & = & \mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}-\nabla P_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\\
-\frac{\partial b_{i}}{\partial t} & = & \mathbf{u}_{i}\cdot\nabla b_{i}+\alpha\nabla^{2}b_{i}\\
+\frac{\partial\mathbf{u}_{i}}{\partial t}\bigg|_{d} & = & \mathbf{u}_{i}\cdot\nabla\mathbf{u}_{i}-\nabla P_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\\
+\frac{\partial b_{i}}{\partial t}\bigg|_{d} & = & \mathbf{u}_{i}\cdot\nabla b_{i}+\alpha\nabla^{2}b_{i}\\
 \frac{D_{i}\mathbf{u}_{i}}{Dt}\bigg|_{d} & = & -\nabla P_{i}+\nu\nabla^{2}\mathbf{u}_{i}+b_{i}\mathbf{k}\\
 \frac{D_{i}b_{i}}{Dt}\bigg|_{d} & = & \alpha\nabla^{2}b_{i}
 \end{eqnarray*}
@@ -230,7 +230,7 @@ Fluid should be transferred to
 j & = & \begin{cases}
 1 & \text{if }\frac{\partial b_{0}}{\partial t}>0\text{ or if }\frac{D_{0}b_{0}}{Dt}\bigg|_{d}\\
 2 & \text{otherwise.}
-\end{cases}
+\end{cases}\label{eq:upOrDown}
 \end{eqnarray}
 
 \end_inset
@@ -260,6 +260,71 @@ M_{21} & = & C_{M}\sigma_{2}\sqrt{\left\{ -\frac{\partial b_{2}}{\partial z}\rig
 
 \end_inset
 
+Eqn (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:upOrDown"
+
+\end_inset
+
+) is only relevant if 
+\begin_inset Formula $w$
+\end_inset
+
+ is small.
+ This can be measured by comparing vertical advection to vertical diffusion.
+ Ie (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:upOrDown"
+
+\end_inset
+
+) is used if 
+\begin_inset Formula 
+\begin{equation}
+\biggl|w_{0}\frac{\partial b_{0}}{\partial z}\biggr|<\alpha\biggl|\nabla^{2}b_{0}\biggr|.\label{eq:iswbig}
+\end{equation}
+
+\end_inset
+
+If (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:iswbig"
+
+\end_inset
+
+) is not satisfied then 
+\begin_inset Formula $j$
+\end_inset
+
+ in 
+\begin_inset Formula $M_{0j}$
+\end_inset
+
+ should be determined by the sign of 
+\begin_inset Formula $w_{0}\frac{\partial w_{0}}{\partial z}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+j=1 & \text{if } & \biggl|w_{0}\frac{\partial b_{0}}{\partial z}\biggr|-\alpha\biggl|\nabla^{2}b_{0}\biggr|<0\text{ and }\frac{D_{0}b_{0}}{Dt}\bigg|_{d}>0\\
+ & \text{or if} & \biggl|w_{0}\frac{\partial b_{0}}{\partial z}\biggr|-\alpha\biggl|\nabla^{2}b_{0}\biggr|>0\text{ and }w_{0}>0\\
+j=2 &  & \text{otherwise}\\
+\text{define }w_{\text{big}} & = & \text{sign}\left(\biggl|w_{0}\frac{\partial b_{0}}{\partial z}\biggr|-\alpha\biggl|\nabla^{2}b_{0}\biggr|\right)\\
+\implies j==1 & = & w_{\text{big}}+\text{sign}\left(w_{0}\frac{\partial w_{0}}{\partial z}\right)==2\\
+ & + & \text{sign}\left(\frac{D_{0}b_{0}}{Dt}\bigg|_{d}\right)-w_{\text{big}}==2\\
+ & = & \text{pos}\left(w_{\text{big}}\right)\text{pos}\left(w_{0}\frac{\partial w_{0}}{\partial z}\right)+\text{pos}\left(-w_{\text{big}}\right)\text{pos}\left(\frac{D_{0}b_{0}}{Dt}\bigg|_{d}\right)
+\end{eqnarray*}
+
+\end_inset
+
 
 \end_layout
 
@@ -272,7 +337,7 @@ As fluids
 \begin_inset Formula $j=1,2$
 \end_inset
 
- slow down, the detrain:
+ slow down, they detrain:
 \begin_inset Formula 
 \begin{eqnarray*}
 M_{j0} & = & C_{d}\sigma_{j}\max\left\{ -\frac{\partial w_{j}}{\partial z},0\right\} .
@@ -384,93 +449,6 @@ w_{i}>0 & \iff & \mathbf{u}_{i}\cdot\mathbf{k}>0\\
 \implies f_{10}^{T} & = & f_{1}-\sigma_{1}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right)\max\left\{ f_{1}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right),\ 0\right\} \\
 f_{20}^{T} & = & f_{2}-\sigma_{2}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right)\min\left\{ f_{2}\left(\mathbf{k}\cdot\hat{\mathbf{S}}_{f}\right),\ 0\right\} 
 \end{eqnarray*}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-begin{landscape}
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Conditionally averaged, resolved, 
-\begin_inset Formula $Ra=10^{8}$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\noindent
-\begin_inset Graphics
-	filename /home/hilary/OpenFOAM/hilary-7/run/hilary/RayleighBenard/Boussinesq/Ra1e8/resolved_1fluid/500000/results.pdf
-	width 115theight%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\noindent
-Single column, three fluids, 
-\begin_inset Formula $C_{M}=0.1$
-\end_inset
-
-, 
-\begin_inset Formula $C_{e}=1$
-\end_inset
-
-, 
-\begin_inset Formula $C_{d}=1$
-\end_inset
-
-, 
-\begin_inset Formula $\gamma=243.8$
-\end_inset
-
- (
-\begin_inset Formula $\hat{\gamma}=1$
-\end_inset
-
-)
-\end_layout
-
-\begin_layout Standard
-\noindent
-\begin_inset Graphics
-	filename /home/hilary/OpenFOAM/hilary-7/run/hilary/RayleighBenard/Boussinesq/Ra1e8/singleColumn_3fluid/200000/results.pdf
-	width 140text%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-
-\backslash
-end{landscape}
-\end_layout
 
 \end_inset
 

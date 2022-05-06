@@ -1,0 +1,176 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Multi-fluid Boussinesq TKE Equation
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+The inviscid multi-fluid Boussinesq equations with diffusion, ignoring some
+ consistency terms relating to 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ and without background stratification are
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M_{ij}\right\} \label{eq:sigma}\\
+\frac{D_{i}\mathbf{u}_{i}}{Dt}+\nabla P_{i} & = & \nabla\cdot\left(\nu_{i}\nabla\mathbf{u}_{i}\right)+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\right)-M_{ij}(\mathbf{u}_{ij}^{T}-\mathbf{u}_{i})\right\} \label{eq:mom}\\
+\frac{D_{i}b_{i}}{Dt} & = & \nabla\cdot\left(\alpha_{i}\nabla b_{i}\right)+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(b_{ji}^{T}-b_{i}\right)-M_{ij}\left(b_{ij}^{T}-b_{i}\right)\right\} \label{eq:b}\\
+\sum_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \nabla\cdot\sum_{i}\sigma_{i}\mathbf{u}_{i}=0\label{eq:divFree}\\
+\sum_{i}\sigma_{i} & = & 1.\label{eq:sumOne}
+\end{eqnarray}
+
+\end_inset
+
+The TKE equation for 
+\begin_inset Formula $k_{i}$
+\end_inset
+
+ in fluid 
+\begin_inset Formula $i$
+\end_inset
+
+ is
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{i}k_{i}}{Dt} & = & \nabla\cdot\left(\nu_{i}\nabla k_{i}\right)+G_{i}-\frac{2}{3}\nabla\cdot\mathbf{u}_{i}k_{i}-\varepsilon_{i}+\nu_{i}\mathbf{k}\cdot\nabla b_{i}\\
+ & + & \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ji}\left(k_{ji}^{T}-k_{i}\right)+M_{ji}\frac{1}{2}\bigl|\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\bigr|^{2}-M_{ij}\left(k_{ij}^{T}-k_{i}\right)-M_{ij}\frac{1}{2}\bigl|\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\bigr|^{2}\right\} \\
+\text{where }G_{i} & = & \nu_{i}\left(\nabla\mathbf{u}_{i}+\nabla\mathbf{u}_{i}^{T}-\frac{2}{3}I\ tr(\nabla\mathbf{u}_{i})\right):\nabla\mathbf{u}_{i}\\
+\nu_{i} & = & C_{\nu}\frac{k_{i}^{2}}{\varepsilon_{i}}=\ell\sqrt{k_{i}}\\
+\varepsilon_{i} & = & C_{\nu}\frac{k_{i}^{3/2}}{\ell}\\
+C_{\nu} & = & 0.09
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Simplifications for 
+\begin_inset Formula $k_{i}=0$
+\end_inset
+
+, 
+\begin_inset Formula $k_{ij}^{T}=0$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,2$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Considering only the transfer terms and assuming 
+\begin_inset Formula $i=1,2$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{0}k_{0}}{Dt} & = & \frac{1}{\sigma_{0}}\sum_{j=1,2}\left\{ M_{j0}\left(\cancelto{0}{k_{j0}^{T}}-k_{0}\right)+M_{j0}\frac{1}{2}\bigl|\mathbf{u}_{j0}^{T}-\mathbf{u}_{0}\bigr|^{2}-M_{0j}\left(k_{0j}^{T}-k_{0}\right)-M_{0j}\frac{1}{2}\bigl|\mathbf{u}_{0j}^{T}-\mathbf{u}_{0}\bigr|^{2}\right\} \\
+\frac{D_{i}k_{i}}{Dt}=0 & =\frac{1}{\sigma_{i}}\biggl\{ & M_{0i}\left(k_{0i}^{T}-\cancelto{0}{k_{i}}\right)+M_{0i}\frac{1}{2}\bigl|\mathbf{u}_{0i}^{T}-\mathbf{u}_{i}\bigr|^{2}-M_{i0}\left(\cancelto{0}{k_{i0}^{T}}-\cancelto{0}{k_{i}}\right)-M_{i0}\frac{1}{2}\bigl|\mathbf{u}_{i0}^{T}-\mathbf{u}_{i}\bigr|^{2}\\
+ & + & M_{ji}\left(\cancelto{0}{k_{ji}^{T}}-\cancelto{0}{k_{i}}\right)+M_{ji}\frac{1}{2}\bigl|\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\bigr|^{2}-M_{ij}\left(\cancelto{0}{k_{ij}^{T}}-\cancelto{0}{k_{i}}\right)-M_{ij}\frac{1}{2}\bigl|\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\bigr|^{2}\biggr\}\text{ for }j=3-i\\
+\implies &  & k_{0i}^{T}=0,\ \mathbf{u}_{0i}^{T}=\mathbf{u}_{i},\ M_{ij}=0
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
