@@ -1,0 +1,287 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Boussinesq, Dry, 3D, Advective Form of Thuburn's MMMF Equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Standard
+Unparameterised equations in flux form from Part III:
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+nopagebreak
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/hilary/latex/reviews/2022/QJ_2fluid/partIIIeqns.png
+	lyxscale 50
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Boussinesq Sigma Equation and Mass Transfers
+\end_layout
+
+\begin_layout Standard
+Assuming constant 
+\begin_inset Formula $\rho$
+\end_inset
+
+ and an arbitrary number of fluids
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left(M_{ij}-M_{ji}\right)\\
+\text{where }M_{ij} & = & \mathcal{F}^{\text{INS}}\sigma_{j}\sqrt{-\min\left(0,\frac{\partial b_{i}}{\partial z}\right)}\\
+ & + & \mathcal{F}^{\text{FRC}}\sigma_{i}\max\left(0,-\frac{\partial w_{i}}{\partial z}\right)\\
+ & + & \mathcal{F}^{\text{MIX}}\sigma_{i}\sigma_{j}\sqrt{k_{2}}\big/L_{i}^{\text{PLM}}\\
+\mathcal{F}^{\text{INS}}=0.2 &  & \mathcal{F}^{\text{FRC}}=1\ \ \mathcal{F}^{\text{MIX}}=0.4
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $M_{ij}$
+\end_inset
+
+ is the mass transfer from 
+\begin_inset Formula $j$
+\end_inset
+
+ to 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Buoyancy Equation
+\end_layout
+
+\begin_layout Standard
+Based on the entropy equation from part III:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}b_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}b_{i}+\nabla\cdot F_{SF}^{b_{i}} & = & \sum_{j\ne i}\left(M_{ij}\hat{b}_{ij}-M_{ji}\hat{b}_{ji}\right)+R_{i}^{b}+S\left(\mathcal{D}_{i}^{k}\right)\\
+\text{where }R_{i}^{b} & = & \sum_{j\ne i}\left(\sigma_{j}\nabla\cdot F_{SF}^{b_{i}}-\sigma_{i}\nabla\cdot F_{SF}^{b_{j}}\right)\\
+ & = & \nabla\cdot F_{SF}^{b_{i}}-\sigma_{i}\sum_{j}\nabla\cdot F_{SF}^{b_{j}}\\
+F_{SF}^{b_{i}}=-\sigma_{i}K_{i}^{b}\nabla b_{i} &  & K_{i}^{b}=\frac{2}{3}\tau_{i}^{b}k_{i},\ \tau_{i}^{b}=3A_{2}^{MY}\tau_{i}=L_{i}/\sqrt{2k_{i}}
+\end{eqnarray*}
+
+\end_inset
+
+Splitting to create the advective form:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\frac{\partial b_{i}}{\partial t} & + & b_{i}\left\{ \cancelto{}{-\nabla\cdot\sigma_{i}\mathbf{u}_{i}}+\sum_{j\ne i}\left(M_{ij}-M_{ji}\right)\right\} +\cancelto{}{b_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i}}+\sigma_{i}\mathbf{u}_{i}\cdot\nabla b_{i}+\cancel{\nabla\cdot F_{SF}^{b_{i}}}\\
+ & = & \sum_{j\ne i}\left(M_{ij}\hat{b}_{ij}-M_{ji}\hat{b}_{ji}\right)+\cancel{\nabla\cdot F_{SF}^{b_{i}}}-\sigma_{i}\sum_{j}\nabla\cdot F_{SF}^{b_{j}}+S\left(\mathcal{D}_{i}^{k}\right)\\
+\implies\frac{D_{i}b_{i}}{Dt} & = & \nabla\cdot\sum_{j}\sigma_{j}K_{j}^{b}\nabla b_{j}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left(M_{ij}\left(\hat{b}_{ij}-b_{i}\right)-M_{ji}\left(\hat{b}_{ji}-b_{i}\right)\right)+\frac{1}{\sigma_{i}}S\left(\mathcal{D}_{i}^{k}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Momentum Equation
+\end_layout
+
+\begin_layout Standard
+Starting from the flux form from part III:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}\mathbf{u}_{i}+\nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{i}} & = & -\sigma_{i}\nabla p+\sigma_{i}b_{i}\mathbf{k}-\mathcal{P}_{i}+\sum_{j\ne i}\left(M_{ij}\hat{\mathbf{u}}_{ij}-M_{ji}\hat{\mathbf{u}}_{ji}\right)+R_{i}^{\mathbf{u}}\\
+\text{where }R_{i}^{\mathbf{u}} & = & \sum_{j\ne i}\left(\sigma_{j}\nabla\cdot F_{SF}^{\mathbf{u}_{i}}-\sigma_{i}\nabla\cdot F_{SF}^{\mathbf{u}_{j}}\right)\\
+ & = & \nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{i}}-\sigma_{i}\sum_{j}\nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{j}}\\
+\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{i}}=-\sigma_{i}K_{i}^{u}\nabla\mathbf{u}_{i} &  & K_{i}^{\mathbf{u}}=\frac{2}{3}\tau_{i}^{u}k_{i},\ \tau_{i}^{u}=3A_{1}^{MY}\tau_{i}=L_{i}/\sqrt{2k_{i}}
+\end{eqnarray*}
+
+\end_inset
+
+Splitting to create the advective form:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\frac{\partial\mathbf{u}_{i}}{\partial t} & + & \mathbf{u}_{i}\left\{ \cancel{-\nabla\cdot\sigma_{i}\mathbf{u}_{i}}+\sum_{j\ne i}\left(M_{ij}-M_{ji}\right)\right\} +\cancel{\mathbf{u}_{i}\left(\nabla\cdot\sigma_{i}\mathbf{u}_{i}\right)}+\sigma_{i}\mathbf{u}_{i}\nabla\cdot\mathbf{u}_{i}+\cancel{\nabla\cdot F_{SF}^{\mathbf{u}_{i}}}\\
+ & = & -\sigma_{i}\nabla p+\sigma_{i}b_{i}\mathbf{k}-\mathcal{P}_{i}+\sum_{j\ne i}\left(M_{ij}\hat{\mathbf{u}}_{ij}-M_{ji}\hat{\mathbf{u}}_{ji}\right)+\cancel{\nabla\cdot F_{SF}^{\mathbf{u}_{i}}}-\sigma_{i}\sum_{j}\nabla\cdot F_{SF}^{\mathbf{u}_{j}}\\
+\implies\frac{D_{i}\mathbf{u}_{i}}{Dt} & = & \nabla\cdot\sum_{j}\sigma_{j}K_{j}^{u}\nabla\mathbf{u}_{j}-\nabla p-\frac{\mathcal{P}_{i}}{\sigma_{i}}+b_{i}\mathbf{k}+\frac{1}{\sigma_{i}}\sum_{j\ne i}\left(M_{ij}\left(\hat{\mathbf{u}}_{ij}-\mathbf{u}_{i}\right)-M_{ji}\left(\hat{\mathbf{u}}_{ji}-\mathbf{u}_{i}\right)\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Turbulent Kinetic Energy Equation
+\end_layout
+
+\begin_layout Standard
+Starting from the flux form:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}k_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}k_{i} & + & \frac{1}{2}\nabla\cdot T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}}=\frac{\sigma_{i}}{\rho_{i}}B_{i}^{\rho u}\frac{\partial p}{\partial z}+\sigma_{i}\left(w_{2}-w_{1}\right)\mathcal{P}_{2}-\textbf{\textbf{F}}_{SF}^{u_{i}}:\nabla\mathbf{u}_{i}\\
+ & + & \sum_{j\ne i}\left\{ M_{ij}\left(\hat{k}_{ij}+\frac{1}{2}|\hat{\mathbf{u}}_{ij}-\mathbf{u}_{i}|^{2}\right)-M_{ji}\left(\hat{k}_{ji}+\frac{1}{2}|\hat{\mathbf{u}}_{ji}-\mathbf{u}_{i}|^{2}\right)\right\} +R_{i}^{k}-\mathcal{D}_{i}^{k}\\
+\text{where }R_{i}^{k} & = & -\sigma_{i}\sum_{j}\mathbf{u}_{j}\cdot R_{j}^{\mathbf{u}}+\frac{1-\sigma_{i}}{2}\nabla\cdot T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}}-\frac{\sigma_{i}}{2}\nabla\cdot\sum_{j\ne i}T_{j}^{\mathbf{u}\mathbf{u}\mathbf{u}}\\
+ & = & -\sigma_{i}\sum_{j}\mathbf{u}_{j}\cdot\left\{ \nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{i}}-\sigma_{i}\sum_{j}\nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{j}}\right\} +\frac{1}{2}\nabla\cdot T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}}-\frac{\sigma_{i}}{2}\nabla\cdot\sum_{j}T_{j}^{\mathbf{u}\mathbf{u}\mathbf{u}}\\
+ & = & -\sigma_{i}\left\{ \sum_{j}\mathbf{u}_{j}\cdot\nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{i}}-\sum_{j}\mathbf{u}_{j}\cdot\sigma_{i}\sum_{j}\nabla\cdot\textbf{\textbf{F}}_{SF}^{\mathbf{u}_{j}}\right\} +\frac{1}{2}\nabla\cdot T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}}-\frac{\sigma_{i}}{2}\nabla\cdot\sum_{j}T_{j}^{\mathbf{u}\mathbf{u}\mathbf{u}}\\
+\frac{1}{2}T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}} & = & -\sigma_{i}K_{i}^{u}\nabla k_{i},\ \ \ \frac{\sigma_{i}}{\rho_{i}}B_{i}^{\rho u}\frac{\partial p}{\partial z}=F_{SF}^{b_{i}}\frac{\partial p}{\partial z}=\sigma_{i}K_{i}^{b}\frac{\partial b_{i}}{\partial z}
+\end{eqnarray*}
+
+\end_inset
+
+Splitting to create the advective form and ignoring the 
+\begin_inset Formula $R_{j}^{\mathbf{u}}$
+\end_inset
+
+ part of 
+\begin_inset Formula $R_{i}^{k}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\sigma_{i}\frac{\partial k_{i}}{\partial t} & + & k_{i}\left\{ -\cancel{\nabla\cdot\sigma_{i}\mathbf{u}_{i}}-\sum_{j\ne i}\left(M_{ij}-M_{ji}\right)\right\} +\sigma_{i}\mathbf{u}_{i}\cdot\nabla k_{i}+\cancel{k_{i}\nabla\cdot\sigma_{i}\mathbf{u}_{i}}\\
+ & + & \cancel{\frac{1}{2}\nabla\cdot T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}}}=\sigma_{i}K_{i}^{b}\frac{\partial b_{i}}{\partial z}+\sigma_{i}\left(w_{2}-w_{1}\right)\mathcal{P}_{2}-\textbf{\textbf{F}}_{SF}^{u_{i}}:\nabla\mathbf{u}_{i}\\
+ & + & \sum_{j\ne i}\left\{ M_{ij}\left(\hat{k}_{ij}+\frac{1}{2}|\hat{\mathbf{u}}_{ij}-\mathbf{u}_{i}|^{2}\right)-M_{ji}\left(\hat{k}_{ji}+\frac{1}{2}|\hat{\mathbf{u}}_{ji}-\mathbf{u}_{i}|^{2}\right)\right\} -\mathcal{D}_{i}^{k}\\
+ &  & +\cancel{\frac{1}{2}\nabla\cdot T_{i}^{\mathbf{u}\mathbf{u}\mathbf{u}}}-\frac{\sigma_{i}}{2}\nabla\cdot\sum_{j}T_{j}^{\mathbf{u}\mathbf{u}\mathbf{u}}\\
+\implies\frac{D_{i}k_{i}}{Dt} & = & \nabla\cdot\sum_{j}\sigma_{j}K_{j}^{u}\nabla k_{j}+\text{K_{i}^{b}\frac{\partial b_{i}}{\partial z}+\left(w_{2}-w_{1}\right)\mathcal{P}_{2}}+K_{i}^{u}\nabla\mathbf{u}_{i}:\nabla\mathbf{u}_{i}-\frac{\mathcal{D}_{i}^{k}}{\sigma_{i}}\\
+ & + & \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ij}\left(\left(\hat{k}_{ij}-k_{i}\right)+\frac{1}{2}|\hat{\mathbf{u}}_{ij}-\mathbf{u}_{i}|^{2}\right)-M_{ji}\left(\left(\hat{k}_{ji}-k_{i}\right)+\frac{1}{2}|\hat{\mathbf{u}}_{ji}-\mathbf{u}_{i}|^{2}\right)\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+Equivalent for individual fluid pressure 
+\begin_inset Formula $P_{i}=P+p_{i}$
+\end_inset
+
+ where 
+\begin_inset Formula $p_{i}=-\gamma\nabla\cdot\mathbf{u}_{i}+\gamma\sum_{j}\sigma_{j}\nabla\cdot\mathbf{u}_{j}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{D_{i}k_{i}}{Dt} & = & \nabla\cdot\sum_{j}\sigma_{j}K_{j}^{u}\nabla k_{j}+\text{K_{i}^{b}\frac{\partial b_{i}}{\partial z}+\ensuremath{\gamma}\ensuremath{\mathbf{u}_{i}}\ensuremath{\cdot\nabla^{2}\mathbf{u}_{i}}}+K_{i}^{u}\nabla\mathbf{u}_{i}:\nabla\mathbf{u}_{i}-\frac{\mathcal{D}_{i}^{k}}{\sigma_{i}}\\
+ & + & \frac{1}{\sigma_{i}}\sum_{j\ne i}\left\{ M_{ij}\left(\left(\hat{k}_{ij}-k_{i}\right)+\frac{1}{2}|\hat{\mathbf{u}}_{ij}-\mathbf{u}_{i}|^{2}\right)-M_{ji}\left(\left(\hat{k}_{ji}-k_{i}\right)+\frac{1}{2}|\hat{\mathbf{u}}_{ji}-\mathbf{u}_{i}|^{2}\right)\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
