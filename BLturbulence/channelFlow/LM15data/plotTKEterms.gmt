@@ -1,0 +1,28 @@
+inputFiles=(LM_Channel_5200_RSTE_k_prof.dat LM_Channel_5200_RSTE_k_prof.dat
+            LM_Channel_5200_RSTE_k_prof.dat LM_Channel_5200_RSTE_k_prof.dat
+            LM_Channel_5200_RSTE_k_prof.dat LM_Channel_5200_RSTE_k_prof.dat
+            LM_Channel_5200_RSTE_k_prof.dat)
+outFile=TKEterms.eps
+colx=2
+col=(3 4 5 6 7 8 9)
+legends=("Production" "Turbulent transport" "Viscous Transport"
+         "Pressure Strain" "Pressure Transport" " - Viscous Dissipation"
+         "Balance")
+pens=("black" "blue" "red" "green,5_5:0" "cyan" "1,magenta,7_4:0" "grey,5_5:5")
+xlabel="y@++@+"
+ylabel="Dk/Dt"
+xmin=0.2
+xmax=6000
+dx=10
+ddx=10
+dxg=0
+ymin=-0.1
+ymax=0.3
+dy=0.05
+ddy=$dy
+dyg=0
+yscale=("*1" "*1" "*1" "*1" "*1" "*(1)" "*1")
+legPos=x5/6.5
+nSkip=74
+projection=X10cl/10c
+gv=0

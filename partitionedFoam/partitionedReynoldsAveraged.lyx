@@ -1,7 +1,9 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass article
 \begin_preamble
 \usepackage{color}
@@ -19,16 +21,18 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman times
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -58,6 +62,7 @@
 \suppress_date false
 \justification true
 \use_refstyle 0
+\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -72,7 +77,10 @@
 \tocdepth 5
 \paragraph_separation indent
 \paragraph_indentation default
-\quotes_language english
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
 \papercolumns 1
 \papersides 1
 \paperpagestyle plain
@@ -98,6 +106,7 @@ Reynolds Averaged Equations Generalised from
 \begin_inset CommandInset citation
 LatexCommand citet
 key "TKP+18"
+literal "true"
 
 \end_inset
 
@@ -114,7 +123,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="4">
-<features rotate="0" tabularvalignment="middle">
+<features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="59text%">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -551,7 +560,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="11" columns="3">
-<features rotate="0" tabularvalignment="middle">
+<features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="39text%">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -1039,7 +1048,7 @@ Eddy diffusivity using eddy mixing length,
 \begin_inset Formula 
 \begin{eqnarray}
 \overline{\mathbf{u}_{i}^{\prime}\phi_{i}^{\prime}} & = & K_{i}\nabla\overline{\phi_{i}}\\
-K_{i} & = & c_{K}\ell_{i}\sqrt{\overline{e_{i}}}\\
+K_{i} & = & c_{K}\ell_{i}\sqrt{\overline{e_{i}}}\ \left(c_{K}=0.1\right)\\
 \ell_{i} & = & \left(\ell_{s}^{-1}+\ell_{e}^{-1}\right)\\
 \ell_{s} & = & K_{i}z\left(1+a_{\ell}\frac{z}{\varLambda}\right)^{b_{\ell}}\\
 \ell_{e} & = & \tau\sqrt{\overline{e_{i}}}\\
@@ -1109,6 +1118,7 @@ The definition of Monin-Obukhov length from
 \begin_inset CommandInset citation
 LatexCommand citet
 key "Emm94"
+literal "true"
 
 \end_inset
 
@@ -1347,6 +1357,7 @@ Lateral, turbulent entrainment and detrainment (in
 \begin_inset CommandInset citation
 LatexCommand citet
 key "TKP+18"
+literal "true"
 
 \end_inset
 

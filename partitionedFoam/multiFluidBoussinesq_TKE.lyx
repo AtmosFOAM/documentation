@@ -206,5 +206,63 @@ If
 
 \end_layout
 
+\begin_layout Part*
+Multi-fluid Diffusion Consistency
+\end_layout
+
+\begin_layout Standard
+The Boussinesq multi-fluid, multi-moment equations in flux form:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & \sum_{j\ne i}\left\{ M_{ji}-M_{ij}\right\} \label{eq:sigmaFlux}\\
+\frac{\partial\sigma_{i}\mathbf{u}_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}\mathbf{u}_{i} & = & -\sigma_{i}\nabla P_{i}+\nabla\cdot\left(\sigma_{i}\nu_{i}\nabla\mathbf{u}_{i}\right)+\sigma_{i}b_{i}\mathbf{k}+\sum_{j\ne i}\left\{ M_{ji}\mathbf{u}_{ji}^{T}-M_{ij}\mathbf{u}_{ij}^{T}\right\} \label{eq:momFlux}\\
+\frac{\partial\sigma_{i}b_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}b_{i} & = & \nabla\cdot\left(\sigma_{i}\nu_{i}\nabla b_{i}\right)+\sum_{j\ne i}\left\{ M_{ji}b_{ji}^{T}-M_{ij}b_{ij}^{T}\right\} \label{eq:bFlux}\\
+\frac{\partial\sigma_{i}k_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}k_{i} & = & \nabla\cdot\left(\sigma_{i}\nu_{i}\nabla k_{i}\right)+\sigma_{i}\nu_{i}\left(\nabla\mathbf{u}_{i}+\nabla\mathbf{u}_{i}^{T}-\frac{2}{3}I\ tr(\nabla\mathbf{u}_{i})\right):\nabla\mathbf{u}_{i}\label{eq:TKEflux}\\
+ & - & \frac{2}{3}\sigma_{i}\nabla\cdot\mathbf{u}_{i}k_{i}-\sigma_{i}\varepsilon_{i}+\sigma_{i}\nu_{i}\mathbf{k}\cdot\nabla b_{i}\nonumber \\
+ & + & \sum_{j\ne i}\left\{ M_{ji}k_{ji}^{T}-M_{ij}k_{ij}^{T}+M_{ji}\frac{1}{2}\bigl|\mathbf{u}_{ji}^{T}-\mathbf{u}_{i}\bigr|^{2}-M_{ij}\frac{1}{2}\bigl|\mathbf{u}_{ij}^{T}-\mathbf{u}_{i}\bigr|^{2}\right\} \nonumber 
+\end{eqnarray}
+
+\end_inset
+
+In order to maintain identical initial conditions between all fluids, for
+ fluid property 
+\begin_inset Formula $\psi_{i}=\mathbf{u}_{i},b_{i}$
+\end_inset
+
+ or 
+\begin_inset Formula $k_{i}$
+\end_inset
+
+, we need mass transfers to balance the terms that vary from the diffusion
+ term.
+ Let us assume a different form for the mutli-fluid equation transfers:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\sigma_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i} & = & D_{i}\\
+\frac{\partial\sigma_{i}\psi_{i}}{\partial t}+\nabla\cdot\sigma_{i}\mathbf{u}_{i}\psi_{i} & = & \nabla\cdot\left(\sigma_{i}\nu_{i}\nabla\psi_{i}\right)+\Psi_{i}+\cdots
+\end{eqnarray*}
+
+\end_inset
+
+In order to maintain identical initial conditions we need:
+\begin_inset Formula 
+\begin{eqnarray}
+\nabla\cdot\left(\sigma_{i}\nu_{i}\nabla\psi_{i}\right)+\Psi_{i} & = & \sigma_{i}\nabla\cdot\left(\nu_{i}\nabla\psi_{i}\right)\\
+\implies\Psi_{i} & = & -\nu_{i}\nabla\psi_{i}\cdot\nabla\sigma_{i}
+\end{eqnarray}
+
+\end_inset
+
+If
+\begin_inset Formula 
+\begin{eqnarray}
+D_{i} & = & \nabla\cdot\left(\nu_{i}\nabla\sigma_{i}\right)=\nu_{i}\nabla^{2}\sigma_{i}+\nabla\sigma_{i}\cdot\nabla\nu_{i}
+\end{eqnarray}
+
+\end_inset
+
+Easier to just write in advective form in the first place.
+\end_layout
+
 \end_body
 \end_document

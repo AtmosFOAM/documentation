@@ -1,0 +1,29 @@
+rmoser@ices.utexas.edu and mnlee@sandia.gov
+
+Many thanks for the great data at https://turbulence.oden.utexas.edu/
+
+I am trying to work out from the LM_Channel_5200 data what would be the implied eddy viscosity. I am using three ways to calculate it and they appear not to be consistent. I think I may have made an incorrect assumption about a scaling somewhere. The three ways that I am calculating non-dimensional eddy viscosity from the data are:
+
+1. Production /(dUdy)^2
+where Production is column 3 of LM_Channel_5200_RSTE_k_prof.dat
+dUdy is column 4 of LM_Channel_5200_mean_prof.dat
+
+2. Cmu k^2/epsilon
+where Cmu=0.09
+k is column 9 of LM_Channel_5200_vel_fluc_prof.dat
+epsilon is column 8 of LM_Channel_5200_RSTE_k_prof.dat
+
+3. kappa y+ sqrt(k)
+where kappa=0.41
+kappa y+ is a mixing length
+k is column 9 of LM_Channel_5200_vel_fluc_prof.dat
+
+4. (kappa y+)^2 dUdy
+
+See graphs in the attached. 
+
+In the inertial sub-layer, 2 and 3 agree but 1 and 4 are much lower. I think I have made a wrong assumption about the contents of the data files. If I simulate the channel flow using a k-epsilon or k-omega model with wall functions then the eddy viscosity in the inertial sub-layer is very close to 1 and 4. 
+
+It would be great if you could offer any help or direct me to someone who can.
+
+Hilary

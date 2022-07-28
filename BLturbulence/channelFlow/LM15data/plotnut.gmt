@@ -1,0 +1,24 @@
+inputFiles=(nut.dat nut.dat nut.dat nut.dat)
+outFile=nut.eps
+colx=2
+col=(3 5 7 8)
+legends=("P/dUdy@+2@+" "C@-@~@m@~@-k@+2@+/@~e@~" "@~k@~y@++@+ k@+0.5@+"
+         "(@~k@~y@++@+)@+2@+ dUdy")
+pens=("black" "blue" "red" "green")
+xlabel="y@++@+"
+ylabel="@~n@~@-t@-@++@+"
+xmin=0.1
+xmax=6000
+dx=10
+ddx=10
+dxg=0
+ymin=1e-4
+ymax=3e3
+dy=10
+ddy=0
+dyg=0
+yscale=("*1" "/8e-6" "*1")
+legPos=x4/0.5
+nSkip=3
+projection=X7.5cl/5cl
+gv=0
