@@ -1,0 +1,326 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family rmdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style british
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Fully Compressible Equations in terms of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ and 
+\begin_inset Formula $\pi$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\rho}{\partial t}+\nabla\cdot\rho\mathbf{u} & = & 0\\
+\frac{\partial\rho\theta}{\partial t}+\nabla\cdot\theta\rho\mathbf{u} & = & \nabla\cdot\alpha_{\text{eff}}\nabla\theta\\
+\frac{\partial\rho\mathbf{u}}{\partial t}+\nabla\cdot\rho\mathbf{u}\mathbf{u} & = & \rho\mathbf{g}-\rho c_{p}\theta\nabla\pi+2\rho\bm{\Omega}\times\mathbf{u}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}-\mu_{s}\mathbf{u}\\
+\pi=\left(p/p_{0}\right)^{\frac{R}{c_{p}}} &  & T=\theta\pi
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\mu_{s}$
+\end_inset
+
+ is a tensorial sponge coefficient.
+ The equation of state for a dry atmosphere is:
+\begin_inset Formula 
+\begin{eqnarray}
+p & = & \rho RT\\
+\implies p_{0}\pi^{\frac{c_{p}}{R}-1} & = & \rho R\theta\\
+\implies\pi & = & \left(\frac{\rho R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Semi-implicit Method
+\end_layout
+
+\begin_layout Standard
+To formulate a Helmholtz equation, write 
+\begin_inset Formula $\pi$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta$
+\end_inset
+
+ in terms of values from the previous iteration and pertubations:
+\begin_inset Formula 
+\begin{eqnarray}
+\pi & = & \pi^{i}+\pi^{\prime}\\
+\theta & = & \theta^{i}+\theta^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $i$
+\end_inset
+
+ is the iteration number and 
+\begin_inset Formula $n$
+\end_inset
+
+ is the time step number so that, for any variable, 
+\begin_inset Formula $\chi$
+\end_inset
+
+, 
+\begin_inset Formula $\chi^{i=0}=\chi^{(n)}$
+\end_inset
+
+.
+ First solve the 
+\begin_inset Formula $\rho$
+\end_inset
+
+ equation explicitly with off-centering 
+\begin_inset Formula $\alpha$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\rho^{i}=\rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}-\Delta t\alpha\nabla\cdot\rho^{i-1}\mathbf{u}^{i-1}
+\end{equation}
+
+\end_inset
+
+Next solve the 
+\begin_inset Formula $\theta$
+\end_inset
+
+ equation implicitly:
+\begin_inset Formula 
+\begin{eqnarray}
+\rho^{i}\theta^{i}=\rho^{(n)}\theta^{(n)} & + & \left(1-\alpha\right)\Delta t\left(\partial\rho\theta/\partial t\right)^{(n)}\\
+ & - & \alpha\Delta t\nabla\cdot\rho^{i}\theta^{i}\mathbf{u}^{i-1}+\alpha\Delta t\nabla\cdot\alpha_{\text{eff}}\nabla\theta^{i}
+\end{eqnarray}
+
+\end_inset
+
+Solve the momentum equation implicitly with lagged pressure and temperature:
+\begin_inset Formula 
+\begin{eqnarray}
+\rho^{i}\mathbf{u}^{i}=\rho^{(n)}\mathbf{u}^{(n)} & + & \left(1-\alpha\right)\Delta t\left(\partial\rho\mathbf{u}/\partial t\right)^{(n)}\\
+ & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\\
+ & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\theta^{i}\nabla\pi^{i-1}\right)
+\end{eqnarray}
+
+\end_inset
+
+To formulate the Helmholtz equation for 
+\begin_inset Formula $\pi^{\prime}$
+\end_inset
+
+ with implicit treatment of gravity waves, write the 
+\begin_inset Formula $\theta$
+\end_inset
+
+ equation as:
+\begin_inset Formula 
+\begin{eqnarray}
+\theta^{j+1} & = & \theta^{j}-\beta\alpha\Delta tu_{n}^{i+1}\nabla_{n}\theta^{i}\\
+\text{where }\theta^{j} & = & \theta^{i}+\beta\alpha\Delta tu_{n}^{i}\nabla_{n}\theta^{i}\\
+\beta & = & \begin{cases}
+1 & \nabla_{n}\theta\nabla_{n}\pi<0\text{ and }|\mathbf{g}\cdot\mathbf{S}|>0\\
+0 & \text{otherwise}
+\end{cases}\\
+\text{where }u_{n} & = & \mathbf{u}\cdot\hat{\mathbf{S}}\\
+\nabla_{n}\chi & = & \hat{\mathbf{S}}\cdot\nabla\chi
+\end{eqnarray}
+
+\end_inset
+
+and 
+\begin_inset Formula $\mathbf{S}$
+\end_inset
+
+ is the outward pointing area vector for each face.
+ Next we will write the momentum equation for fluxes on faces:
+\begin_inset Formula 
+\begin{equation}
+\phi=\rho\mathbf{u}\cdot\mathbf{S}
+\end{equation}
+
+\end_inset
+
+Substituting 
+\begin_inset Formula $\theta^{j+1}$
+\end_inset
+
+ into the momentum equation and expressing in terms of fluxes gives:
+\begin_inset Formula 
+\begin{eqnarray}
+\phi^{i+1} & = & \phi^{i}+\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{(n)}\\
+ & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\cdot\mathbf{S}\\
+ & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}-\beta\alpha\Delta tu_{n}^{i+1}\nabla_{n}\theta^{i}\right)\nabla\left(\pi^{i}+\pi^{\prime}\right)\right)
+\end{eqnarray}
+
+\end_inset
+
+Linearise and write as:
+\begin_inset Formula 
+\begin{eqnarray}
+\phi^{i+1} & = & \phi^{j}\\
+ & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}-\beta\alpha\Delta t\frac{\phi^{i+1}}{\rho^{i}}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}\right)\right)\\
+\text{where }\phi^{j} & = & \phi^{i}+\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{(n)}\\
+ & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\cdot\mathbf{S}
+\end{eqnarray}
+
+\end_inset
+
+Rearrange to get 
+\begin_inset Formula $\phi^{i+1}$
+\end_inset
+
+ all on the LHS:
+\begin_inset Formula 
+\begin{eqnarray}
+\phi^{i+1} & = & \frac{\phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}\right)\right)}{1+\beta\alpha^{2}\Delta t^{2}c_{p}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}}.\label{eq:fluxBack}
+\end{eqnarray}
+
+\end_inset
+
+This needs to be substituted into the continuity equation.
+ We need to linearise the equation of state to express 
+\begin_inset Formula $\rho$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $\pi^{\prime}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\pi^{i}+\pi^{\prime} & = & \left(\frac{\left(\rho^{i}+\rho^{\prime}\right)R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}\\
+\text{where }\pi^{i} & = & \left(\frac{\rho^{i}R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}\\
+\implies1+\frac{\pi^{\prime}}{\pi^{i}} & = & \left(1+\frac{\rho^{\prime}}{\rho^{i}}\right)^{\frac{R}{c_{v}}}\\
+ & \approx & 1+\frac{R}{c_{v}}\frac{\rho^{\prime}}{\rho^{i}}\\
+\implies\pi^{\prime} & \approx & \pi^{i}\frac{R}{c_{v}}\frac{\rho^{\prime}}{\rho^{i}}\\
+\text{or }\rho^{\prime} & \approx & \frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+Substitute into the continuity equation:
+\begin_inset Formula 
+\begin{eqnarray}
+\rho^{i+1} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}-\Delta t\alpha\nabla\cdot\phi^{i+1}\\
+\implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
+ & - & \Delta t\alpha\nabla\cdot\left\{ G\phi^{j}+\alpha\Delta t\rho^{i}G\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}\right)\right)\right\} \\
+\text{where }G & = & \frac{1}{1+\beta\alpha^{2}\Delta t^{2}c_{p}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}}\\
+\implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
+ & - & \alpha\Delta t\nabla\cdot G\left\{ \phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}\right)\right)\right\} \\
+ & + & \alpha^{2}\Delta t^{2}\nabla\cdot G\rho^{i}c_{p}\theta^{j}\nabla_{n}\pi^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+Then back substitute using (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:fluxBack"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\end_layout
+
+\end_body
+\end_document
