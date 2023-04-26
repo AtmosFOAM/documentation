@@ -194,7 +194,7 @@ Solve the momentum equation implicitly with lagged pressure and temperature:
 \begin_inset Formula 
 \begin{eqnarray}
 \rho^{i}\mathbf{u}^{i}=\rho^{(n)}\mathbf{u}^{(n)} & + & \left(1-\alpha\right)\Delta t\left(\partial\rho\mathbf{u}/\partial t\right)^{(n)}\\
- & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\\
+ & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}+\rho^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\\
  & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\theta^{i}\nabla\pi^{i-1}\right)
 \end{eqnarray}
 
@@ -244,8 +244,8 @@ Substituting
 \begin_inset Formula 
 \begin{eqnarray}
 \phi^{i+1} & = & \phi^{i}+\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{(n)}\\
- & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\cdot\mathbf{S}\\
- & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}-\beta\alpha\Delta tu_{n}^{i+1}\nabla_{n}\theta^{i}\right)\nabla\left(\pi^{i}+\pi^{\prime}\right)\right)
+ & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}+\rho^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\cdot\mathbf{S}\\
+ & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}\cdot\mathbf{S}-c_{p}\left(\theta^{j}-\beta\alpha\Delta tu_{n}^{i+1}\nabla_{n}\theta^{i}\right)\nabla_{n}\left(\pi^{i}+\pi^{\prime}\right)|\mathbf{S}|\right)
 \end{eqnarray}
 
 \end_inset
@@ -254,7 +254,7 @@ Linearise and write as:
 \begin_inset Formula 
 \begin{eqnarray}
 \phi^{i+1} & = & \phi^{j}\\
- & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}-\beta\alpha\Delta t\frac{\phi^{i+1}}{\rho^{i}}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}\right)\right)\\
+ & + & \alpha\Delta t\rho^{i}\left(\mathbf{g}\cdot\mathbf{S}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}|\mathbf{S}|+\theta^{j}\nabla_{n}\pi^{\prime}|\mathbf{S}|-\beta\alpha\Delta t\frac{\phi^{i+1}}{\rho^{i}}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}\right)\right)\\
 \text{where }\phi^{j} & = & \phi^{i}+\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{(n)}\\
  & + & \alpha\Delta t\left(-\nabla\cdot\rho^{i}\mathbf{u}^{i-1}\mathbf{u}^{i}+\nabla\cdot\mu_{\text{eff}}\nabla\mathbf{u}^{i}2\bm{\Omega}\times\mathbf{u}^{i}\right)\cdot\mathbf{S}
 \end{eqnarray}
@@ -268,7 +268,7 @@ Rearrange to get
  all on the LHS:
 \begin_inset Formula 
 \begin{eqnarray}
-\phi^{i+1} & = & \frac{\phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}\right)\right)}{1+\beta\alpha^{2}\Delta t^{2}c_{p}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}}.\label{eq:fluxBack}
+\phi^{i+1} & = & \frac{\phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}\cdot\mathbf{S}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}\right)|\mathbf{S}|\right)}{1-\beta\alpha^{2}\Delta t^{2}c_{p}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}}.\label{eq:fluxBack}
 \end{eqnarray}
 
 \end_inset
@@ -295,7 +295,7 @@ This needs to be substituted into the continuity equation.
 
 \end_inset
 
-Substitute into the continuity equation:
+Substitute into the continuity equation to create Helmholtz equation:
 \begin_inset Formula 
 \begin{eqnarray}
 \rho^{i+1} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}-\Delta t\alpha\nabla\cdot\phi^{i+1}\\
@@ -303,7 +303,7 @@ Substitute into the continuity equation:
  & - & \Delta t\alpha\nabla\cdot\left\{ G\phi^{j}+\alpha\Delta t\rho^{i}G\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}\right)\right)\right\} \\
 \text{where }G & = & \frac{1}{1+\beta\alpha^{2}\Delta t^{2}c_{p}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}}\\
 \implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
- & - & \alpha\Delta t\nabla\cdot G\left\{ \phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}\right)\right)\right\} \\
+ & - & \alpha\Delta t\nabla\cdot G\left\{ \phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\theta^{j}\nabla_{n}\pi^{i}\right)\right\} \\
  & + & \alpha^{2}\Delta t^{2}\nabla\cdot G\rho^{i}c_{p}\theta^{j}\nabla_{n}\pi^{\prime}
 \end{eqnarray}
 
@@ -320,6 +320,253 @@ noprefix "false"
 \end_inset
 
 ).
+\end_layout
+
+\begin_layout Subsection
+Boundary Conditions for 
+\begin_inset Formula $\pi^{\prime}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $\pi$
+\end_inset
+
+ satisfies hydrostatic balance in direction 
+\begin_inset Formula $\mathbf{n}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+\mathbf{g}\cdot\mathbf{n}=c_{p}\theta\nabla_{n}\pi
+\end{equation}
+
+\end_inset
+
+If this is satisfied for 
+\begin_inset Formula $\pi^{i}$
+\end_inset
+
+ then 
+\begin_inset Formula $\nabla_{n}\pi^{\prime}=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Hydrostatic Code 
+\series medium
+\size normal
+(ignoring Coriolis and friction)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\rho}{\partial t}+\nabla\cdot\rho\mathbf{v}+\frac{\partial}{\partial z}\left(\rho w\right) & = & 0\\
+\frac{\partial\theta}{\partial t}+\mathbf{v}\cdot\nabla_{h}\theta+w\frac{\partial\theta}{\partial z} & = & 0\\
+\frac{\partial\mathbf{v}}{\partial t}+\mathbf{u}\cdot\nabla_{h}\mathbf{v} & = & -c_{p}\theta\nabla_{h}\pi\\
+g & = & c_{p}\theta\frac{\partial\pi}{\partial z}\\
+\pi=\left(p/p_{0}\right)^{\frac{R}{c_{p}}} &  & T=\theta\pi
+\end{eqnarray}
+
+\end_inset
+
+The equation of state for a dry atmosphere is:
+\begin_inset Formula 
+\begin{eqnarray}
+p & = & \rho RT\\
+\implies p_{0}\pi^{\frac{c_{p}}{R}-1} & = & \rho R\theta\\
+\implies\pi & = & \left(\frac{\rho R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}\\
+\text{or linearised }\rho^{\prime} & \approx & \frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+Assuming Euler implicit:
+\begin_inset Formula 
+\begin{eqnarray}
+\theta^{n+1} & = & \theta^{n}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta-\Delta tw^{n+1}\frac{\partial\theta}{\partial z}\\
+\implies g & = & c_{p}\left(\theta^{n}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta-\Delta tw^{n+1}\frac{\partial\theta}{\partial z}\right)\frac{\partial\pi}{\partial z}\\
+\frac{g}{c_{p}\frac{\partial\pi}{\partial z}} & = & \theta^{n}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta-\Delta tw^{n+1}\frac{\partial\theta}{\partial z}\\
+\implies\Delta tw^{n+1}\frac{\partial\theta}{\partial z} & = & \frac{-g+c_{p}\frac{\partial\pi}{\partial z}\left(\theta^{n}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta\right)}{c_{p}\frac{\partial\pi}{\partial z}}\\
+\implies w^{n+1} & = & \frac{g-c_{p}\left(\theta^{n}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta\right)\frac{\partial\pi}{\partial z}}{-\Delta tc_{p}\frac{\partial\pi}{\partial z}\frac{\partial\theta}{\partial z}}\\
+\text{and }\mathbf{v}^{n+1} & = & \mathbf{v}^{n}-\Delta t\mathbf{u}\cdot\nabla_{h}\mathbf{v}-\Delta tc_{p}\theta^{n}\nabla_{h}\pi\\
+\text{into continuity }\frac{\partial\rho}{\partial t} & = & -\nabla\cdot\rho\mathbf{v}-\frac{\partial}{\partial z}\left(\rho w\right)=0\\
+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\frac{\pi^{\prime}}{\Delta t}+\frac{\rho^{i}-\rho^{(n)}}{\Delta t} & = & -\nabla\cdot\rho\mathbf{v}^{i}+\Delta t\nabla\cdot\rho c_{p}\theta^{n}\nabla_{h}\pi^{\prime}\\
+ & - & \Delta t\frac{\partial}{\partial z}\left(\rho G\left(g-c_{p}\left(\theta^{n}\frac{\partial\pi}{\partial z}^{i}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta\frac{\partial\pi}{\partial z}^{i}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta\frac{\partial\pi}{\partial z}^{\prime}\right)\right)\right)\\
+\text{where }\mathbf{v}^{i} & = & \mathbf{v}^{n}-\Delta t\mathbf{u}\cdot\nabla_{h}\mathbf{v}-\Delta tc_{p}\theta^{n}\nabla_{h}\pi^{i}\\
+G & = & \frac{1}{-\Delta t^{2}c_{p}\frac{\partial\pi}{\partial z}\frac{\partial\theta}{\partial z}}\\
+\implies\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\frac{\pi^{\prime}}{\Delta t}+\frac{\rho^{i}-\rho^{(n)}}{\Delta t} & = & -\nabla\cdot\rho\mathbf{v}^{i}\\
+ & - & \Delta t\frac{\partial}{\partial z}\left(\rho G\left(g-c_{p}\left(\theta^{n}\frac{\partial\pi}{\partial z}^{i}-\Delta t\mathbf{v}\cdot\nabla_{h}\theta\frac{\partial\pi}{\partial z}^{i}\right)\right)\right)\\
+ & + & \Delta t\nabla\cdot\rho c_{p}\theta^{n}\nabla_{h}\pi^{\prime}-\Delta t^{2}\frac{\partial}{\partial z}\left(\rho Gc_{p}\left(\mathbf{v}\cdot\nabla_{h}\theta\right)\frac{\partial\pi}{\partial z}^{\prime}\right)
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Numerical Solution of 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "KDK+19"
+literal "false"
+
+\end_inset
+
+ equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../../lit/litReviews/fullyCompressibleNotes/KDK+19_equations.png
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\vartheta=1$
+\end_inset
+
+ for a dry atmosphere, 
+\begin_inset Formula $\varphi^{\prime}=c_{pd}\pi^{\prime}$
+\end_inset
+
+, 
+\begin_inset Formula $\varepsilon=R_{d}/R_{v}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Helmholtz in terms of 
+\begin_inset Formula $\varphi^{\prime}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $\theta=\theta_{a}+\theta^{\prime}$
+\end_inset
+
+, 
+\begin_inset Formula $\pi=\pi_{a}+\pi^{\prime}$
+\end_inset
+
+, 
+\begin_inset Formula $\mathbf{u}=\mathbf{v}+w\mathbf{k}$
+\end_inset
+
+, 
+\begin_inset Formula $g=c_{p}\theta_{a}\frac{\partial\pi_{a}}{\partial z}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Ambient state satisfies 
+\begin_inset Graphics
+	filename /home/hilary/latex/lit/litReviews/fullyCompressibleNotes/KDK+19_ambientState.png
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Dry Version 
+\series medium
+(inviscid and without Coriolis) and linearising about ambient state
+\end_layout
+
+\begin_layout Standard
+Without Coriolis implies 
+\begin_inset Formula $\nabla_{h}\theta_{a}=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\rho}{\partial t}+\nabla\cdot\rho\mathbf{u} & = & 0\\
+\frac{\partial\rho\theta^{\prime}}{\partial t}+\nabla\cdot\theta^{\prime}\rho\mathbf{v} & = & -\rho w\frac{\partial\theta_{a}}{\partial z}\\
+\frac{\partial\rho\mathbf{u}}{\partial t}+\nabla\cdot\rho\mathbf{v}\mathbf{u} & = & -\rho c_{p}\theta\nabla\pi^{\prime}\\
+\pi^{\prime} & = & \left(\frac{\rho R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}-\pi_{a}
+\end{eqnarray}
+
+\end_inset
+
+Numerical solution:
+\begin_inset Formula 
+\begin{eqnarray}
+\theta^{\prime} & = & \theta^{j}-\alpha\beta\Delta t\frac{\partial\theta_{a}}{\partial z}w^{i+1}\\
+\text{where }\theta^{j} & = & \theta^{i}+\alpha\beta\Delta t\frac{\partial\theta_{a}}{\partial z}w^{i}\\
+\phi^{i+1} & = & \phi^{j}-\alpha\Delta t\rho c_{p}\left(\theta_{a}+\theta^{\prime}\right)\nabla\pi^{\prime}\\
+\text{where }\phi^{j} & = & \phi^{n}+\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{n}-\alpha\Delta t\nabla\cdot\left(\rho\mathbf{v}\mathbf{u}\right)^{i}\\
+\implies\phi^{i+1} & \approx & \phi^{j}-\alpha\Delta t\rho c_{p}\theta_{a}\nabla\pi^{\prime}-\alpha\Delta t\rho c_{p}\left(\theta^{j}-\alpha\beta\Delta t\frac{\partial\theta_{a}}{\partial z}w^{i+1}\right)\nabla\pi^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+Rearranging and assuming 
+\begin_inset Formula $\beta\rho w=\beta\phi$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray}
+\phi^{i+1} & = & \frac{\phi^{j}-\alpha\Delta t\rho c_{p}\left(\theta_{a}+\theta^{j}\right)\nabla\pi^{\prime}}{1-\alpha^{2}\Delta t^{2}\beta c_{p}\frac{\partial\theta_{a}}{\partial z}\nabla\pi^{\prime}}
+\end{eqnarray}
+
+\end_inset
+
+Substitute into continuity equation using linearised equation of state to
+ get Helmholtz equation for 
+\begin_inset Formula $\pi^{\prime}$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
+ & - & \alpha\Delta t\nabla\cdot G\phi^{j}\\
+ & + & \alpha^{2}\Delta t^{2}\nabla\cdot G\rho^{i}c_{p}\left(\theta_{a}+\theta^{j}\right)\nabla_{n}\pi^{\prime}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "numerics"
+options "abbrvnat"
+
+\end_inset
+
+
 \end_layout
 
 \end_body
