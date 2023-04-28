@@ -298,11 +298,11 @@ This needs to be substituted into the continuity equation.
 Substitute into the continuity equation to create Helmholtz equation:
 \begin_inset Formula 
 \begin{eqnarray}
-\rho^{i+1} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}-\Delta t\alpha\nabla\cdot\phi^{i+1}\\
-\implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
+\rho^{i+1} & = & \rho^{(n)}+\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}-\Delta t\alpha\nabla\cdot\phi^{i+1}\\
+\implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}+\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
  & - & \Delta t\alpha\nabla\cdot\left\{ G\phi^{j}+\alpha\Delta t\rho^{i}G\left(\mathbf{g}-c_{p}\left(\theta^{j}\nabla_{n}\pi^{i}+\theta^{j}\nabla_{n}\pi^{\prime}\right)\right)\right\} \\
 \text{where }G & = & \frac{1}{1+\beta\alpha^{2}\Delta t^{2}c_{p}\nabla_{n}\theta^{i}\nabla_{n}\pi^{i}}\\
-\implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
+\implies\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}+\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
  & - & \alpha\Delta t\nabla\cdot G\left\{ \phi^{j}+\alpha\Delta t\rho^{i}\left(\mathbf{g}-c_{p}\theta^{j}\nabla_{n}\pi^{i}\right)\right\} \\
  & + & \alpha^{2}\Delta t^{2}\nabla\cdot G\rho^{i}c_{p}\theta^{j}\nabla_{n}\pi^{\prime}
 \end{eqnarray}
@@ -320,6 +320,29 @@ noprefix "false"
 \end_inset
 
 ).
+\end_layout
+
+\begin_layout Standard
+In order to be able to test solver convergence, we want to solve for 
+\begin_inset Formula $\pi$
+\end_inset
+
+ rather than 
+\begin_inset Formula $\pi^{\prime}$
+\end_inset
+
+.
+ So this equation becomes:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\rho^{i}-\rho^{(n)}}{\Delta t}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\frac{\pi-\pi^{i}}{\Delta t} & = & \left(1-\alpha\right)\left(\partial\rho/\partial t\right)^{(n)}\\
+ & - & \alpha\nabla\cdot G\left\{ \phi^{j}+\alpha\Delta t\rho^{i}\mathbf{g}\cdot\hat{\mathbf{S}}\right\} \\
+ & + & \alpha^{2}\Delta t\nabla\cdot G\rho^{i}c_{p}\theta^{j}\nabla_{n}\pi
+\end{eqnarray}
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -548,7 +571,7 @@ Substitute into continuity equation using linearised equation of state to
 :
 \begin_inset Formula 
 \begin{eqnarray}
-\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}-\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
+\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}+\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
  & - & \alpha\Delta t\nabla\cdot G\phi^{j}\\
  & + & \alpha^{2}\Delta t^{2}\nabla\cdot G\rho^{i}c_{p}\left(\theta_{a}+\theta^{j}\right)\nabla_{n}\pi^{\prime}
 \end{eqnarray}
