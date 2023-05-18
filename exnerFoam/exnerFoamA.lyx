@@ -517,7 +517,7 @@ Ambient state satisfies
 \begin_layout Subsubsection*
 Dry Version 
 \series medium
-(inviscid and without Coriolis) and linearising about ambient state
+(inviscid and without Coriolis)
 \end_layout
 
 \begin_layout Standard
@@ -526,55 +526,312 @@ Without Coriolis implies
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray}
 \frac{\partial\rho}{\partial t}+\nabla\cdot\rho\mathbf{u} & = & 0\\
-\frac{\partial\rho\theta^{\prime}}{\partial t}+\nabla\cdot\theta^{\prime}\rho\mathbf{v} & = & -\rho w\frac{\partial\theta_{a}}{\partial z}\\
-\frac{\partial\rho\mathbf{u}}{\partial t}+\nabla\cdot\rho\mathbf{v}\mathbf{u} & = & -\rho c_{p}\theta\nabla\pi^{\prime}\\
+\frac{\partial\rho\theta^{\prime}}{\partial t}+\nabla\cdot\theta^{\prime}\rho\mathbf{u} & = & -\rho w\frac{\partial\theta_{a}}{\partial z}\\
+\frac{\partial\rho\mathbf{u}}{\partial t}+\nabla\cdot\rho\mathbf{u}\mathbf{u} & = & -\rho\left(\frac{\theta^{\prime}}{\theta_{a}}\mathbf{g}+c_{p}\theta\nabla\pi^{\prime}\right)\\
 \pi^{\prime} & = & \left(\frac{\rho R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}-\pi_{a}
 \end{eqnarray}
 
 \end_inset
 
-Numerical solution:
-\begin_inset Formula 
-\begin{eqnarray}
-\theta^{\prime} & = & \theta^{j}-\alpha\beta\Delta t\frac{\partial\theta_{a}}{\partial z}w^{i+1}\\
-\text{where }\theta^{j} & = & \theta^{i}+\alpha\beta\Delta t\frac{\partial\theta_{a}}{\partial z}w^{i}\\
-\phi^{i+1} & = & \phi^{j}-\alpha\Delta t\rho c_{p}\left(\theta_{a}+\theta^{\prime}\right)\nabla\pi^{\prime}\\
-\text{where }\phi^{j} & = & \phi^{n}+\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{n}-\alpha\Delta t\nabla\cdot\left(\rho\mathbf{v}\mathbf{u}\right)^{i}\\
-\implies\phi^{i+1} & \approx & \phi^{j}-\alpha\Delta t\rho c_{p}\theta_{a}\nabla\pi^{\prime}-\alpha\Delta t\rho c_{p}\left(\theta^{j}-\alpha\beta\Delta t\frac{\partial\theta_{a}}{\partial z}w^{i+1}\right)\nabla\pi^{\prime}
-\end{eqnarray}
-
-\end_inset
-
-Rearranging and assuming 
-\begin_inset Formula $\beta\rho w=\beta\phi$
+Numerical solution without implicit gravity waves and defining the flux,
+ 
+\begin_inset Formula $\phi=\rho\mathbf{u}\cdot\mathbf{S}$
 \end_inset
 
 
 \begin_inset Formula 
 \begin{eqnarray}
-\phi^{i+1} & = & \frac{\phi^{j}-\alpha\Delta t\rho c_{p}\left(\theta_{a}+\theta^{j}\right)\nabla\pi^{\prime}}{1-\alpha^{2}\Delta t^{2}\beta c_{p}\frac{\partial\theta_{a}}{\partial z}\nabla\pi^{\prime}}
+\phi^{n+1} & = & \phi^{j}-\alpha\Delta t\rho c_{p}\theta\nabla\pi^{\prime}\\
+\text{where }\phi^{j} & = & \phi^{n}-\left(1-\alpha\right)\Delta t\left(\partial\phi/\partial t\right)^{n}-\alpha\Delta t\nabla\cdot\left(\rho\mathbf{v}\mathbf{u}\right)^{i}-\alpha\Delta t\rho\frac{\theta^{\prime}}{\theta_{a}}\mathbf{g}\cdot\mathbf{S}
 \end{eqnarray}
 
 \end_inset
 
-Substitute into continuity equation using linearised equation of state to
- get Helmholtz equation for 
-\begin_inset Formula $\pi^{\prime}$
+Linearise equation of state:
+\begin_inset Formula 
+\begin{eqnarray*}
+\pi_{1}+\pi^{\prime\prime} & = & \left(\frac{\left(\rho_{1}+\rho^{\prime\prime}\right)R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}\\
+\implies\rho^{\prime\prime} & \approx & \frac{c_{v}}{R}\frac{\rho_{1}}{\pi_{1}}\pi^{\prime\prime}
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\pi_{a}+\pi^{\prime}=\pi_{1}+\pi^{\prime\prime}$
+\end_inset
+
+ and 
+\begin_inset Formula $\pi_{1}=\left(\frac{\rho_{1}R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}$
+\end_inset
+
+ so 
+\begin_inset Formula $\frac{\partial\rho}{\partial t}$
+\end_inset
+
+ becomes:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\rho}{\partial t} & = & \frac{\partial}{\partial t}\left(\rho_{1}+\frac{c_{v}}{R}\frac{\rho_{1}}{\pi_{1}}\pi^{\prime\prime}\right)\\
+ & = & \frac{\rho_{1}-\rho^{n}}{\Delta t}+\frac{c_{v}}{R}\frac{\rho_{1}}{\pi_{1}}\frac{\pi^{\prime}-\pi_{1}^{\prime}}{\Delta t}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Implicit Gravity Waves
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\theta^{\prime}$
+\end_inset
+
+ in terms of 
+\begin_inset Formula $w$
 \end_inset
 
 :
 \begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\rho\theta^{\prime}}{\partial t}+\nabla\cdot\theta^{\prime}\rho\mathbf{u} & = & -\rho w\frac{\partial\theta_{a}}{\partial z}\\
+\implies\rho^{n+1}\theta^{\prime n+1} & = & \rho^{n}\theta^{\prime n}-\left(1-\alpha\right)\Delta t\left(\frac{\partial\rho\theta^{\prime}}{\partial t}\right)^{n}\\
+ & - & \alpha\Delta t\left\{ \theta^{\prime}\nabla\cdot\rho\mathbf{u}+\rho\mathbf{v}\cdot\nabla\theta^{\prime}+\rho w\frac{\partial\theta^{\prime}}{\partial z}+\rho w\frac{\partial\theta_{a}}{\partial z}\right\} ^{n+1}\\
+\implies\theta^{\prime n+1} & = & \frac{\rho^{n}\theta^{\prime n}+\left(1-\alpha\right)\Delta t\left(\frac{\partial\rho\theta^{\prime}}{\partial t}\right)^{n}-\alpha\Delta t\left\{ \theta^{\prime}\nabla\cdot\rho\mathbf{u}+\rho\mathbf{v}\cdot\nabla\theta^{\prime}\right\} ^{n+1}}{\rho^{n+1}}\\
+ & - & \alpha\Delta tw^{n+1}\left(\frac{\partial\theta}{\partial z}\right)^{n+1}\\
+\implies\theta^{\prime n+1} & = & \theta^{\prime\prime}-\alpha\Delta tw^{n+1}\left(\frac{\partial\theta}{\partial z}\right)^{n+1}\\
+\text{where }\theta^{\prime\prime} & = & \theta^{\prime n+1}+\alpha\Delta tw^{n+1}\left(\frac{\partial\theta}{\partial z}\right)^{n+1}
+\end{eqnarray*}
+
+\end_inset
+
+Substitute into momentum equation:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\left(\rho\mathbf{u}\right)^{n+1}-\left(\rho\mathbf{u}\right)^{n}}{\Delta t} & = & \left(1-\alpha\right)\Delta t\left(\frac{\partial\rho\mathbf{u}}{\partial t}\right)^{n}-\alpha\left(\nabla\cdot\rho\mathbf{u}\mathbf{u}\right)^{n+1}\\
+ & - & \rho^{n+1}\left(\left(\theta^{\prime\prime}-\alpha\Delta tw^{n+1}\left(\frac{\partial\theta}{\partial z}\right)^{n+1}\right)\left(\frac{\mathbf{g}}{\theta_{a}}+c_{p}\nabla\pi^{\prime}\right)+c_{p}\theta_{a}\nabla\pi^{\prime}\right)^{n+1}\\
+\implies\left(\rho\mathbf{u}\right)^{n+1} & = & \left(\rho\mathbf{u}\right)^{n}+\Delta t\left\{ \left(1-\alpha\right)\Delta t\left(\frac{\partial\rho\mathbf{u}}{\partial t}\right)^{n}-\alpha\left(\nabla\cdot\rho\mathbf{u}\mathbf{u}\right)^{n+1}\right\} \\
+ & - & \rho^{n+1}\left(\theta^{\prime\prime}\left(\frac{\mathbf{g}}{\theta_{a}}+c_{p}\nabla\pi^{\prime}\right)+c_{p}\theta_{a}\nabla\pi^{\prime}-\alpha\Delta tw^{n+1}\left(\frac{\partial\theta}{\partial z}\right)^{n+1}\left(\frac{\mathbf{g}}{\theta_{a}}+c_{p}\nabla\pi^{\prime}\right)\right)^{n+1}\\
+\implies\left(\rho\mathbf{u}\right)^{n+1} & = & \frac{\left(\rho\mathbf{u}\right)^{n}+\Delta t\left\{ \left(1-\alpha\right)\Delta t\left(\frac{\partial\rho\mathbf{u}}{\partial t}\right)^{n}-\alpha\left(\nabla\cdot\rho\mathbf{u}\mathbf{u}\right)^{n+1}\right\} -\rho^{n+1}\left(\theta^{\prime\prime}\left(\frac{\mathbf{g}}{\theta_{a}}+c_{p}\nabla\pi^{\prime}\right)+c_{p}\theta_{a}\nabla\pi^{\prime}\right)^{n+1}}{\left\{ 1-\alpha\Delta t\beta\left(\frac{\partial\theta}{\partial z}\right)^{n+1}\left(\frac{\mathbf{g}}{\theta_{a}}+c_{p}\nabla\pi^{\prime}\right)\right\} ^{n+1}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Slip Boundary Conditions
+\end_layout
+
+\begin_layout Standard
+Position 0 is the boundary, 1 is the near wall cell, 
+\begin_inset Formula $\mathbf{n}$
+\end_inset
+
+ is the unit normal to the boundary:
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathbf{u}\cdot\mathbf{n}=0 & \text{and} & \frac{\partial\mathbf{u}\times\mathbf{n}}{\partial n}=0\\
+\text{define }\mathbf{v} & = & \mathbf{u}-\left(\mathbf{u}\cdot\mathbf{n}\right)\mathbf{n}\\
+w & = & \mathbf{u}\cdot\mathbf{n}\\
+\text{so }w_{0} & = & 0\\
+\mathbf{v}_{0} & = & \mathbf{v}_{1}\\
+\implies\mathbf{u}_{0} & = & \mathbf{u}_{1}-\left(\mathbf{u}_{1}\cdot\mathbf{n}\right)\mathbf{n}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Treatment of Sponge
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\rho\mathbf{u}}{\partial t} & = & \mathbf{F}-\mu\rho\left(\begin{array}{c}
+0\\
+0\\
+w
+\end{array}\right)\\
+\phi^{n+1}-\phi^{n} & = & \Delta t\mathbf{F}\cdot\mathbf{S}-\Delta t\mu\rho\left(\begin{array}{c}
+0\\
+0\\
+w
+\end{array}\right)\cdot\mathbf{S}\\
+ & = & \Delta t\mathbf{F}\cdot\mathbf{S}-\Delta t\mu\phi^{n+1}|\mathbf{g}\cdot\mathbf{S}|\\
+\implies\phi^{n+1} & = & \frac{\Delta t\mathbf{F}\cdot\mathbf{S}}{1+\Delta t\mu|\mathbf{g}\cdot\mathbf{S}|}
+\end{eqnarray*}
+
+\end_inset
+
+For the full velocity field:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\left(\rho\mathbf{u}\right)^{n+1}-\left(\rho\mathbf{u}\right)^{n}}{\Delta t} & = & \mathbf{F}-\mu\left(\hat{\mathbf{g}}\hat{\mathbf{g}}^{T}\right)\left(\rho\mathbf{u}\right)^{n+1}\\
+\implies\left(I+\Delta t\mu\left(\hat{\mathbf{g}}\hat{\mathbf{g}}^{T}\right)\right)\left(\rho\mathbf{u}\right)^{n+1} & = & \left(\rho\mathbf{u}\right)^{n}+\Delta t\mathbf{F}\\
+\implies\left(\rho\mathbf{u}\right)^{n+1} & = & \left(I+\Delta t\mu\left(\hat{\mathbf{g}}\hat{\mathbf{g}}^{T}\right)\right)^{-1}\left(\left(\rho\mathbf{u}\right)^{n}+\Delta t\mathbf{F}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+BouyantFoam Pressure
+\end_layout
+
+\begin_layout Standard
+bouyantFoam uses the pressure variable
+\begin_inset Formula 
+\begin{equation}
+p_{rgh}=p-\rho\mathbf{g}\cdot\left(\mathbf{x}-\mathbf{x}_{\text{ref}}\right)-p_{\text{ref}}
+\end{equation}
+
+\end_inset
+
+so the RHS of the momentum equation becomes
+\begin_inset Formula 
 \begin{eqnarray}
-\rho^{i}+\frac{c_{v}}{R}\frac{\rho^{i}}{\pi^{i}}\pi^{\prime} & = & \rho^{(n)}+\left(1-\alpha\right)\Delta t\left(\partial\rho/\partial t\right)^{(n)}\\
- & - & \alpha\Delta t\nabla\cdot G\phi^{j}\\
- & + & \alpha^{2}\Delta t^{2}\nabla\cdot G\rho^{i}c_{p}\left(\theta_{a}+\theta^{j}\right)\nabla_{n}\pi^{\prime}
+\rho\mathbf{g}-\nabla p & = & \rho\mathbf{g}-\nabla\left(p_{rgh}+\rho\mathbf{g}\cdot\left(\mathbf{x}-\mathbf{x}_{\text{ref}}\right)\right)\\
+ & = & -\mathbf{g}\cdot\left(\mathbf{x}-\mathbf{x}_{\text{ref}}\right)\nabla\rho-\nabla p_{rgh}
 \end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Bouyant Exner
+\end_layout
+
+\begin_layout Standard
+In terms of 
+\begin_inset Formula $\pi=\left(\frac{p}{p_{\text{ref}}}\right)^{\frac{R}{c_{p}}}$
+\end_inset
+
+, 
+\begin_inset Formula $\pi=\left(\frac{\rho R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{p}=c_{v}+R$
+\end_inset
+
+, hydrostatic balance is:
+\begin_inset Formula 
+\begin{eqnarray}
+\mathbf{g} & = & c_{p}\theta\nabla\pi
+\end{eqnarray}
+
+\end_inset
+
+if we define
+\begin_inset Formula 
+\begin{eqnarray*}
+\pi_{g} & = & \pi-\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\\
+\implies\mathbf{g}-c_{p}\theta\nabla\pi & = & \mathbf{g}-c_{p}\theta\left(\nabla\pi_{g}+\nabla\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\right)\\
+ & = & \mathbf{g}-c_{p}\theta\left(\nabla\pi_{g}+\frac{c_{p}\theta\nabla\left(\mathbf{g}\cdot\mathbf{x}\right)-\mathbf{g}\cdot\mathbf{x}\nabla\left(c_{p}\theta\right)}{\left(c_{p}\theta\right)^{2}}\right)\\
+ & = & \frac{\mathbf{g}\cdot\mathbf{x}}{\theta}\nabla\theta-c_{p}\theta\nabla\pi_{g}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Implicit Gravity Waves
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\theta^{n+1}$
+\end_inset
+
+ is a solution of 
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial\rho\theta}{\partial t}+\nabla\cdot\theta\rho\mathbf{u}=0
+\end{equation}
+
+\end_inset
+
+then define:
+\begin_inset Formula 
+\begin{eqnarray*}
+\theta^{\prime} & = & \theta^{n+1}+\alpha\Delta tw\frac{\partial\theta}{\partial z}\\
+\text{so that }\theta^{n+1} & = & \theta^{\prime}-\alpha\Delta tw\frac{\partial\theta}{\partial z}
+\end{eqnarray*}
+
+\end_inset
+
+substitute into 
+\begin_inset Formula $w$
+\end_inset
+
+ equation and rearrange:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\rho w}{\partial t}+\nabla\cdot\rho\mathbf{u}w & = & \rho\frac{\mathbf{g}\cdot\mathbf{x}}{\theta}\frac{\partial\theta}{\partial z}-\rho c_{p}\theta\frac{\partial\pi_{g}}{\partial z}-\mu\rho w\\
+\implies\frac{\left(\rho w\right)^{n+1}-\left(\rho w\right)^{n}}{\Delta t}+\left(\nabla\cdot\rho\mathbf{u}w\right)^{n+1/2} & = & \rho\frac{\mathbf{g}\cdot\mathbf{x}}{\theta}\frac{\partial\theta}{\partial z}-\rho c_{p}\left(\theta^{\prime}-\alpha\Delta tw\frac{\partial\theta}{\partial z}\right)\frac{\partial\pi_{g}}{\partial z}-\mu\rho w\\
+\left(\rho w\right)^{n+1}\left(1+\alpha\Delta t\mu-\left(\alpha\Delta t\right)^{2}c_{p}\frac{\partial\theta}{\partial z}\frac{\partial\pi_{g}}{\partial z}\right) & = & \left(\rho w\right)^{n}+\left(1-\alpha\right)\Delta t\left(\frac{\partial\rho w}{\partial t}\right)^{n}-\alpha\Delta t\left(\nabla\cdot\rho\mathbf{u}w\right)^{n+1}\\
+ & + & \alpha\Delta t\rho\left\{ \frac{\mathbf{g}\cdot\mathbf{x}}{\theta^{n+1}}\left(\frac{\partial\theta}{\partial z}\right)^{n+1}-c_{p}\theta^{\prime}\frac{\partial\pi_{g}^{n+1}}{\partial z}\right\} 
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Helmholtz Equation and Equation of State
+\end_layout
+
+\begin_layout Standard
+Equation of state
+\begin_inset Formula 
+\begin{equation}
+\pi_{g}=\left(\frac{\rho R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}-\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}
+\end{equation}
+
+\end_inset
+
+Linearise using
+\begin_inset Formula 
+\begin{eqnarray*}
+\pi_{g}=\pi_{g}^{\ell}+\pi_{g}^{\prime}, &  & \rho=\rho^{\ell}+\rho^{\prime},\ \pi_{g}^{\ell}=\left(\frac{\rho^{\ell}R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}-\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\\
+\implies\pi_{g}^{\ell}+\pi_{g}^{\prime} & = & \left(1+\frac{\rho^{\prime}}{\rho^{\ell}}\right)^{\frac{R}{c_{v}}}\left(\frac{\rho^{\ell}R\theta}{p_{0}}\right)^{\frac{R}{c_{v}}}-\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\\
+\implies1+\frac{\pi_{g}^{\prime}}{\pi_{g}^{\ell}} & = & \left(1+\frac{\rho^{\prime}}{\rho^{\ell}}\right)^{\frac{R}{c_{v}}}\left(1+\frac{1}{\pi_{g}^{\ell}}\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\right)-\frac{1}{\pi_{g}^{\ell}}\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\\
+ & = & \left(1+\frac{\rho^{\prime}}{\rho^{\ell}}\right)^{\frac{R}{c_{v}}}+\frac{1}{\pi_{g}^{\ell}}\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\left\{ \left(1+\frac{\rho^{\prime}}{\rho^{\ell}}\right)^{\frac{R}{c_{v}}}-1\right\} \\
+ & \approx & 1+\frac{R}{c_{v}}\frac{\rho^{\prime}}{\rho^{\ell}}+\frac{1}{\pi_{g}^{\ell}}\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\frac{R}{c_{v}}\frac{\rho^{\prime}}{\rho^{\ell}}\\
+\implies\pi_{g}^{\prime} & \approx & \left(\pi_{g}^{\ell}+\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\right)\frac{R}{c_{v}}\frac{\rho^{\prime}}{\rho^{\ell}}\\
+\rho^{\prime} & \approx & \frac{\rho^{\ell}}{\left(\pi_{g}^{\ell}+\frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta}\right)\frac{R}{c_{v}}}\pi^{\prime}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Boundary Conditions
+\end_layout
+
+\begin_layout Standard
+At zero flux boundary conditions hydrostatic balance is preserved exactly:
+\begin_inset Formula 
+\begin{eqnarray*}
+\nabla_{n}\pi_{g} & = & \frac{\mathbf{g}\cdot\mathbf{x}}{c_{p}\theta^{2}}\nabla_{n}\theta
+\end{eqnarray*}
 
 \end_inset
 
