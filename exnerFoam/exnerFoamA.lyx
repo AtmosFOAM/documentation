@@ -765,7 +765,7 @@ Implicit Gravity Waves
 
 \end_inset
 
-then define:
+then define: 
 \begin_inset Formula 
 \begin{eqnarray*}
 \theta^{\prime} & = & \theta^{n+1}+\alpha\Delta tw\frac{\partial\theta}{\partial z}\\
