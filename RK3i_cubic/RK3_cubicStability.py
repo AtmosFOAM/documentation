@@ -35,12 +35,13 @@ def calcA(Ai, Ae, c, kdx):
     return A[-1]
 
 # Butcher tableau as a function of Courant number
-def BA(c, cmax, Al, Ah):
-    alpha = max(0, 1 - cmax/max(c, eps))
-    return (1-alpha)*Ah + alpha*Al
+def BA(c, cmax, A1, A2, A3):
+    alpha = max(0, 1 - 2*cmax/max(c, eps))
+    beta = max(0, 1 - cmax/max(c, eps))
+    return (1-beta)*A3 + beta*((1 - alpha)*A2 + alpha*A1)
 
 
-def calcAllMagA(Al, Ah, cs, cmax=1., nkdx = 81, magAkdx = None, kdxs = None):
+def calcAllMagA(A1, A2, A3, cs, cmax=1., nkdx = 81, magAkdx = None, kdxs = None):
     if type(magAkdx) == np.ndarray:
         magAkdx.resize([nkdx,len(cs)], refcheck=False)
     if type(kdxs) == np.ndarray:
@@ -57,7 +58,7 @@ def calcAllMagA(Al, Ah, cs, cmax=1., nkdx = 81, magAkdx = None, kdxs = None):
         
         for ic in range(len(cs)):
             c = cs[ic]
-            A = calcA(BA(c, cmax, Al, Ah), Ah, c, kdx)
+            A = calcA(BA(c, cmax, A1, A2, A3), A3, c, kdx)
             if type(magAkdx) == np.ndarray:
                 magAkdx[ik,ic] = A
             absA[ic] = max(absA[ic], abs(A))
@@ -65,7 +66,7 @@ def calcAllMagA(Al, Ah, cs, cmax=1., nkdx = 81, magAkdx = None, kdxs = None):
 
 # Implicit and Explicit Butcher tableau
 Ai1 = np.array([[0,0,0,0], [0,1,0,0], [0,0,0.5,0], [0,0,0,1]])
-Ai2 = np.array([[0,0,0,0], [0.5,0.5,0,0], [0.25,0,0.25,0,0], [0.5,0,0,0.5]])
+Ai2 = np.array([[0,0,0,0], [0.5,0.5,0,0], [0.25,0,0.25,0], [0.5,0,0,0.5]])
 Ae3 = np.array([[0,0,0,0], [1,0,0,0], [0.25,0.25,0,0], [1/6,1/6,2/3,0]])
 # Range of Courant numbers
 cs = np.linspace(0,8,321)
@@ -73,7 +74,7 @@ cs = np.linspace(0,8,321)
 # Magnitude of amplification
 kdx = np.array([0.]).copy()
 Ak = np.array([[1j]]).copy()
-absA_13 = calcAllMagA(Ai1, Ae3, cs, cmax=1.6, magAkdx = Ak, kdxs = kdx)
+absA_13 = calcAllMagA(Ai1, Ai2, Ae3, cs, cmax=1., magAkdx = Ak, kdxs = kdx)
 
 # Plot max|A| as a function of c
 plt.clf()
@@ -98,11 +99,12 @@ plt.contourf(cs, kdx, abs(Ak), np.arange(0,2,0.1), cmap='bwr',
              extend='both')
 plt.colorbar(location='bottom')
 plt.contour(cs, kdx, abs(Ak), [1+eps], colors='k')
-plt.axvline(x=1.6, ls=(2,(2,10)), color='k', lw=0.25)
+plt.axvline(x=1, ls=(2,(2,10)), color='k', lw=0.25)
+plt.axvline(x=2, ls=(2,(2,10)), color='k', lw=0.25)
 plt.xlabel(r'$c$')
 plt.ylabel(r'$k\Delta x$')
 plt.plot([0], [0], 'k-', label=r'$|A|=1$')
-plt.plot([0], [0], ls=(2,(2,10)), color='k', lw=0.25, label=r'$c=1.6$')
+#plt.plot([0], [0], ls=(2,(2,10)), color='k', lw=0.25, label=r'$c=1,2$')
 plt.legend()
 plt.tight_layout()
 fileName='Acubic_RK3_kdx.pdf'

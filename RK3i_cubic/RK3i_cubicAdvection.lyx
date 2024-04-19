@@ -236,8 +236,8 @@ We are considering the possibility that the Butcher tableau coefficients
  vary in space, so they are placed inside the divergence term of the spatial
  discretisation so that conservation is not violated.
  For linear advection where monotonicity is a requirement, strong stability
- preserving (SSP) schemes are used, such as the Euler implicit and explicit
- RK3 scheme:
+ preserving (SSP) schemes are used, such as the Euler implicit, trapezoidal
+ implicit and RK3 explicit schemes:
 \begin_inset Formula 
 \begin{eqnarray}
 \begin{array}{c|c}
@@ -246,7 +246,14 @@ We are considering the possibility that the Butcher tableau coefficients
 \end{array}=\begin{array}{c|c}
 1 & 1\\
 \hline  & 1
-\end{array} &  & \begin{array}{c|c}
+\end{array}, & \begin{array}{c|c}
+\mathsf{\mathbf{c}_{i2}} & A_{i2}\\
+\hline  & \mathbf{w}_{i2}^{T}
+\end{array}=\begin{array}{c|cc}
+0 & 0\\
+1 & 1-\alpha & \alpha\\
+\hline  & 1-\alpha & \alpha
+\end{array}, & \begin{array}{c|c}
 \mathsf{\tilde{\mathbf{c}}_{3}} & \tilde{A}_{3}\\
 \hline  & \mathbf{\tilde{w}}_{3}^{T}
 \end{array}=\begin{array}{c|ccc}
@@ -256,6 +263,24 @@ We are considering the possibility that the Butcher tableau coefficients
 \hline  & \nicefrac{1}{6} & \nicefrac{1}{6} & \nicefrac{1}{3}
 \end{array}\label{eq:RK3}
 \end{eqnarray}
+
+\end_inset
+
+With off-centering, 
+\begin_inset Formula $\alpha=\nicefrac{1}{2}$
+\end_inset
+
+, making trapezoidal implicit into the second-order, Crank-Nicolson, and
+ 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+ making it into Euler implicit.
+ For monotonicity and optimal accuracy we need:
+\begin_inset Formula 
+\begin{equation}
+\alpha=\max\left(\frac{1}{2},1-\frac{1}{c}\right).
+\end{equation}
 
 \end_inset
 
@@ -301,29 +326,25 @@ This means that the explicit and implicit Butcher tableau must have the
 \end_inset
 
 .
- Euler implicit and the explicit RK3 scheme become:
+ Trapezoidal implicit and the explicit RK3 scheme become:
 \begin_inset Formula 
 \begin{eqnarray}
-A_{1}=\begin{pmatrix}0 & 0 & 0 & 0\\
-0 & \tilde{c}_{1} & 0 & 0\\
-0 & 0 & \tilde{c}_{2} & 0\\
-0 & 0 & 0 & \tilde{c}_{3}
+A_{2}=\begin{pmatrix}0 & 0 & 0 & 0\\
+\left(1-\alpha\right)\tilde{c}_{1} & \alpha\tilde{c}_{1} & 0 & 0\\
+\left(1-\alpha\right)\tilde{c}_{2} & 0 & \alpha\tilde{c}_{2} & 0\\
+\left(1-\alpha\right)\tilde{c}_{3} & 0 & 0 & \alpha\tilde{c}_{3}
 \end{pmatrix} &  & \tilde{A}_{3}=\begin{pmatrix}0 & 0 & 0 & 0\\
 1 & 0 & 0 & 0\\
 \nicefrac{1}{4} & \nicefrac{1}{4} & 0 & 0\\
-\nicefrac{1}{6} & \nicefrac{1}{6} & \nicefrac{1}{3} & 0
+\nicefrac{1}{6} & \nicefrac{1}{6} & \nicefrac{2}{3} & 0
 \end{pmatrix}\label{eq:RK3-1}
 \end{eqnarray}
 
 \end_inset
 
-The first-order scheme, 
-\begin_inset Formula $A_{1}$
-\end_inset
-
-, is only needed for large Courant numbers, so the explicit scheme is a
- blend between 
-\begin_inset Formula $A_{1}$
+The implicit schemes are only needed for large Courant numbers, so the explicit
+ scheme is a blend between 
+\begin_inset Formula $A_{2}$
 \end_inset
 
  and 
@@ -331,13 +352,13 @@ The first-order scheme,
 \end_inset
 
 , based on off-centering parameter, 
-\begin_inset Formula $\alpha$
+\begin_inset Formula $\beta$
 \end_inset
 
 :
 \begin_inset Formula 
 \begin{eqnarray}
-A & = & \left(1-\alpha\right)\tilde{A}_{3}+\alpha A_{1}\label{eq:A_imp}
+A & = & \left(1-\beta\right)\tilde{A}_{3}+\beta A_{2}\label{eq:A_imp}
 \end{eqnarray}
 
 \end_inset
@@ -353,7 +374,7 @@ literal "false"
  we use:
 \begin_inset Formula 
 \begin{equation}
-\alpha=\max\left(0,1-\frac{c_{\max}}{c}\right)\label{eq:alphaFromc}
+\beta=\max\left(0,1-\frac{1}{c}\right)\label{eq:alphaFromc}
 \end{equation}
 
 \end_inset
@@ -362,12 +383,7 @@ where the Courant number,
 \begin_inset Formula $c$
 \end_inset
 
-, is defined based on the spatial discretistaion and the maximum stable
- Courant number, 
-\begin_inset Formula $c_{\max}$
-\end_inset
-
-, is scheme dependent.
+, is defined based on the spatial discretistaion.
 \end_layout
 
 \begin_layout Standard
@@ -417,8 +433,8 @@ noprefix "false"
 ) gives:
 \begin_inset Formula 
 \begin{eqnarray}
-\psi^{i} & = & \psi^{(n)}-\Delta t\nabla_{\text{L}}\cdot\left(\alpha\tilde{c}_{i}\mathbf{u}^{i}\psi^{i}\right)\nonumber \\
- & - & \Delta t\sum_{\ell=1}^{i-1}\left\{ \nabla_{\text{L}}\cdot\left(\left(1-\alpha\right)\tilde{a}_{i\ell}\mathbf{u}^{\ell}\psi^{\ell}\right)+\nabla_{\text{HC}}\cdot\left(\tilde{a}_{i\ell}\mathbf{u}^{\ell}\psi^{\ell}\right)\right\} ,\ \ i=1,...s\\
+\psi^{i} & = & \psi^{(n)}-\Delta t\nabla_{L}\cdot\left(\left(1-\alpha\right)\beta\tilde{c}_{i}\mathbf{u}^{(n)}\psi^{(n)}\right)-\Delta t\nabla_{\text{L}}\cdot\left(\alpha\beta\tilde{c}_{i}\mathbf{u}^{i}\psi^{i}\right)\nonumber \\
+ & - & \Delta t\sum_{\ell=1}^{i-1}\left\{ \nabla_{\text{L}}\cdot\left(\left[\left(1-\beta\right)\tilde{a}_{i\ell}\right]\mathbf{u}^{\ell}\psi^{\ell}\right)+\nabla_{\text{HC}}\cdot\left(\tilde{a}_{i\ell}\mathbf{u}^{\ell}\psi^{\ell}\right)\right\} ,\ \ i=1,...s\\
 \psi^{(n+1)} & = & \psi^{s}\label{eq:RK-ImEx-1}
 \end{eqnarray}
 
@@ -467,8 +483,11 @@ If the scheme does not satisfy one of these condition then the extent to
 :
 \begin_inset Formula 
 \begin{eqnarray}
-o & = & \max\left(1-\biggl|\sum_{i}w_{i}-1\biggr|,\ 0\right)+\max\left(1-\biggl|2\sum_{i}c_{i}w_{i}-1\biggr|,\ 0\right)\nonumber \\
- & + & \max\left(\frac{1}{2}-\biggl|6\sum_{ij}w_{i}a_{ij}c_{j}-1\biggr|,\ 0\right)+\max\left(\frac{1}{2}-\biggl|3\sum_{i}c_{i}w_{i}-1\biggr|,\ 0\right).\label{eq:orderMetric}
+o & = & o_{1}+\text{int}\left(o_{1}\right)\left\{ o_{2}+\text{int}\left(o_{2}\right)o_{3}\right\} \label{eq:orderMetric}\\
+\text{where}\\
+o_{1} & = & \max\left(1-\biggl|\sum_{i}w_{i}-1\biggr|,\ 0\right)\\
+o_{2} & = & \max\left(1-\biggl|2\sum_{i}c_{i}w_{i}-1\biggr|,\ 0\right)\\
+o_{3} & = & \max\left(\frac{1}{2}-\biggl|6\sum_{ij}w_{i}a_{ij}c_{j}-1\biggr|,\ 0\right)+\max\left(\frac{1}{2}-\biggl|3\sum_{i}c_{i}w_{i}-1\biggr|,\ 0\right)
 \end{eqnarray}
 
 \end_inset
@@ -568,7 +587,7 @@ The order of accuracy metric,
 , (
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "eq:orderMetric"
+reference "ea"
 plural "false"
 caps "false"
 noprefix "false"
@@ -611,6 +630,157 @@ name "fig:orderMetric"
 
 \begin_layout Standard
 The stability depends on the spatial discretisation.
+\end_layout
+
+\begin_layout Section
+Stability Functions of the ImEx Scheme
+\end_layout
+
+\begin_layout Standard
+We can analyse the stability of the time-stepping for solving exponential
+ decay and a pure oscillation:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{dy}{dt}=-\lambda y &  & \frac{dy}{dt}=\iota\lambda y,\ \lambda>0,\ \iota=\sqrt{-1}.
+\end{eqnarray}
+
+\end_inset
+
+These give the stability functions in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:RK-ImEx_stabilityFunctions"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+For solving 
+\begin_inset Formula $\frac{dy}{dt}=-\lambda y$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+For solving 
+\begin_inset Formula $\frac{dy}{dt}=\iota\lambda y$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/python/numericalMethods/plots/ImEx_stability_decay.pdf
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/python/numericalMethods/plots/ImEx_stability_osc.pdf
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Stability functions of the scheme defined by (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:RK3-1"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:A_imp"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:RK-ImEx_stabilityFunctions"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -936,7 +1106,7 @@ noprefix "false"
 ) and cancelling gives:
 \begin_inset Formula 
 \begin{eqnarray}
-\mathcal{A}^{i} & = & \frac{1-c\left(1-e^{-\iota k\Delta x}\right)\sum_{\ell=1}^{i-1}a_{i\ell}\mathcal{A}^{\ell}-\frac{c}{6}\left(2e^{\iota k\Delta x}-3+e^{-2\iota k\Delta x}\right)\sum_{\ell=1}^{i-1}\tilde{a}_{i\ell}\mathcal{A}^{\ell}}{1+ca_{ii}\left(1-e^{-\iota k\Delta x}\right)}\nonumber \\
+\mathcal{A}^{i} & = & \frac{1-c\left(1-e^{-\iota k\Delta x}\right)\sum_{\ell=1}^{i-1}a_{i\ell}\mathcal{A}^{\ell}-\frac{c}{6}\left(2e^{\iota k\Delta x}-3+e^{-2\iota k\Delta x}\right)\sum_{\ell=1}^{i-1}\tilde{a}_{i\ell}\mathcal{A}^{\ell}}{1+ca_{ii}\left(1-e^{-\iota k\Delta x}\right)}\\
 \mathcal{A} & = & 1-c\left(1-e^{-\iota k\Delta x}\right)\sum_{i=1}^{s}w_{i}\mathcal{A}^{i}-\frac{c}{6}\left(2e^{\iota k\Delta x}-3+e^{-2\iota k\Delta x}\right)\sum_{i=1}^{s}\tilde{w}_{i}\mathcal{A}^{i}\label{eq:vnA}\\
  & = & \mathcal{A}^{s}\nonumber 
 \end{eqnarray}
@@ -950,10 +1120,10 @@ Using
 1 & 0 & 0 & 0\\
 \nicefrac{1}{4} & \nicefrac{1}{4} & 0 & 0\\
 \nicefrac{1}{6} & \nicefrac{1}{6} & \nicefrac{2}{3} & 0
-\end{pmatrix},\ \ A=\left(1-\alpha\right)\tilde{A}+\alpha\begin{pmatrix}0 & 0 & 0 & 0\\
-0 & 1 & 0 & 0\\
-0 & 0 & \nicefrac{1}{2} & 0\\
-0 & 0 & 0 & 1
+\end{pmatrix},\ \ A=\left(1-\beta\right)\tilde{A}+\beta\begin{pmatrix}0 & 0 & 0 & 0\\
+\left(1-\alpha\right)\tilde{c}_{1} & \alpha\tilde{c}_{1} & 0 & 0\\
+\left(1-\alpha\right)\tilde{c}_{2} & 0 & \alpha\tilde{c}_{2} & 0\\
+\left(1-\alpha\right)\tilde{c}_{3} & 0 & 0 & \alpha\tilde{c}_{3}
 \end{pmatrix}
 \end{equation}
 
@@ -962,16 +1132,20 @@ Using
 with:
 \begin_inset Formula 
 \begin{equation}
-\alpha=\max\left(0,1-\frac{1.6}{c}\right)\label{eq:alphaFromc-1}
+\alpha=\max\left(\frac{1}{2},1-\frac{1}{c}\right),\ \beta=\max\left(0,1-\frac{1}{c}\right)\label{eq:alphaFromc-1}
 \end{equation}
 
 \end_inset
 
 gives third-order accurate in time for 
-\begin_inset Formula $c<1.6$
+\begin_inset Formula $c<1$
 \end_inset
 
-, dropping to first-order for larger 
+, dropping to second-order for 
+\begin_inset Formula $c\in\left[1,2\right]$
+\end_inset
+
+ and first-order for larger 
 \begin_inset Formula $c$
 \end_inset
 
@@ -1147,7 +1321,7 @@ backslashbox{$
 \backslash
 downarrow
 \backslash
- n_x/n_y$}{$
+ n_x,n_y$}{$
 \backslash
 rightarrow
 \backslash
@@ -1590,7 +1764,7 @@ status open
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $n_{x}/n_{y}=40$
+\begin_inset Formula $n_{x},n_{y}=40$
 \end_inset
 
 , 
@@ -1606,7 +1780,7 @@ status open
 \begin_inset Text
 
 \begin_layout Plain Layout
-\begin_inset Formula $n_{x}/n_{y}=40$
+\begin_inset Formula $n_{x},n_{y}=40$
 \end_inset
 
 , 
@@ -1828,8 +2002,7 @@ Normalised mass errors for
 \begin_inset Caption Standard
 
 \begin_layout Plain Layout
-Errors.
- Need to look into why the mass conservation errors are so high.
+Error diagnostics.
 \begin_inset CommandInset label
 LatexCommand label
 name "fig:errorDiags"
