@@ -65,7 +65,7 @@ def calcAllMagA(Al, Ah, cs, cmax=1., nkdx = 81, magAkdx = None, kdxs = None):
 
 # Implicit and Explicit Butcher tableau
 Ai1 = np.array([[0,0,0,0], [0,1,0,0], [0,0,0.5,0], [0,0,0,1]])
-Ae1 = np.array([[0,0,0,0], [1,0,0,0], [0,0.5,0,0], [0,0,1,0]])
+Ai2 = np.array([[0,0,0,0], [0.5,0.5,0,0], [0.25,0,0.25,0,0], [0.5,0,0,0.5]])
 Ae3 = np.array([[0,0,0,0], [1,0,0,0], [0.25,0.25,0,0], [1/6,1/6,2/3,0]])
 # Range of Courant numbers
 cs = np.linspace(0,8,321)
@@ -102,6 +102,7 @@ plt.axvline(x=1.6, ls=(2,(2,10)), color='k', lw=0.25)
 plt.xlabel(r'$c$')
 plt.ylabel(r'$k\Delta x$')
 plt.plot([0], [0], 'k-', label=r'$|A|=1$')
+plt.plot([0], [0], ls=(2,(2,10)), color='k', lw=0.25, label=r'$c=1.6$')
 plt.legend()
 plt.tight_layout()
 fileName='Acubic_RK3_kdx.pdf'

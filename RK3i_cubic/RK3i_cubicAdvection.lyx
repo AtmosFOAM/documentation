@@ -5,6 +5,9 @@
 \save_transient_properties true
 \origin unavailable
 \textclass article
+\begin_preamble
+\usepackage{slashbox,afterpage}
+\end_preamble
 \use_default_options true
 \maintain_unincluded_children false
 \language british
@@ -152,8 +155,8 @@ where
 \begin_inset Formula $\nabla_{\text{HC}}\cdot\left(\mathbf{u}\psi\right)$
 \end_inset
 
- is the high-order correction and we define the full high-order discretisation
- as: 
+ is the high-order correction so that the full high-order discretisation
+ is: 
 \begin_inset Formula 
 \begin{equation}
 \nabla_{\text{H}}\cdot\left(\mathbf{u}\psi\right)=\nabla_{\text{L}}\cdot\left(\mathbf{u}\psi\right)+\nabla_{\text{HC}}\cdot\left(\mathbf{u}\psi\right).
@@ -414,7 +417,7 @@ noprefix "false"
 ) gives:
 \begin_inset Formula 
 \begin{eqnarray}
-\psi^{i} & = & \psi^{(n)}-\Delta t\nabla_{\text{L}}\cdot\left(\alpha\tilde{c}_{i}\mathbf{u}^{\ell}\psi^{\ell}\right)\nonumber \\
+\psi^{i} & = & \psi^{(n)}-\Delta t\nabla_{\text{L}}\cdot\left(\alpha\tilde{c}_{i}\mathbf{u}^{i}\psi^{i}\right)\nonumber \\
  & - & \Delta t\sum_{\ell=1}^{i-1}\left\{ \nabla_{\text{L}}\cdot\left(\left(1-\alpha\right)\tilde{a}_{i\ell}\mathbf{u}^{\ell}\psi^{\ell}\right)+\nabla_{\text{HC}}\cdot\left(\tilde{a}_{i\ell}\mathbf{u}^{\ell}\psi^{\ell}\right)\right\} ,\ \ i=1,...s\\
 \psi^{(n+1)} & = & \psi^{s}\label{eq:RK-ImEx-1}
 \end{eqnarray}
@@ -533,7 +536,7 @@ noprefix "false"
 
 \end_inset
 
-) is third-order for all Courant numbers (although it may not be stable).
+) is third-order for all Courant numbers.
 \end_layout
 
 \begin_layout Standard
@@ -547,7 +550,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename /home/hilary/python/numericalMethods/plots/ImEx_order.pdf
-	width 48text%
+	width 75text%
 
 \end_inset
 
@@ -770,7 +773,17 @@ noprefix "false"
 \end_inset
 
 ), which provides third-order accuracy when the meshes are uniform as verified
- in section xxxx.
+ in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:numExpts"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
  This scheme can also be expressed on a one-dimensional grid as a low-order
  term with a higher-order correction:
 \begin_inset Formula 
@@ -1043,6 +1056,797 @@ name "fig:magA_RK3_cubic"
 
 \begin_layout Section
 Numerical Experiments
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:numExpts"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A tracer, 
+\begin_inset Formula $\psi\in\left[0,1\right]$
+\end_inset
+
+, with an initially doubly sinusoidal profile is advected diagonally through
+ a doubly periodic unit-square domain, 
+\begin_inset Formula $[-\nicefrac{1}{2},\nicefrac{1}{2})^{2}$
+\end_inset
+
+.
+ The initial tracer field is
+\begin_inset Formula 
+\begin{equation}
+\psi_{0}=\frac{1}{4}\left(1+\cos2\pi x\right)\left(1+\cos2\pi y\right)
+\end{equation}
+
+\end_inset
+
+and the velocity field is 
+\begin_inset Formula $\mathbf{v}=\left(1,1\right)^{T}$
+\end_inset
+
+.
+ The unit square is discretised with 
+\begin_inset Formula $n_{x}\times n_{y}$
+\end_inset
+
+ uniform square cells.
+ A set of spatial and temporal resolutions are used with resulting Courant
+ numbers as shown in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:advectionTimeSteps"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The tracer is advected for one time unit so that it returns to its original
+ position.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="7">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+backslashbox{$
+\backslash
+downarrow
+\backslash
+ n_x/n_y$}{$
+\backslash
+rightarrow
+\backslash
+ c$}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1.6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2.5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+10
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.04
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.05
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0625
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.125
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.25
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.01
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.02
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.025
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.03125
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0625
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.125
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+80
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.005
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.01
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0125
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.015625
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.03125
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0625
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+160
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0025
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.005
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.00625
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0078125
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.015625
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.03125
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Time step used for each simulation of advection through a unit square for
+ each spatial resolution, 
+\begin_inset Formula $n_{x}/n_{y}$
+\end_inset
+
+, and each Courant number, 
+\begin_inset Formula $c$
+\end_inset
+
+.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:advectionTimeSteps"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Initial and final values of the tracer for 
+\begin_inset Formula $n_{x}/n_{y}=40$
+\end_inset
+
+, 
+\begin_inset Formula $c=1.6$
+\end_inset
+
+ and for 
+\begin_inset Formula $n_{x}/n_{y}=40$
+\end_inset
+
+, 
+\begin_inset Formula $c=10$
+\end_inset
+
+ are shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:tracerContoured"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, showing accurate results for 
+\begin_inset Formula $c=1.6$
+\end_inset
+
+ and large phase errors in the direction of flow for 
+\begin_inset Formula $c=10$
+\end_inset
+
+.
+ The 
+\begin_inset Formula $\ell_{2}$
+\end_inset
+
+ error norms as a function of resolution for each of the Courant numbers
+ are shown in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:errorDiags"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ and some other error diagnostics.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n_{x}/n_{y}=40$
+\end_inset
+
+, 
+\begin_inset Formula $c=1.6$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $n_{x}/n_{y}=40$
+\end_inset
+
+, 
+\begin_inset Formula $c=10$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-11/run/advection/uniformVelocity/constantVelocity/cubicRK3_40_c1p6/1/T.pdf
+	lyxscale 50
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-11/run/advection/uniformVelocity/constantVelocity/cubicRK3_40_c10/1/T.pdf
+	lyxscale 50
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Tracer at the initial time (dashed contoured) and at the final time (black
+ contoured) after diagonal advection through the doubly periodic unit cube.
+ Contours from 0.05 to 0.95 every 0.1.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:tracerContoured"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\ell_{2}$
+\end_inset
+
+ error norm as a function of resolution
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multicolumn="1" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-11/run/advection/uniformVelocity/constantVelocity/plots/errorNorms.eps
+	lyxscale 50
+	width 75text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Maximum and minimum 
+\begin_inset Formula $\psi$
+\end_inset
+
+ for 
+\begin_inset Formula $n_{x}=40$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Normalised mass errors for 
+\begin_inset Formula $n_{x}=40$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-11/run/advection/uniformVelocity/constantVelocity/plots/bounds.eps
+	lyxscale 50
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/hilary/OpenFOAM/hilary-11/run/advection/uniformVelocity/constantVelocity/plots/massError.eps
+	lyxscale 50
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Errors.
+ Need to look into why the mass conservation errors are so high.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:errorDiags"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
