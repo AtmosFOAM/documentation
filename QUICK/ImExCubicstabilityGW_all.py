@@ -113,7 +113,7 @@ for (A, fileName) in zip([absA, absA05, absA_c, absAmax],
                    'Acubic_gamma_1_beta_1_alphac.pdf',
                    'Acubic_gamma_1_beta_1_alphacN.pdf']):
     plt.clf()
-    plt.contourf(cs, Ndts, A[:,:,0,0], np.arange(0.45,1.65,0.1), cmap='bwr',
+    plt.contourf(cs, Ndts, A[:,:,0,0], np.arange(0.4,1.6,0.1), cmap='bwr',
                  extend='both')
     plt.colorbar(location='bottom')
     plt.contour(cs, Ndts, A[:,:,0,0], [1+eps], colors='k')

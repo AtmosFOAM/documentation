@@ -169,6 +169,13 @@ where
 
 \begin_layout Section
 Runge-Kutta Implicit/Explicit Time Stepping
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:RK_ImEx"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -632,7 +639,7 @@ name "fig:orderMetric"
 The stability depends on the spatial discretisation.
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Stability Functions of the ImEx Scheme
 \end_layout
 
@@ -777,6 +784,384 @@ name "fig:RK-ImEx_stabilityFunctions"
 
 
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Efficient Implementation
+\end_layout
+
+\begin_layout Standard
+The scheme defined in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:RK_ImEx"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ is:
+\begin_inset Formula 
+\begin{eqnarray}
+\psi^{i} & = & \psi^{(n)}-\Delta t\tilde{c}_{i}\nabla_{L}\cdot\left(\left(1-\alpha\right)\beta\mathbf{u}^{(n)}\psi^{(n)}\right)-\Delta t\tilde{c}_{i}\nabla_{\text{L}}\cdot\left(\alpha\beta\mathbf{u}^{i}\psi^{i}\right)\nonumber \\
+ & - & \Delta t\sum_{\ell=1}^{i-1}\tilde{a}_{i\ell}\left\{ \nabla_{\text{L}}\cdot\left(\left(1-\beta\right)\mathbf{u}^{\ell}\psi^{\ell}\right)+\nabla_{\text{HC}}\cdot\left(\mathbf{u}^{\ell}\psi^{\ell}\right)\right\} ,\ \ i=1,...s,\\
+\psi^{(n+1)} & = & \psi^{s},\label{eq:RK-ImEx-1-1}
+\end{eqnarray}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{eqnarray}
+\tilde{A}=\begin{pmatrix}0 & 0 & 0 & 0\\
+1 & 0 & 0 & 0\\
+\nicefrac{1}{4} & \nicefrac{1}{4} & 0 & 0\\
+\nicefrac{1}{6} & \nicefrac{1}{6} & \nicefrac{2}{3} & 0
+\end{pmatrix} &  & \tilde{c}_{i}=\sum_{\ell}\tilde{a}_{i\ell},\label{eq:RK3-1-1}
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta$
+\end_inset
+
+ are calculated once per time step:
+\begin_inset Formula 
+\begin{eqnarray}
+\alpha=\max\left(\frac{1}{2},1-\frac{1}{c}\right) &  & \beta=\max\left(0,1-\frac{1}{c}\right).
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Storing Divergences
+\end_layout
+
+\begin_layout Standard
+At the beginning of each time step, calculate
+\begin_inset Formula 
+\begin{equation}
+\text{div}^{0}=\nabla_{L}\cdot\left(\left(1-\alpha\right)\beta\mathbf{u}^{(n)}\psi^{(n)}\right)
+\end{equation}
+
+\end_inset
+
+for use at each stage.
+ At each RK stage, 
+\begin_inset Formula $i$
+\end_inset
+
+, solve
+\begin_inset Formula 
+\begin{equation}
+\psi^{i}=\psi^{(n)}-\Delta t\tilde{c}_{i}\text{div}^{0}-\Delta t\tilde{c}_{i}\nabla_{\text{L}}\cdot\left(\alpha\beta\mathbf{u}^{i}\psi^{i}\right)-\Delta t\sum_{\ell=1}^{i-1}\tilde{a}_{i\ell}\text{div}^{\ell}
+\end{equation}
+
+\end_inset
+
+then store
+\begin_inset Formula 
+\begin{equation}
+\text{div}^{i}=\nabla_{\text{L}}\cdot\left(\left(1-\beta\right)\mathbf{u}^{i}\psi^{i}\right)+\nabla_{\text{HC}}\cdot\left(\mathbf{u}^{i}\psi^{i}\right).
+\end{equation}
+
+\end_inset
+
+Storage is needed for:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\text{div}^{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\text{div}^{i}$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\psi^{(n)}$
+\end_inset
+
+ and one 
+\begin_inset Formula $\psi^{i}$
+\end_inset
+
+ (same storage as 
+\begin_inset Formula $\psi^{(n+1)}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\alpha$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Storing Fluxes
+\end_layout
+
+\begin_layout Standard
+We need to store fluxes for FCT so can we store fluxes instead of divergences
+ for an efficient implementation? We will need to store high and low order
+ fluxes.
+\end_layout
+
+\begin_layout Standard
+At the beginning of each time step, calculate
+\begin_inset Formula 
+\begin{equation}
+F_{L}^{E}=\left(1-\alpha\right)\beta\psi_{L}^{(n)}U^{(n)}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $U^{(n)}=\mathbf{u}^{(n)}\cdot\mathbf{S}$
+\end_inset
+
+.
+ At each stage, 
+\begin_inset Formula $i$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Enumerate
+solve
+\begin_inset Formula 
+\begin{equation}
+\psi^{i}=\psi^{(n)}-\Delta t\tilde{c}_{i}\text{div}\left(F_{L}^{E}\right)-\Delta t\tilde{c}_{i}\text{div}\left(\alpha\beta U^{i}\psi_{L}^{i}\right)-\Delta t\sum_{\ell=1}^{i-1}\tilde{a}_{i\ell}\text{div}\left(F^{\ell}\right)
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\begin{equation}
+\text{div}\left(F\right)=\frac{1}{\mathcal{V}}\sum_{\text{faces}}F
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+then store
+\begin_inset Formula 
+\begin{eqnarray}
+F^{i} & = & \left(\left(1-\beta\right)\psi_{L}^{i}+\psi_{HC}^{i}\right)U^{i}\\
+F^{T} & = & F_{L}^{E}+\alpha\beta\psi_{L}^{i}U^{i}+\sum_{\ell=1}^{i}\tilde{a}_{i\ell}F^{i}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If an FCT solution is needed then we also need to solve at each stage:
+\begin_inset Formula 
+\begin{equation}
+\psi^{d}=\psi^{(n)}-\Delta t\tilde{c}_{i}\text{div}\left(F_{L}^{E}\right)-\Delta t\tilde{c}_{i}\text{div}\left(\left(1-\left(1-\alpha\right)\beta\right)U^{i}\psi_{L}^{d}\right).
+\end{equation}
+
+\end_inset
+
+This needs to be done better.
+ More needs to be treated explicitly for 
+\begin_inset Formula $\beta=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Storage is needed for:
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="left" valignment="top">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\psi$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+old and new
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F_{L}^{E}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F^{i}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+for each stage
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F^{T}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+total HO flux
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $F^{d}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+for FCT solution
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\psi^{d}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+for FCT solution
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
 
 \end_inset
 
@@ -1229,7 +1614,7 @@ name "fig:magA_RK3_cubic"
 \end_layout
 
 \begin_layout Section
-Numerical Experiments
+First Numerical Experiments
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:numExpts"
@@ -2020,6 +2405,14 @@ name "fig:errorDiags"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Variable Density Version
+\end_layout
+
+\begin_layout Section
+With Flux Corrected Transport
 \end_layout
 
 \begin_layout Standard
