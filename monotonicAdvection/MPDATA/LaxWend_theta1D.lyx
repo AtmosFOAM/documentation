@@ -384,7 +384,12 @@ This isn't properly second-order in time.
 
 \end_inset
 
+For 
+\begin_inset Formula $\theta=\frac{1}{2}$
+\end_inset
 
+ the problematic terms disappear.
+ 
 \end_layout
 
 \begin_layout Subsection*
