@@ -1,5 +1,5 @@
-#LyX 2.2 created this file. For more info see http://www.lyx.org/
-\lyxformat 508
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -25,6 +25,8 @@
 \font_osf false
 \font_sf_scale 100 100
 \font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -54,6 +56,7 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
+\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -68,7 +71,10 @@
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\quotes_language english
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -87,6 +93,10 @@ Lax-Wendroff with
 \end_inset
 
  time stepping
+\end_layout
+
+\begin_layout Date
+12 April 2022
 \end_layout
 
 \begin_layout Standard
@@ -141,31 +151,249 @@ c\ge1 & \text{use} & \theta=1-\frac{1}{c},\ c=\frac{1}{1-\theta},\ \chi\le\frac{
 
 \end_layout
 
+\begin_layout Subsection*
+Second-Order Accuracy of Explicit Lax-Wendroff
+\end_layout
+
 \begin_layout Standard
-To show that (
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "eq:LWtheta"
+The scheme is
+\begin_inset Formula 
+\begin{equation}
+\psi_{j}^{n+1}=\psi_{j}^{n}-c\left(\psi_{j}^{n}-\psi_{j-1}^{n}\right)-\frac{c}{2}\left(1-c\right)\left(\psi_{j+1}^{n}-2\psi_{j}^{n}+\psi_{j-1}^{n}\right).\label{eq:LW}
+\end{equation}
 
 \end_inset
 
-) is second-order, consider:
+Evaluate 
+\begin_inset Formula $\partial\psi/\partial t$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial\psi/\partial x$
+\end_inset
+
+ at time 
+\begin_inset Formula $n$
+\end_inset
+
+, position 
+\begin_inset Formula $j$
+\end_inset
+
+ using Taylor series about 
+\begin_inset Formula $\left(n,j\right)$
+\end_inset
+
+:
 \begin_inset Formula 
 \begin{eqnarray}
-\psi_{n} & = & \psi_{n+\theta}-\theta\Delta t\psi_{n+\theta}^{\prime}+\theta^{2}\frac{\Delta t^{2}}{2!}\psi_{n+\theta}^{\prime\prime}+O\left(\Delta t^{3}\right)\\
-\psi_{n+1} & = & \psi_{n+\theta}+\left(1-\theta\right)\Delta t\psi_{n+\theta}^{\prime}+\left(1-\theta\right)^{2}\frac{\Delta t^{2}}{2!}\psi_{n+\theta}^{\prime\prime}+O\left(\Delta t^{3}\right)\\
-\implies\psi_{n+1}-\psi_{n} & = & \Delta t\psi_{n+\theta}^{\prime}+\left\{ \left(1-\theta\right)^{2}-\theta^{2}\right\} \frac{\Delta t^{2}}{2!}\psi_{n+\theta}^{\prime\prime}+O\left(\Delta t^{3}\right)\\
-\implies\frac{\partial\psi}{\partial t}_{j}^{n+\theta} & = & \frac{\psi^{n+1}-\psi^{n}}{\Delta t}+\left(1-2\theta\right)\frac{\Delta t}{2!}\psi_{n+\theta}^{\prime\prime}+O\left(\Delta t^{2}\right)\\
-\\
-\\
-\psi_{j-1} & = & \psi_{j}-\Delta x\psi_{j}^{\prime}+\frac{\Delta x^{2}}{2!}\psi_{j}^{\prime\prime}-\frac{\Delta x^{3}}{3!}\psi_{j}^{\prime\prime}+O\left(\Delta x^{4}\right)\\
-\implies\psi_{j}^{\prime} & = & \frac{\psi_{j}-\psi_{j-1}}{\Delta x}+\frac{\Delta x}{2!}\psi_{j}^{\prime\prime}-\frac{\Delta x^{2}}{3!}\psi_{j}^{\prime\prime}+O\left(\Delta x^{3}\right)\\
-\implies\frac{\partial\psi}{\partial x}_{j}^{n+1/2} & = & \left(1-\theta\right)\left\{ \frac{\psi_{j}^{n}-\psi_{j-1}^{n}}{\Delta x}+\frac{\Delta x}{2!}\psi_{j}^{n\prime\prime}+O\left(\Delta x^{2}\right)\right\} 
+\psi_{j}^{n+1} & = & \psi_{j}^{n}+\Delta t\frac{\partial\psi}{\partial t}_{j}^{n}+\frac{\Delta t^{2}}{2!}\frac{\partial^{2}\psi}{\partial t^{2}}_{j}^{n}+O\left(\Delta t^{3}\right)\\
+\implies\frac{\partial\psi}{\partial t}_{j}^{n} & = & \frac{\psi_{j}^{n+1}-\psi_{j}^{n}}{\Delta t}-\frac{\Delta t}{2!}\frac{\partial^{2}\psi}{\partial t^{2}}_{j}^{n}+O\left(\Delta t^{2}\right)\\
+\text{and }\psi_{j-1}^{n} & = & \psi_{j}^{n}-\Delta x\frac{\partial\psi}{\partial x}_{j}^{n}+\frac{\Delta x^{2}}{2!}\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n}+O\left(\Delta x^{3}\right)\\
+\implies\frac{\partial\psi}{\partial x}_{j}^{n} & = & \frac{\psi_{j}^{n}-\psi_{j-1}^{n}}{\Delta x}+\frac{\Delta x}{2!}\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n}+O\left(\Delta x^{2}\right)\label{eq:ddx}
 \end{eqnarray}
 
 \end_inset
 
+Use (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:1dadvection"
+plural "false"
+caps "false"
+noprefix "false"
 
+\end_inset
+
+) to replace 
+\begin_inset Formula $\partial^{2}\psi/\partial t^{2}$
+\end_inset
+
+ with 
+\begin_inset Formula $\partial^{2}\psi/\partial x^{2}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial^{2}\psi}{\partial t^{2}} & = & \frac{\partial}{\partial t}\left(\frac{\partial\psi}{\partial t}\right)=\frac{\partial}{\partial t}\left(-u\frac{\partial\psi}{\partial x}\right)=-u\frac{\partial}{\partial x}\left(\frac{\partial\psi}{\partial t}\right)=u^{2}\frac{\partial^{2}\psi}{\partial x^{2}}\\
+\implies\frac{\partial\psi}{\partial t}_{j}^{n} & = & \frac{\psi_{j}^{n+1}-\psi_{j}^{n}}{\Delta t}-\frac{\Delta t}{2!}u^{2}\frac{\partial^{2}\psi}{\partial u^{2}}_{j}^{n}+O\left(\Delta t^{2}\right).\label{eq:ddt}
+\end{eqnarray}
+
+\end_inset
+
+Discretise 
+\begin_inset Formula $\partial^{2}\psi/\partial x^{2}$
+\end_inset
+
+ to second-order:
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial^{2}\psi}{\partial u^{2}}_{j}^{n}=\frac{\psi_{j+1}^{n}-2\psi_{j}^{n}+\psi_{j-1}^{n}}{\Delta x^{2}}+O\left(\Delta x^{2}\right).\label{eq:d2dx2}
+\end{equation}
+
+\end_inset
+
+Substitute (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ddx"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ddt"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:d2dx2"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+) into (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:1dadvection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+):
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\psi_{j}^{n+1}-\psi_{j}^{n}}{\Delta t} & - & \frac{\Delta t}{2!}u^{2}\frac{\partial^{2}\psi}{\partial u^{2}}_{j}^{n}+O\left(\Delta t^{2}\right)+u\left\{ \frac{\psi_{j}^{n}-\psi_{j-1}^{n}}{\Delta x}+\frac{\Delta x}{2!}\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n}+O\left(\Delta x^{2}\right)\right\} =0\\
+\implies\psi_{j}^{n+1} & = & \psi_{j}^{n}-c\left(\psi_{j}^{n}-\psi_{j-1}^{n}\right)-\frac{1}{2}\left(\Delta t\Delta xu-\Delta t^{2}u^{2}\right)\frac{\psi_{j+1}^{n}-2\psi_{j}^{n}+\psi_{j-1}^{n}}{\Delta x^{2}}+\Delta t\left\{ O\left(\Delta t^{2}\right)+O\left(\Delta x^{2}\right)\right\} \\
+\implies\psi_{j}^{n+1} & = & \psi_{j}^{n}-c\left(\psi_{j}^{n}-\psi_{j-1}^{n}\right)-\frac{c}{2}\left(1-c\right)\left(\psi_{j+1}^{n}-2\psi_{j}^{n}+\psi_{j-1}^{n}\right)+\Delta t\left\{ O\left(\Delta t^{2}\right)+O\left(\Delta x^{2}\right)\right\} 
+\end{eqnarray}
+
+\end_inset
+
+as required.
+\end_layout
+
+\begin_layout Subsection*
+Second-Order Accuracy of Lax-Wendroff with 
+\begin_inset Formula $\theta$
+\end_inset
+
+ time stepping
+\end_layout
+
+\begin_layout Standard
+The scheme is 
+\begin_inset Formula 
+\begin{equation}
+\psi_{j}^{n+1}=\psi_{j}^{n}-c\left(1-\theta\right)\left(\psi_{j}^{n}-\psi_{j-1}^{n}\right)-c\theta\left(\psi_{j}^{n+1}-\psi_{j-1}^{n+1}\right)-\frac{c}{2}\left(1-\left(1-2\theta\right)c\right)\left(\psi_{j+1}^{n}-2\psi_{j}^{n}+\psi_{j-1}^{n}\right).\label{eq:LWtheta-2}
+\end{equation}
+
+\end_inset
+
+Evaluate 
+\begin_inset Formula $\partial\psi/\partial t$
+\end_inset
+
+ and 
+\begin_inset Formula $\partial\psi/\partial x$
+\end_inset
+
+ at time 
+\begin_inset Formula $n+\theta$
+\end_inset
+
+, position 
+\begin_inset Formula $j$
+\end_inset
+
+ using Taylor series about 
+\begin_inset Formula $\left(n+\theta,j\right)$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\psi_{j}^{n} & = & \psi_{j}^{n+\theta}-\theta\Delta t\frac{\partial\psi}{\partial t}_{j}^{n+\theta}+\frac{\theta^{2}\Delta t^{2}}{2!}\frac{\partial^{2}\psi}{\partial t^{2}}_{j}^{n+\theta}+O\left(\Delta t^{3}\right)\\
+\text{and }\psi_{j}^{n+1} & = & \psi_{j}^{n+\theta}+\left(1-\theta\right)\Delta t\frac{\partial\psi}{\partial t}_{j}^{n+\theta}+\left(1-\theta\right)^{2}\frac{\Delta t^{2}}{2!}\frac{\partial^{2}\psi}{\partial t^{2}}_{j}^{n+\theta}+O\left(\Delta t^{3}\right)\\
+\implies\frac{\partial\psi}{\partial t}_{j}^{n+\theta} & = & \frac{\psi_{j}^{n+1}-\psi_{j}^{n}}{\Delta t}-\left(1-2\theta\right)\frac{\Delta t}{2!}\frac{\partial^{2}\psi}{\partial t^{2}}_{j}^{n+\theta}+O\left(\Delta t^{2}\right)\\
+\text{and }\psi_{j-1}^{n+\theta} & = & \psi_{j}^{n+\theta}-\Delta x\frac{\partial\psi}{\partial x}_{j}^{n+\theta}+\frac{\Delta x^{2}}{2!}\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n+\theta}+O\left(\Delta x^{3}\right)\\
+\implies\frac{\partial\psi}{\partial x}_{j}^{n+\theta} & = & \frac{\psi_{j}^{n+\theta}-\psi_{j-1}^{n+\theta}}{\Delta x}+\frac{\Delta x}{2!}\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n+\theta}+O\left(\Delta x^{2}\right)\label{eq:ddx-1}
+\end{eqnarray}
+
+\end_inset
+
+Use linear interpolation in time:
+\begin_inset Formula 
+\begin{equation}
+\psi_{j}^{n+\theta}=\left(1-\theta\right)\psi_{j}^{n}+\theta\psi_{j}^{n+1}+O\left(\Delta t\right)
+\end{equation}
+
+\end_inset
+
+Substituting into 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:1dadvection"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ at time 
+\begin_inset Formula $n+\theta$
+\end_inset
+
+, position 
+\begin_inset Formula $j$
+\end_inset
+
+ gives:
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\psi_{j}^{n+1}-\psi_{j}^{n}}{\Delta t} & - & \left(1-2\theta\right)\frac{\Delta t}{2!}\frac{\partial^{2}\psi}{\partial t^{2}}_{j}^{n+\theta}+O\left(\Delta t^{2}\right)=-u\left\{ \frac{\psi_{j}^{n+\theta}-\psi_{j-1}^{n+\theta}}{\Delta x}+\frac{\Delta x}{2!}\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n+\theta}+O\left(\Delta x^{2}\right)\right\} \\
+\implies\psi_{j}^{n+1} & = & \psi_{j}^{n}-c\left\{ \left(1-\theta\right)\left(\psi_{j}^{n}-\psi_{j-1}^{n}\right)+\theta\left(\psi_{j}^{n+1}-\psi_{j-1}^{n+1}\right)+O\left(\Delta t\right)\right\} \\
+ & - & \Delta t\left\{ u\frac{\Delta x}{2!}-u^{2}\left(1-2\theta\right)\frac{\Delta t}{2!}\right\} \left(\frac{\partial^{2}\psi}{\partial x^{2}}_{j}^{n}+O\left(\Delta t\right)\right)+\Delta t\left\{ O\left(\Delta t^{2}\right)+O\left(\Delta x^{2}\right)\right\} \\
+\implies\psi_{j}^{n+1} & = & \psi_{j}^{n}-c\left\{ \left(1-\theta\right)\left(\psi_{j}^{n}-\psi_{j-1}^{n}\right)+\theta\left(\psi_{j}^{n+1}-\psi_{j-1}^{n+1}\right)\right\} \\
+ & - & \frac{c}{2}\left\{ 1-\left(1-2\theta\right)c\right\} \left(\psi_{j+1}^{n}-2\psi_{j}^{n}+\psi_{j-1}^{n}\right)+O\left(\Delta t^{2}\right)+\Delta tO\left(\Delta x^{2}\right)
+\end{eqnarray*}
+
+\end_inset
+
+This isn't properly second-order in time.
+ For proper second-order, we should have
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\psi^{n+1}-\psi^{n}}{\Delta t} & = & \text{discretisation}+O\left(\Delta t^{2}\right)\\
+\implies\psi^{n+1} & = & \psi^{n}+\Delta t\times\text{discretisation}+O\left(\Delta t^{3}\right)
+\end{eqnarray*}
+
+\end_inset
+
+For 
+\begin_inset Formula $\theta=\frac{1}{2}$
+\end_inset
+
+ the problematic terms disappear.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Stability Analysis
 \end_layout
 
 \begin_layout Standard

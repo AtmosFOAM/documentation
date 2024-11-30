@@ -187,26 +187,22 @@ name "sec:RK_ImEx"
 \end_layout
 
 \begin_layout Standard
-The first-order term,
- 
+The first-order term, 
 \begin_inset Formula $\nabla_{\text{L}}\cdot\left(\mathbf{u}\psi\right)$
 \end_inset
 
- ,
- is treated explicitly where time-step restrictions allow,
- and implicitly elsewhere.
- The high-order correction,
- 
+ , is treated explicitly where time-step restrictions allow, and implicitly
+ elsewhere.
+ The high-order correction, 
 \begin_inset Formula $\nabla_{\text{HC}}\cdot\left(\mathbf{u}\psi\right)$
 \end_inset
 
-,
- is always calculated explicitly.
+, is always calculated explicitly.
  We use an implict/explicit (ImEx) 
 \begin_inset Formula $s$
 \end_inset
 
--stage Runge-Kutta notation 
+-stage Runge-Kutta scheme 
 \begin_inset CommandInset citation
 LatexCommand citep
 key "PR05"
@@ -285,15 +281,12 @@ We are considering the possibility that the Butcher tableau coefficients vary in
 
 \end_inset
 
-With off-centering,
- 
+With off-centering, 
 \begin_inset Formula $\alpha=\nicefrac{1}{2}$
 \end_inset
 
-,
- making trapezoidal implicit into the second-order,
- Crank-Nicolson,
- and 
+, making trapezoidal implicit into the second-order, Crank-Nicolson, and
+ 
 \begin_inset Formula $\alpha=1$
 \end_inset
 
