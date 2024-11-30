@@ -1,0 +1,325 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{color}
+\newcommand{\nicefrac}[2]{\ensuremath ^{#1}\!\!/\!_{#2}}
+\usepackage { fancybox}
+
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\textfraction}{0}
+\renewcommand{\topfraction}{1}
+\renewcommand{\bottomfraction}{1}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "times" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\paperwidth 15cm
+\paperheight 12cm
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+1D Two-fluid Boussinesq Equations
+\end_layout
+
+\begin_layout Author
+Hilary Weller
+\end_layout
+
+\begin_layout Subsubsection*
+Single Fluid 1D Boussinesq Equations
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial w}{\partial t}+\frac{\partial w^{2}}{\partial z}+\frac{\partial P}{\partial z} & = & b\\
+\frac{\partial b}{\partial t}+\frac{\partial wb}{\partial z}+N^{2}w & = & 0\\
+\frac{\partial w}{\partial z} & = & 0
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Multi-fluid
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial\sigma_{i}}{\partial t}+\frac{\partial w_{i}\sigma_{i}}{\partial z} & = & \sum_{j\ne i}\sigma_{j}S_{ji}-\sigma_{i}S_{ij}\label{eq:sigma}\\
+\frac{\partial\sigma_{i}w_{i}}{\partial t}+\frac{\partial\sigma_{i}w_{i}^{2}}{\partial z}+\sigma_{i}\frac{\partial P}{\partial z}+\sigma_{i}\frac{\partial p_{i}}{\partial z} & = & \sigma_{i}b_{i}+\sum_{j\ne i}w_{ji}^{T}\sigma_{j}S_{ji}-w_{ij}^{T}\sigma_{i}S_{ij}\label{eq:wi}\\
+\frac{\partial\sigma_{i}b_{i}}{\partial t}+\frac{\partial\sigma_{i}w_{i}b_{i}}{\partial z}+\sigma_{i}N^{2}w_{i} & = & \sum_{j\ne i}b_{ji}^{T}\sigma_{j}S_{ji}-b_{ij}^{T}\sigma_{i}S_{ij}\label{eq:bi}\\
+\sum_{i}\frac{\partial\sigma_{i}w_{i}}{\partial z}=0 &  & \sum_{i}\sigma_{i}=1\label{eq:continuitySum}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Pressure
+\end_layout
+
+\begin_layout Standard
+Summing the 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+ equations and combining with continuity gives the Poisson equation for
+ 
+\begin_inset Formula $P$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial^{2}P}{\partial z^{2}} & = & \sum_{i}\frac{\partial}{\partial z}\left(-\frac{\partial\sigma_{i}w_{i}^{2}}{\partial z}+\sigma_{i}b_{i}\right).\label{eq:Poisson}
+\end{eqnarray}
+
+\end_inset
+
+Assuming zero gradient boundary conditions, this can be integrated to give:
+ 
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial P}{\partial z} & = & -\sum_{i}\frac{\partial\sigma_{i}w_{i}^{2}}{\partial z}+\overline{b}.\label{eq:dPdz}
+\end{eqnarray}
+
+\end_inset
+
+We use the parameterisation for 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ which ensures 
+\begin_inset Formula $\sum_{i}\sigma_{i}p_{i}=0$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{equation}
+p_{i}=-\gamma\frac{\partial w_{i}}{\partial z}+\gamma\sum_{j}\sigma_{j}\frac{\partial w_{j}}{\partial z}=-\gamma\left(1-\sigma_{i}\right)\frac{\partial w_{i}}{\partial z}+\gamma\sum_{j\ne i}\sigma_{j}\frac{\partial w_{j}}{\partial z}\label{eq:pressureDivergence}
+\end{equation}
+
+\end_inset
+
+
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Assumptions
+\end_layout
+
+\begin_layout Subsection
+Two-Fluids, Steady State
+\end_layout
+
+\begin_layout Standard
+Assuming two fluids, 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ gives simplified equations for the pressures
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial P}{\partial z} & = & -\left(\frac{\partial\sigma_{i}w_{i}^{2}}{\partial z}+\frac{\partial\sigma_{j}w_{j}^{2}}{\partial z}\right)+\overline{b}\\
+\frac{\partial p_{i}}{\partial z} & = & -\gamma\frac{\partial}{\partial z}\left\{ \sigma_{j}\frac{\partial w_{i}}{\partial z}-\sigma_{j}\frac{\partial w_{j}}{\partial z}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+Substituting in the models for pressure and assuming steady state gives
+ 
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial w_{i}\sigma_{i}}{\partial z} & = & \sigma_{j}S_{ji}-\sigma_{i}S_{ij}\label{eq:sigma-2}\\
+\frac{\partial\sigma_{i}w_{i}}{\partial z}+\frac{\partial\sigma_{j}w_{j}}{\partial z}=0 & \implies & \sigma_{i}w_{i}=-\sigma_{j}w_{j}\\
+ & \implies & \sigma_{i}^{2}w_{i}^{2}=\sigma_{j}^{2}w_{j}^{2}\\
+\sigma_{j}\frac{\partial\sigma_{i}w_{i}^{2}}{\partial z}-\sigma_{i}\frac{\partial\sigma_{j}w_{j}^{2}}{\partial z}-\sigma_{i}\gamma\frac{\partial}{\partial z}\left\{ \sigma_{j}\frac{\partial w_{i}}{\partial z}-\sigma_{j}\frac{\partial w_{j}}{\partial z}\right\}  & = & \sigma_{i}\left(b_{i}-\overline{b}\right)+w_{ji}^{T}\sigma_{j}S_{ji}-w_{ij}^{T}\sigma_{i}S_{ij}\\
+\frac{\partial\sigma_{i}w_{i}b_{i}}{\partial z}+\sigma_{i}N^{2}w_{i} & = & b_{ji}^{T}\sigma_{j}S_{ji}-b_{ij}^{T}\sigma_{i}S_{ij}\label{eq:bi-2}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Two-Fluids, uniform, steady columns
+\end_layout
+
+\begin_layout Standard
+Additionally assuming 
+\begin_inset Formula $\frac{\partial\sigma}{\partial z}=0$
+\end_inset
+
+ gives
+\begin_inset Formula 
+\begin{eqnarray}
+S_{ij} & = & -\max\left(\partial w_{i}/\partial z,0\right)=\frac{\sigma_{j}}{\sigma_{i}}\max\left(\partial w_{j}/\partial z,0\right)\\
+\sigma_{i}\frac{\partial w_{i}}{\partial z} & = & -\sigma_{j}\frac{\partial w_{j}}{\partial z}\\
+\frac{\sigma_{i}^{2}+\sigma_{j}^{2}}{\sigma_{j}}\frac{\partial w_{i}^{2}}{\partial z}-\gamma\frac{\partial^{2}w_{i}}{\partial z^{2}} & = & b_{i}-\overline{b}+w_{ji}^{T}\frac{\sigma_{j}}{\sigma_{i}}S_{ji}-w_{ij}^{T}S_{ij}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $w_{ij}^{T}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma=\frac{1}{2}$
+\end_inset
+
+ or 
+\begin_inset Formula $\sigma_{i}<<\sigma_{j}\approx1$
+\end_inset
+
+ gives
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray}
+\frac{\partial w_{i}^{2}}{\partial z}-\gamma\frac{\partial^{2}w_{i}}{\partial z^{2}} & = & b_{i}-\overline{b}
+\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $b_{ij}^{T}=b_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $N=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assume near the ground so 
+\begin_inset Formula $S_{01}=\frac{\sigma_{1}}{\sigma_{0}}\frac{\partial w_{1}}{\partial z}=-\frac{\partial w_{0}}{\partial z}$
+\end_inset
+
+, 
+\begin_inset Formula $S_{10}=0$
+\end_inset
+
+.
+ Consider fluid 1:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial w_{1}b_{1}}{\partial z} & = & b_{0}\frac{\partial w_{1}}{\partial z}\\
+\implies w_{1}\frac{\partial b_{1}}{\partial z} & = & \left(b_{0}-b_{1}\right)\frac{\partial w_{1}}{\partial z}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Assuming 
+\begin_inset Formula $w=\mathbb{W}\sin\frac{\pi z}{H}$
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
